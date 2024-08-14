@@ -7,7 +7,6 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { usePathname } from "next/navigation";
 import {
   Button,
   Dialog,
@@ -18,16 +17,10 @@ import {
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const pathname = usePathname();
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
 
   return (
-    <div className="w-full sticky top-0 z-30 flex flex-col items-center">
-      <div className="w-full flex justify-between items-center px-4 py-3 bg-primary">
+    <div className="w-full md:w-4/5 mx-auto bg-primary sticky top-0 md:top-8 z-30 flex flex-col items-center md:rounded-full">
+      <div className="w-full flex justify-between items-center px-4 py-3">
         <div className="flex items-center gap-x-4">
           <Link href="/">
             <Image
@@ -54,7 +47,7 @@ export default function NavBar() {
           >
             Create
           </Link>
-          <div className="px-3 py-1 bg-accent rounded-xl border-2 border-transparent hover:border-white/80 transition duration-300 ease-in-out">
+          <div className="px-3 py-1 bg-accent rounded-full border-2 border-transparent hover:border-white/80 transition duration-300 ease-in-out">
             Connect
           </div>
         </div>
@@ -100,7 +93,7 @@ export default function NavBar() {
                       Create
                     </Link>
                     <div
-                      className="flex w-fit mt-3 ml-3 items-center gap-x-2 px-4 py-2 bg-accent rounded-xl"
+                      className="flex w-fit mt-3 ml-3 items-center gap-x-2 px-4 py-2 bg-accent rounded-full"
                     >
                       Connect
                     </div>

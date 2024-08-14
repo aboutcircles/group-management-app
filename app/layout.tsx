@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
+import NavBar from "@/components/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Group Management App",
+  title: "Circles Management Group",
   description: "About Circles",
 };
 
@@ -16,7 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="w-full h-full text-white bg-background/90">
+          <Providers>
+            <NavBar />
+            {children}
+          </Providers>
+        </div>
+      </body>
     </html>
   );
 }
