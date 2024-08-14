@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <main className="flex h-screen flex-col items-center justify-center">
       <div className="w-full lg:w-[625px] h-full lg:h-auto bg-background text-primary backdrop-blur-lg drop-shadow-md p-8 lg:rounded-2xl flex gap-y-4 flex-col justify-start items-center">
-        <p className="text-xl">GROUP MANAGEMENT APP</p>
+        <p className="text-xl font-bold">GROUP MANAGEMENT APP</p>
         <p className="text-xl my-8">Connect your wallet to get started:</p>
         <Link
           href="/connect"
