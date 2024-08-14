@@ -16,6 +16,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 
+
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

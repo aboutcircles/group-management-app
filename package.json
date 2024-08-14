@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
+    "@safe-global/safe-apps-sdk": "^9.1.0",
     "@web3-onboard/core": "^2.22.2",
     "@web3-onboard/injected-wallets": "^2.11.1",
     "@web3-onboard/react": "^2.9.2",
