@@ -19,9 +19,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="w-full h-full text-white bg-background/90">
+        <div className="w-full h-full text-white bg-background">
           <Providers>
-            <NavBar />
             {children}
           </Providers>
         </div>
