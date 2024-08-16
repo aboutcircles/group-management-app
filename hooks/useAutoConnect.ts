@@ -6,17 +6,17 @@ import { useEffect } from 'react';
 const AUTOCONNECTED_CONNECTOR_IDS = ['safe'];
 
 function useAutoConnect() {
-  const { connect, connectors } = useConnect();
+    const { connect, connectors } = useConnect();
 
-  useEffect(() => {
-    AUTOCONNECTED_CONNECTOR_IDS.forEach((connector) => {
-      const connectorInstance = connectors.find((c) => c.id === connector);
+    useEffect(() => {
+        AUTOCONNECTED_CONNECTOR_IDS.forEach((connector) => {
+            const connectorInstance = connectors.find((c) => c.id === connector);
 
-      if (connectorInstance) {
-        connect({ connector: connectorInstance });
-      }
-    });
-  }, [connect, connectors]);
+            if (connectorInstance) {
+                connect({ connector: connectorInstance });
+            }
+        });
+    }, [connect, connectors]);
 }
 
 export { useAutoConnect };

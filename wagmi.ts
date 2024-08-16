@@ -4,6 +4,7 @@ import { safe } from "wagmi/connectors";
 
 export const config = createConfig({
   chains: [gnosis, gnosisChiado],
+  multiInjectedProviderDiscovery: false,
   connectors: [safe()],
   ssr: true,
   transports: {
