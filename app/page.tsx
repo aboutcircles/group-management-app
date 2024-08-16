@@ -1,16 +1,19 @@
 import ConnectButton from "@/components/ConnectButton";
 import DropDown from "@/components/DropDown";
+import Fallback from "@/components/Fallback";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <div className="w-full lg:w-[775px] bg-primary h-screen md:h-full lg:h-auto shadow-md p-4 lg:rounded-2xl flex gap-y-6 flex-col justify-start items-center">
-        <div className="w-full flex justify-end">
+      <div className="w-full lg:w-[775px] bg-primary h-screen md:h-full lg:h-auto shadow-md p-4 lg:rounded-2xl flex gap-y-4 flex-col justify-start items-center">
+        <div className="w-full flex justify-end items-center">
           <ConnectButton />
         </div>
-        {/* <Dashboard /> */}
+        <div className="w-full relative h-full lg:h-[375px] bg-background text-black rounded-2xl p-4">
+          <Fallback />
+        </div>
         <div className="w-full flex flex-col-reverse sm:flex-row justify-between">
           <div className="flex flex-col justify-center sm:justify-start mt-4 sm:mt-0">
             <Image
@@ -23,7 +26,6 @@ export default function Page() {
               CIRCLES GROUP MANAGEMENT
             </p>
           </div>
-
           <div className="flex flex-1">
             <Link
               target="_blank"
