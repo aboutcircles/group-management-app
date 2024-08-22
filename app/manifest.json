@@ -1,6 +1,7 @@
 {
     "name": "Safe GM App",
     "description": "This is a group management app for circle owners",
+    "iconPath": "/circles.svg",
     "icons": [
       {
         "src": "/circles.svg",
