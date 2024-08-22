@@ -1,7 +1,8 @@
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Description, Field, Input, Label } from '@headlessui/react';
+import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
+import MintPolicy, { mintPolicies } from './MintPolicy';
 
 type Step = 'start' | 'form' | 'executed'; // TODO DRY
 
@@ -13,9 +14,13 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     symbol: '',
+    description: '',
   });
+  const [mintPolicy, setMintPolicy] = useState(mintPolicies[0]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -32,6 +37,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     if (!validName || !validSymbol) return;
 
     // setStep('executed');
+    // TODO: Create group
   };
 
   return (
@@ -40,24 +46,23 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
       className='w-full h-full flex flex-col items-center justify-center gap-y-4'
     >
       <h1 className='text-2xl text-center font-bold'>CREATE GROUP</h1>
-      <Field className='w-5/6 md:w-3/5'>
-        <Label className='text-sm/6 font-medium text-black'>Name</Label>
-        <Input
-          required
-          type='text'
-          name='name'
-          value={formData.name}
-          // pattern="^[0-9A-Za-z \-_.()'&+#]*$"
-          placeholder='Group Name...'
-          className='mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
-          onChange={handleChange}
-        />
-        <p className='text-xs text-accent h-4 pl-1'>
-          {!validName && 'Invalid name'}
-        </p>
-      </Field>
-      <div className='flex w-5/6 md:w-3/5 gap-x-2'>
-        <Field className='w-full'>
+      <div className='flex w-full gap-x-2'>
+        <Field className='w-4/5'>
+          <Label className='text-sm/6 font-medium text-black'>Name</Label>
+          <Input
+            required
+            type='text'
+            name='name'
+            value={formData.name}
+            placeholder='Group Name...'
+            className='mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+            onChange={handleChange}
+          />
+          <p className='text-xs text-accent h-4 pl-1'>
+            {!validName && 'Invalid name'}
+          </p>
+        </Field>
+        <Field className='w-1/5'>
           <Label className='text-sm/6 font-medium text-black'>Symbol</Label>
           <Input
             required
@@ -71,23 +76,23 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
             {!validSymbol && 'Invalid symbol'}
           </p>
         </Field>
-        {/* <Field className='w-full'>
-            <Label className='text-sm/6 font-medium text-black'>Fee (%)</Label>
-            <Input
-              required
-              placeholder='0'
-              className='mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
-            />
-          </Field> */}
       </div>
-      {/* <Field className='w-5/6 md:w-3/5'>
-          <Label className='text-sm/6 font-medium text-black'>Treasury</Label>
-          <Input
-            required
-            placeholder='0x...'
-            className='mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
-          />
-        </Field> */}
+      <Field className='w-full'>
+        <Label className='text-sm/6 font-medium text-black'>Description</Label>
+        <Textarea
+          name='description'
+          value={formData.description}
+          placeholder='Group Description...'
+          className='mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+          onChange={handleChange}
+        />
+      </Field>
+      <Field className='w-full'>
+        <Label className='text-sm/6 font-medium text-black'>
+          Base Mint Policy
+        </Label>
+        <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
+      </Field>
       <button
         type='submit'
         disabled={!validName || !validSymbol}

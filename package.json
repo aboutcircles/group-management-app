@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@circles-sdk/sdk": "0.7.0-preview-1",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@safe-global/safe-apps-sdk": "^9.1.0",
