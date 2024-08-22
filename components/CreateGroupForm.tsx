@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy, { mintPolicies } from './MintPolicy';
+import ImgUpload from './ImgUpload';
 
 type Step = 'start' | 'form' | 'executed'; // TODO DRY
 
@@ -31,6 +32,11 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   const validName = isValidName(formData.name) || formData.name.length === 0;
   const validSymbol =
     isValidSymbol(formData.symbol) || formData.symbol.length === 0;
+
+  const handleFileSelected = (file: File | null) => {
+    console.log(file);
+    // TODO: set image
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,6 +94,10 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         />
       </Field>
       <Field className='w-full'>
+        <Label className='text-sm/6 font-medium text-black'>Group Image</Label>
+        <ImgUpload onFileSelected={handleFileSelected} />
+      </Field>
+      <Field className='w-full'>
         <Label className='text-sm/6 font-medium text-black'>
           Base Mint Policy
         </Label>
@@ -96,7 +106,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
       <button
         type='submit'
         disabled={!validName || !validSymbol}
-        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
+        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out mt-4'
       >
         Create
         <ArrowRightIcon className='h-4 w-4 ml-1' />

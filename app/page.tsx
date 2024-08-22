@@ -16,14 +16,14 @@ export default function Page() {
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center'>
-      <div className='w-full lg:w-[775px] bg-primary h-screen md:h-full lg:h-auto shadow-md p-4 lg:rounded-3xl flex gap-y-4 flex-col justify-start items-center'>
+      <div className='w-full lg:w-[775px] lg:my-4 bg-primary md:h-full lg:h-auto shadow-md p-4 lg:rounded-3xl flex gap-y-4 flex-col justify-start items-center'>
         <div className='w-full flex justify-between items-center'>
           <button className='bg-secondary rounded-full p-2'>
             <HomeIcon className='h-5 w-5' />
           </button>
           <ConnectButton address={address} />
         </div>
-        <div className='w-full relative h-full lg:h-[375px] bg-background text-black rounded-2xl p-4'>
+        <div className='w-full relative h-full  bg-background text-black rounded-2xl p-4'>
           {/* TODO: if safe connected and group registered -> dashboard
                     else if safe connected and no group registered -> group registration
                     else -> fallback */}
@@ -44,10 +44,11 @@ export default function Page() {
           <div className='flex flex-1'>
             <Link
               target='_blank'
-              className='flex flex-1 justify-center text-sm lg:text-base items-center underline hover:text-white/80'
+              className='flex flex-1 justify-center text-sm text-centerlg:text-base items-center underline hover:text-white/80'
               href={'https://www.aboutcircles.com/'}
             >
-              Learn more about the Circles Project
+              Learn more about
+              <br className='sm:hidden' /> the Circles Project
             </Link>
             <div className='flex justify-center items-center'>
               <DropDown />
