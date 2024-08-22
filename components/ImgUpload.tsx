@@ -11,11 +11,15 @@ import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 type AvatarUploadProps = {
   onFileSelected: (file: File | null) => void;
+  imgUrl?: string;
 };
 
-const AvatarUpload: React.FC<AvatarUploadProps> = ({ onFileSelected }) => {
+const AvatarUpload: React.FC<AvatarUploadProps> = ({
+  onFileSelected,
+  imgUrl,
+}) => {
   const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(imgUrl || null);
   const [isOpen, setIsOpen] = useState(false);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -53,7 +57,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({ onFileSelected }) => {
         />
       ) : (
         <div
-          className='w-40 h-40 rounded-full bg-white text-black/30 my-4 text-center flex items-center justify-center cursor-pointer text-sm'
+          className='w-40 h-40 rounded-full bg-white dark:bg-white text-black/30 dark:text-black/30 my-4 text-center flex items-center justify-center cursor-pointer text-sm'
           onClick={openModal}
         >
           Click to upload an image
@@ -71,7 +75,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({ onFileSelected }) => {
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <div className='fixed inset-0 bg-black bg-opacity-25' />
+            <div className='fixed inset-0 bg-black bg-opacity-25 dark:bg-black dark:bg-opacity-25' />
           </TransitionChild>
 
           <div className='fixed inset-0 overflow-y-auto'>
@@ -85,34 +89,37 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({ onFileSelected }) => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-lg bg-white text-black p-6 text-left align-middle shadow-xl transition-all'>
                   <DialogTitle
                     as='h3'
-                    className='text-lg font-medium leading-6 text-gray-900'
+                    className='text-lg font-medium leading-6 text-black'
                   >
                     Upload image
                   </DialogTitle>
 
                   <div
                     {...getRootProps()}
-                    className={`mt-4 p-6 border-2 border-dashed rounded-lg cursor-pointer ${
-                      isDragActive ? 'border-indigo-600' : 'border-gray-300'
+                    className={`mt-4 p-6 border border-dashed rounded-lg cursor-pointer ${
+                      isDragActive ? 'border-accent' : 'border-zinc'
                     }`}
                   >
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <p className='text-indigo-600'>Drop the files here ...</p>
+                      <p className='text-accent'>
+                        Drop the file <br />
+                        here
+                      </p>
                     ) : (
-                      <p className='text-gray-500'>
-                        Drag&apos;n&apos;drop an image file here, or click to
-                        select a file
+                      <p className='text-zinc'>
+                        Drag&apos;n&apos;drop an image file here <br /> or click
+                        to select a file
                       </p>
                     )}
                   </div>
 
                   {file && (
                     <div className='mt-4'>
-                      <p className='text-gray-600'>
+                      <p className='text-black'>
                         Selected file: <strong>{file.name}</strong>
                       </p>
                     </div>

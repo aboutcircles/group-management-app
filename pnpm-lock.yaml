@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@circles-sdk/data':
+        specifier: 0.5.0-preview-2
+        version: 0.5.0-preview-2
       '@circles-sdk/sdk':
         specifier: ^0.5.0-preview-2
         version: 0.5.0-preview-2(bufferutil@4.0.8)(utf-8-validate@5.0.10)

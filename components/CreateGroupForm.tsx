@@ -1,9 +1,12 @@
+'use client';
+
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy, { mintPolicies } from './MintPolicy';
 import ImgUpload from './ImgUpload';
+import { useRouter } from 'next/navigation';
 
 type Step = 'start' | 'form' | 'executed'; // TODO DRY
 
@@ -18,6 +21,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     description: '',
   });
   const [mintPolicy, setMintPolicy] = useState(mintPolicies[0]);
+  const router = useRouter();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,6 +48,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
 
     // setStep('executed');
     // TODO: Create group
+    router.push('/group');
   };
 
   return (
