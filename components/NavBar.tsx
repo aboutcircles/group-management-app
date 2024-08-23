@@ -13,7 +13,7 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <div className='w-full flex justify-between items-center'>
+    <div className='w-full flex justify-between items-center text-white'>
       <Link href='/' className='bg-secondary rounded-full p-2 inline-block'>
         <HomeIcon className='h-5 w-5' />
       </Link>

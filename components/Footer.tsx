@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <div className='w-full flex flex-col-reverse sm:flex-row justify-between'>
+    <div className='w-full flex flex-col-reverse sm:flex-row justify-between text-white'>
       <div className='flex flex-col items-center  mt-4 sm:mt-0'>
         <Image src='/circles.svg' alt='Circles Logo' width={105} height={105} />
         <p className='text-[6px] leading-[6px] sm:text-[8px] sm:leading-[8px] mt-2 '>
