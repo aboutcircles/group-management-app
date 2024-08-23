@@ -3,6 +3,10 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy, { mintPolicies } from './MintPolicy';
+import useCircles from '@/hooks/useCirclesSdk';
+import { Avatar, CirclesConfig, Sdk } from '@circles-sdk/sdk';
+import { ethers } from 'ethers';
+import type { GroupProfile } from '@circles-sdk/profiles';
 
 type Step = 'start' | 'form' | 'executed'; // TODO DRY
 
@@ -17,6 +21,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     description: '',
   });
   const [mintPolicy, setMintPolicy] = useState(mintPolicies[0]);
+  const { circles, eoaAddress } = useCircles(formData); // Get circles SDK and address
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -36,8 +41,24 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     e.preventDefault();
     if (!validName || !validSymbol) return;
 
-    // setStep('executed');
-    // TODO: Create group
+    try {
+      if (circles) {
+        const profile: GroupProfile = {
+          name: formData.name,
+          description: formData.description,
+          previewImageUrl: '',
+          imageUrl: undefined,
+          symbol: formData.symbol,
+        };
+
+        // Directly call the registerGroupV2 function from the SDK
+        const avatar = await circles.registerGroupV2(mintPolicy.name, profile);
+        console.log('Avatar created:', avatar);
+        setStep('executed'); // Move to the next step if needed
+      }
+    } catch (error) {
+      console.error('Failed to create group:', error);
+    }
   };
 
   return (
