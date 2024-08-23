@@ -56,7 +56,9 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
       onSubmit={handleSubmit}
       className='w-full h-full flex flex-col items-center justify-center gap-y-4'
     >
-      <h1 className='text-2xl text-center font-bold'>CREATE GROUP</h1>
+      <h1 className='text-2xl text-center font-bold text-accent'>
+        CREATE GROUP
+      </h1>
       <div className='flex w-full gap-x-2'>
         <Field className='w-4/5'>
           <Label className='text-sm/6 font-medium text-black'>Name</Label>

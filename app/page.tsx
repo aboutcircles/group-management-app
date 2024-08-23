@@ -1,10 +1,11 @@
 'use client';
 
 import Fallback from '@/components/Fallback';
-import { useAutoConnect } from '@/hooks/useAutoConnect';
-import { useAccount } from 'wagmi';
+// import { useAutoConnect } from '@/hooks/useAutoConnect';
+// import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useSafe } from '@/hooks/useSafe';
 
 // const group = {
 //   name: 'Group Test',
@@ -18,15 +19,18 @@ import { useEffect } from 'react';
 const group = null;
 
 export default function Page() {
-  const { address } = useAccount();
+  // const { address } = useAccount();
+  const { safeAddress: address } = useSafe();
   const router = useRouter();
-  useAutoConnect();
+  // useAutoConnect();
 
   useEffect(() => {
     if (address) {
       router.push('/create');
     }
   }, [address, router]);
+
+  console.log(address);
 
   return <>{!address && <Fallback />}</>;
 }
