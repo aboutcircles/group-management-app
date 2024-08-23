@@ -4,17 +4,21 @@ import useCircles from '@/hooks/useCircles';
 import { useEffect } from 'react';
 
 export default function Group({ group }: { group: GroupType }) {
-  const { findGroupByAddress } = useCircles();
+  const { findGroupByAddress, getTrustRelations } = useCircles();
 
   useEffect(() => {
     const fetchGroup = async () => {
       const groups = await findGroupByAddress(
         '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
       );
-      console.log(groups);
+      console.log('groups', groups);
+      const trustRelations = await getTrustRelations(
+        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+      );
+      console.log('trustRelations', trustRelations);
     };
     fetchGroup();
-  }, [findGroupByAddress]);
+  }, [findGroupByAddress, getTrustRelations]);
 
   return (
     <TabGroup>

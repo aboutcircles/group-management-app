@@ -7,6 +7,7 @@ import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy, { mintPolicies } from './MintPolicy';
 import ImgUpload from './ImgUpload';
 import { useRouter } from 'next/navigation';
+import useCircles from '@/hooks/useCircles';
 
 type Step = 'start' | 'form' | 'executed'; // TODO DRY
 
@@ -20,8 +21,11 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     symbol: '',
     description: '',
   });
+
   const [mintPolicy, setMintPolicy] = useState(mintPolicies[0]);
   const router = useRouter();
+
+  const { registerGroup } = useCircles();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -48,7 +52,8 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
 
     // setStep('executed');
     // TODO: Create group
-    router.push('/group');
+    // router.push('/group');
+    registerGroup(mintPolicy.name, formData);
   };
 
   return (
