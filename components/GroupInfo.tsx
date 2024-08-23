@@ -9,7 +9,7 @@ export type Group = {
   name: string;
   symbol: string;
   description: string;
-  image: string;
+  image?: string;
   balance: string;
   members: number;
 };
