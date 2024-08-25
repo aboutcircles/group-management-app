@@ -8,32 +8,8 @@ type Opts = {
 
 export function useSafe() {
   const [safeAddress, setSafeAddress] = useState<string | undefined>(undefined);
+  const [safeOwners, setSafeOwners] = useState<string[] | undefined>(undefined);
   const [sdk, setSdk] = useState<SafeAppsSDK | undefined>(undefined);
-
-  const [metaMaskAccount, setMetaMaskAccount] = useState<string | null>(null);
-
-  // Function to request accounts from MetaMask
-  const requestMetaMaskAccount = async () => {
-    try {
-      const { ethereum } = window as any;
-      if (!ethereum) {
-        throw new Error('MetaMask not found');
-      }
-
-      // Request account access
-      const accounts = await ethereum.request({
-        method: 'eth_requestAccounts',
-      });
-      setMetaMaskAccount(accounts[0]); // Set the first account
-    } catch (error) {
-      console.error('Error connecting to MetaMask:', error);
-    }
-  };
-
-  useEffect(() => {
-    // This will check if MetaMask is installed and request access
-    requestMetaMaskAccount();
-  }, []);
 
   useEffect(() => {
     async function set() {
@@ -50,11 +26,15 @@ export function useSafe() {
       const safe = await appsSdk.safe.getInfo();
       console.log('safe', safe);
       setSafeAddress(safe.safeAddress);
+      setSafeOwners(safe.owners);
     }
     set();
   }, []);
 
-  console.log('metaMaskAccount', metaMaskAccount);
-
-  return { safeAddress, sdk, metaMaskAccount };
+  return {
+    safeAddress,
+    sdk,
+    safeOwners,
+    //  metaMaskAccount
+  };
 }

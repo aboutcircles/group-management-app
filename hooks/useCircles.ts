@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
 import type { GroupProfile } from '@circles-sdk/profiles';
 import { ethers } from 'ethers';
+import { useSafe } from '@/hooks/useSafe';
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
@@ -11,22 +12,26 @@ export const chainConfigGnosis: CirclesConfig = {
   v1HubAddress: '0x29b9a7fbb8995b2423a71cc17cf9810798f6c543',
   v2HubAddress: '0x7bC1F123089Bc1f384b6379d0587968d1CD5830a',
   migrationAddress: '0xEaBa6046103C3A2f5A681fD4323f78C647Fb4292',
-  profileServiceUrl: '',
+  nameRegistryAddress: '0xb95ef3f3e693531d9588815bca954dc8dce30937',
+  profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
 };
 
 // Chiado testnet:
 export const chainConfigChiado: CirclesConfig = {
-  pathfinderUrl: 'https://pathfinder.aboutcircles.com',
+  pathfinderUrl: 'https://chiado-pathfinder.aboutcircles.com',
   circlesRpcUrl: 'https://chiado-rpc.aboutcircles.com',
   v1HubAddress: '0xdbf22d4e8962db3b2f1d9ff55be728a887e47710',
   v2HubAddress: '0x2066CDA98F98397185483aaB26A89445addD6740',
   migrationAddress: '0x2A545B54bb456A0189EbC53ed7090BfFc4a6Af94',
+  nameRegistryAddress: '0x64703664BBc8A3BaeD014171e86Dfc2dF2E07A08',
   profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
 };
 
 export default function useCircles() {
   const [circles, setCircles] = useState<Sdk | null>(null);
   const [eoaAddress, setEoaAddress] = useState<string | null>(null);
+
+  const { safeOwners } = useSafe();
 
   useEffect(() => {
     async function initializeSdk() {
@@ -37,14 +42,31 @@ export default function useCircles() {
       }
 
       try {
+        const accounts = await windowEthereum.request({
+          method: 'eth_requestAccounts',
+        });
+        const currentAccount = accounts[0]; // Get the first account
+
+        console.log('currentAccount', currentAccount);
+
         const browserProvider = new ethers.BrowserProvider(windowEthereum);
+        const addr = await browserProvider.send('eth_requestAccounts', []);
+        console.log('addr', addr);
         const signer = await browserProvider.getSigner();
         const address = await signer.getAddress();
+
+        if (safeOwners && safeOwners.includes(address)) {
+          console.log('safe owner');
+        } else {
+          console.log('eoa not safe owner');
+        }
+
         const newSdk = new Sdk(chainConfigGnosis, {
           runner: signer,
           address,
         });
         setCircles(newSdk);
+        console.log('address eoa', address);
         setEoaAddress(address);
       } catch (error) {
         console.error('Failed to initialize SDK:', error);
@@ -52,7 +74,7 @@ export default function useCircles() {
     }
 
     initializeSdk();
-  }, []);
+  }, [safeOwners]);
 
   const findGroupByAddress = async (address: string) => {
     try {
@@ -98,8 +120,10 @@ export default function useCircles() {
     };
 
     try {
+      console.log('creating group...');
       const newGroup = await circles?.registerGroupV2(mintPolicy, profile);
       console.log('newGroup', newGroup);
+      return newGroup;
     } catch (error) {
       console.error('Failed to register group:', error);
     }

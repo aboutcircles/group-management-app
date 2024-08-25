@@ -53,7 +53,8 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     // setStep('executed');
     // TODO: Create group
     // router.push('/group');
-    registerGroup(mintPolicy.name, formData);
+    const newGroup = await registerGroup(mintPolicy.name, formData);
+    console.log('newGroup from form', newGroup);
   };
 
   return (
