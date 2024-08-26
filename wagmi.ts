@@ -17,7 +17,7 @@ export const config = createConfig({
       projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
     }),
     safe(),
-    metaMask(),
+    // metaMask(),
   ],
   ssr: true,
   transports: {

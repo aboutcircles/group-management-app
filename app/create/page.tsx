@@ -2,8 +2,8 @@
 
 import Fallback from '@/components/Fallback';
 import RegisterGroup from '@/components/RegisterGroup';
-import { useSafe } from '@/hooks/useSafe';
-// import { useAccount } from 'wagmi';
+// import { useSafe } from '@/hooks/useSafe';
+import { useAccount } from 'wagmi';
 
 // const group = {
 //   name: 'Group Test',
@@ -17,7 +17,7 @@ import { useSafe } from '@/hooks/useSafe';
 const group = null;
 
 export default function Page() {
-  // const { address } = useAccount();
-  const { safeAddress: address } = useSafe();
+  const { address } = useAccount();
+  // const { safeAddress: address } = useSafe();
   return <>{address ? <RegisterGroup /> : <Fallback />}</>;
 }

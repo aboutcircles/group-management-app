@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
 import type { GroupProfile } from '@circles-sdk/profiles';
 import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
 // import { useSafe } from '@/hooks/useSafe';
 
 // Gnosis:
@@ -29,48 +30,22 @@ export const chainConfigChiado: CirclesConfig = {
 
 export default function useCircles() {
   const [circles, setCircles] = useState<Sdk | null>(null);
-  const [eoaAddress, setEoaAddress] = useState<string | null>(null);
+  const { address } = useAccount();
 
-  // const { safeOwners } = useSafe();
+  console.log('address', address);
 
   useEffect(() => {
     async function initializeSdk() {
-      const windowEthereum = (window as any).ethereum;
-      if (!windowEthereum) {
-        console.error('window.ethereum is not installed');
-        return;
-      }
-
-      try {
-        const accounts = await windowEthereum.request({
-          method: 'eth_requestAccounts',
-        });
-        const currentAccount = accounts[0]; // Get the first account
-
-        console.log('currentAccount', currentAccount);
-
-        const browserProvider = new ethers.BrowserProvider(windowEthereum);
-        const addr = await browserProvider.send('eth_requestAccounts', []);
-        console.log('addr', addr);
-        const signer = await browserProvider.getSigner();
-        const address = await signer.getAddress();
-
-        // if (safeOwners && safeOwners.includes(address)) {
-        //   console.log('safe owner');
-        // } else {
-        //   console.log('eoa not safe owner');
-        // }
-
-        const newSdk = new Sdk(chainConfigGnosis, {
-          runner: signer,
-          address,
-        });
-        setCircles(newSdk);
-        console.log('address eoa', address);
-        setEoaAddress(address);
-      } catch (error) {
-        console.error('Failed to initialize SDK:', error);
-      }
+      // TODO get a signer here to initialize the Circles SDK
+      // try {
+      //   const newSdk = new Sdk(chainConfigGnosis, {
+      //     runner: signer,
+      //     address,
+      //   });
+      //   setCircles(newSdk);
+      // } catch (error) {
+      //   console.error('Failed to initialize Circles SDK:', error);
+      // }
     }
 
     initializeSdk();
@@ -131,7 +106,7 @@ export default function useCircles() {
 
   return {
     circles,
-    eoaAddress,
+    // eoaAddress,
     findGroupByAddress,
     getTrustRelations,
     registerGroup,
