@@ -11,11 +11,11 @@ export default function Group({ group }: { group: GroupType }) {
       const groups = await findGroupByAddress(
         '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
       );
-      console.log('groups', groups);
+      // console.log('groups', groups);
       const trustRelations = await getTrustRelations(
         '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
       );
-      console.log('trustRelations', trustRelations);
+      // console.log('trustRelations', trustRelations);
     };
     fetchGroup();
   }, [findGroupByAddress, getTrustRelations]);
