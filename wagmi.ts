@@ -1,6 +1,11 @@
 import { http, createConfig } from 'wagmi';
 import { gnosis, gnosisChiado } from 'wagmi/chains';
-import { coinbaseWallet, walletConnect, metaMask } from 'wagmi/connectors';
+import {
+  coinbaseWallet,
+  walletConnect,
+  metaMask,
+  safe,
+} from 'wagmi/connectors';
 
 export const config = createConfig({
   chains: [gnosis, gnosisChiado],
@@ -11,6 +16,7 @@ export const config = createConfig({
     walletConnect({
       projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
     }),
+    safe(),
     metaMask(),
   ],
   ssr: true,
