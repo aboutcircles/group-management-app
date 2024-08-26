@@ -5,7 +5,8 @@ import Fallback from '@/components/Fallback';
 // import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useSafe } from '@/hooks/useSafe';
+import { useAccount } from 'wagmi';
+// import { useSafe } from '@/hooks/useSafe';
 
 // const group = {
 //   name: 'Group Test',
@@ -19,8 +20,8 @@ import { useSafe } from '@/hooks/useSafe';
 const group = null;
 
 export default function Page() {
-  // const { address } = useAccount();
-  const { safeAddress: address } = useSafe();
+  const { address } = useAccount();
+  // const { safeAddress: address } = useSafe();
   const router = useRouter();
   // useAutoConnect();
 

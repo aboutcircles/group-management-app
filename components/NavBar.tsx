@@ -6,11 +6,11 @@ import { HomeIcon } from '@heroicons/react/24/outline';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useSafe } from '@/hooks/useSafe';
+// import { useSafe } from '@/hooks/useSafe';
 
 export default function Navbar() {
-  // const { address } = useAccount();
-  const { safeAddress: address } = useSafe();
+  const { address } = useAccount();
+  // const { safeAddress: address } = useSafe();
   // useAutoConnect();
   const router = useRouter();
 

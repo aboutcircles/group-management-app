@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
 import type { GroupProfile } from '@circles-sdk/profiles';
 import { ethers } from 'ethers';
-import { useSafe } from '@/hooks/useSafe';
+// import { useSafe } from '@/hooks/useSafe';
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
@@ -31,7 +31,7 @@ export default function useCircles() {
   const [circles, setCircles] = useState<Sdk | null>(null);
   const [eoaAddress, setEoaAddress] = useState<string | null>(null);
 
-  const { safeOwners } = useSafe();
+  // const { safeOwners } = useSafe();
 
   useEffect(() => {
     async function initializeSdk() {
@@ -55,11 +55,11 @@ export default function useCircles() {
         const signer = await browserProvider.getSigner();
         const address = await signer.getAddress();
 
-        if (safeOwners && safeOwners.includes(address)) {
-          console.log('safe owner');
-        } else {
-          console.log('eoa not safe owner');
-        }
+        // if (safeOwners && safeOwners.includes(address)) {
+        //   console.log('safe owner');
+        // } else {
+        //   console.log('eoa not safe owner');
+        // }
 
         const newSdk = new Sdk(chainConfigGnosis, {
           runner: signer,
@@ -74,7 +74,7 @@ export default function useCircles() {
     }
 
     initializeSdk();
-  }, [safeOwners]);
+  }, []);
 
   const findGroupByAddress = async (address: string) => {
     try {
