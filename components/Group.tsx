@@ -15,9 +15,10 @@ export default function Group() {
     console.log('use effect for Group', circles);
     const fetchGroup = async () => {
       console.log('address', address);
-      if (!address) return;
+      if (!address || !circles) return;
       const group = await findGroupByAddress(
-        '0x03F937F2D7B0FbA7BF6a3350F617a8a7560a4F43'
+        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+        // '0x03F937F2D7B0FbA7BF6a3350F617a8a7560a4F43'
         // address
       );
       console.log('groups', group);

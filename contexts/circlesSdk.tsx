@@ -29,9 +29,9 @@ interface SDKContextType {
   circles: Sdk | null;
 }
 
-export const CirclesSdkContext = createContext<SDKContextType | undefined>(
-  undefined
-);
+export const CirclesSdkContext = createContext<SDKContextType>({
+  circles: null,
+});
 
 export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
