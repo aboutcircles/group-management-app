@@ -8,10 +8,10 @@ import ImgUpload from './ImgUpload';
 export type Group = {
   name: string;
   symbol: string;
-  description: string;
+  description?: string;
   image?: string;
-  balance: string;
-  members: number;
+  balance?: string;
+  members?: number;
 };
 
 export default function GroupInfo({ group }: { group: Group }) {
