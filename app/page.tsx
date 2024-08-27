@@ -9,10 +9,23 @@ import { HomeIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
+import { useSafeProvider } from '@/hooks/useSafeProvider';
+import { useEffect } from 'react';
+
 
 export default function Page() {
   const { address } = useAccount();
+  const provider  = useSafeProvider();
   useAutoConnect();
+
+  useEffect(() => {
+    if (provider) {
+      console.log('Got SafeAppProvider:', provider);
+    } else {
+      console.log('Provider is not yet available.');
+    }
+  }, [provider]); // Depend on provider
+
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center'>

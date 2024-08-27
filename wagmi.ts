@@ -1,6 +1,7 @@
 import { http, createConfig } from "wagmi";
 import { gnosis, gnosisChiado } from "wagmi/chains";
 import { safe } from "wagmi/connectors";
+import { type SafeParameters } from 'wagmi/connectors'
 
 export const config = createConfig({
   chains: [gnosis, gnosisChiado],
