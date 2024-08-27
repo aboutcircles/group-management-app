@@ -2,26 +2,8 @@
 import { useEffect, useState } from 'react';
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
 import type { GroupProfile } from '@circles-sdk/profiles';
-import {
-  BrowserProvider,
-  ethers,
-  JsonRpcProvider,
-  Eip1193Provider,
-} from 'ethers';
-import {
-  useAccount,
-  useChainId,
-  useConnect,
-  useConnectorClient,
-  useConnectors,
-  useClient,
-  Config,
-  useWalletClient,
-} from 'wagmi';
-import { getEthersSigner } from '@/utils/ethers';
-import { config } from '@/wagmi';
-import { useEthersProvider } from './useEthers';
-// import { useSafe } from '@/hooks/useSafe';
+import { BrowserProvider } from 'ethers';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
@@ -49,39 +31,17 @@ export default function useCircles() {
   const [circles, setCircles] = useState<Sdk | null>(null);
   const { address } = useAccount();
   const chainId = useChainId();
-  // const { connectors } = useConnect();
-  // const connectorClient = useConnectorClient();
-  // const client = useClient<Config>({ chainId });
-
-  // console.log('client', client);
-
-  // const ethersProvider = useEthersProvider({ chainId }) as JsonRpcProvider;
-
   const { data: walletClient } = useWalletClient();
-
-  // console.log('address', address);
 
   useEffect(() => {
     async function initializeSdk() {
       if (!address || !chainId || !walletClient) return;
-
-      // const wagmiProvider = await client.connector.getProvider();
-
       const ethersProvider = new BrowserProvider(walletClient);
-
-      // const signer = await getEthersSigner(
-      //   config,
-      //   { chainId },
-      //   connectorClient
-      // );
-
       console.log('initializeSdk');
 
       const signer = await ethersProvider.getSigner();
 
       console.log('signer', signer);
-
-      // TODO get a signer here to initialize the Circles SDK
       try {
         const newSdk = new Sdk(chainConfigGnosis, {
           runner: signer,
@@ -152,7 +112,6 @@ export default function useCircles() {
 
   return {
     circles,
-    // eoaAddress,
     findGroupByAddress,
     getTrustRelations,
     registerGroup,
