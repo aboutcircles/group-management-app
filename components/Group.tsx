@@ -3,10 +3,11 @@ import GroupInfo, { Group as GroupType } from './GroupInfo';
 import useCircles from '@/hooks/useCircles';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import ManageMembers from './ManageMembers';
 
 export default function Group() {
   const { address } = useAccount();
-  const { findGroupByAddress, getTrustRelations, circles } = useCircles();
+  const { findGroupByAddress, circles } = useCircles();
   const [group, setGroup] = useState<GroupType | undefined>(undefined);
 
   console.log('circles from Group', circles);
@@ -14,22 +15,19 @@ export default function Group() {
   useEffect(() => {
     console.log('use effect for Group', circles);
     const fetchGroup = async () => {
-      console.log('address', address);
       if (!address || !circles) return;
+      console.log('address', address.toLowerCase());
       const group = await findGroupByAddress(
-        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-        // '0x03F937F2D7B0FbA7BF6a3350F617a8a7560a4F43'
-        // address
+        // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7' // works
+        '0xec549ed5ab5c05ffcde00e77115bcb0728f36070'
+        // address.toLowerCase() // not working
+        // address // also not
       );
       console.log('groups', group);
       setGroup(group as GroupType);
-      const trustRelations = await getTrustRelations(address);
-      //   '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-      // );
-      console.log('trustRelations', trustRelations);
     };
     fetchGroup();
-  }, [address, circles, findGroupByAddress, getTrustRelations]);
+  }, [address, circles, findGroupByAddress]);
 
   if (!group || !circles) return <div>Loading...</div>;
 
@@ -47,7 +45,9 @@ export default function Group() {
         <TabPanel>
           <GroupInfo group={group} />
         </TabPanel>
-        <TabPanel className='h-6'>manage members</TabPanel>
+        <TabPanel>
+          <ManageMembers />
+        </TabPanel>
       </TabPanels>
     </TabGroup>
   );

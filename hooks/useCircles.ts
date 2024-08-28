@@ -6,10 +6,6 @@ import { CirclesSdkContext } from '@/contexts/circlesSdk';
 export default function useCircles() {
   const { circles } = useContext(CirclesSdkContext);
 
-  // const circles = useContext(CirclesSdkContext) ?? {};
-
-  console.log('circles', circles);
-
   // if (!circles) {
   //   throw new Error('useCirclesSdk must be used within a CirclesSDKProvider');
   // }
@@ -33,20 +29,24 @@ export default function useCircles() {
     [circles]
   );
 
-  const getTrustRelations = async (address: string) => {
-    try {
-      const trustRelations = circles?.data.getTrustRelations(address, 10);
-      if (await trustRelations?.queryNextPage()) {
-        const trustRelationsResult = trustRelations?.currentPage?.results ?? [];
-        return trustRelationsResult;
-      } else {
+  const getTrustRelations = useCallback(
+    async (address: string) => {
+      try {
+        const trustRelations = circles?.data.getTrustRelations(address, 10);
+        if (await trustRelations?.queryNextPage()) {
+          const trustRelationsResult =
+            trustRelations?.currentPage?.results ?? [];
+          return trustRelationsResult;
+        } else {
+          return [];
+        }
+      } catch (error) {
+        console.error('Failed to get trust relations:', error);
         return [];
       }
-    } catch (error) {
-      console.error('Failed to get trust relations:', error);
-      return [];
-    }
-  };
+    },
+    [circles]
+  );
 
   const registerGroup = useCallback(
     async (mintPolicy: string, groupData: GroupProfile) => {

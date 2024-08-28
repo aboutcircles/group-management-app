@@ -67,6 +67,8 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     initializeSdk();
   }, [initializeSdk]);
 
+  console.log('render circles context');
+
   return (
     <CirclesSdkContext.Provider value={{ circles }}>
       {children}
