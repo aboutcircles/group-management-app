@@ -1,24 +1,35 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import GroupInfo, { Group as GroupType } from './GroupInfo';
 import useCircles from '@/hooks/useCircles';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import ManageMembers from './ManageMembers';
 
-export default function Group({ group }: { group: GroupType }) {
-  const { findGroupByAddress, getTrustRelations } = useCircles();
+export default function Group() {
+  const { address } = useAccount();
+  const { findGroupByAddress, circles } = useCircles();
+  const [group, setGroup] = useState<GroupType | undefined>(undefined);
+
+  console.log('circles from Group', circles);
 
   useEffect(() => {
+    console.log('use effect for Group', circles);
     const fetchGroup = async () => {
-      const groups = await findGroupByAddress(
-        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+      if (!address || !circles) return;
+      console.log('address', address.toLowerCase());
+      const group = await findGroupByAddress(
+        // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7' // works
+        '0xec549ed5ab5c05ffcde00e77115bcb0728f36070'
+        // address.toLowerCase() // not working
+        // address // also not
       );
-      console.log('groups', groups);
-      const trustRelations = await getTrustRelations(
-        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-      );
-      console.log('trustRelations', trustRelations);
+      console.log('groups', group);
+      setGroup(group as GroupType);
     };
     fetchGroup();
-  }, [findGroupByAddress, getTrustRelations]);
+  }, [address, circles, findGroupByAddress]);
+
+  if (!group || !circles) return <div>Loading...</div>;
 
   return (
     <TabGroup>
@@ -34,7 +45,9 @@ export default function Group({ group }: { group: GroupType }) {
         <TabPanel>
           <GroupInfo group={group} />
         </TabPanel>
-        <TabPanel className='h-6'>manage members</TabPanel>
+        <TabPanel>
+          <ManageMembers />
+        </TabPanel>
       </TabPanels>
     </TabGroup>
   );
