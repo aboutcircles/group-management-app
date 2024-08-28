@@ -1,17 +1,16 @@
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
-import { isValidName, isValidSymbol } from '@/utils/isValid';
-import MintPolicy, { mintPolicies } from './MintPolicy';
 import ImgUpload from './ImgUpload';
+import { truncateAddress } from '@/utils/truncateAddress';
 
 export type Group = {
   name: string;
   symbol: string;
-  description: string;
+  description?: string;
   image?: string;
-  balance: string;
-  members: number;
+  balance?: string;
+  members?: number;
+  mint?: string;
 };
 
 export default function GroupInfo({ group }: { group: Group }) {
@@ -20,7 +19,6 @@ export default function GroupInfo({ group }: { group: Group }) {
     symbol: group.symbol,
     description: group.description,
   });
-  const [mintPolicy, setMintPolicy] = useState(mintPolicies[0]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -70,11 +68,16 @@ export default function GroupInfo({ group }: { group: Group }) {
               onChange={handleChange}
             />
           </Field>
-          <p className='text-xs text-gray mx-3'>{group.members} members</p>
+          {/* <p className='text-xs text-gray mx-3'>{group.members} members</p> */}
           <div className='flex'>
             <p className='font-bold mx-3'>{group.symbol}</p>
             <p className=''>{group.balance}</p>
           </div>
+          {group.mint && (
+            <p className='text-xs text-gray mx-3'>
+              Mint policy: {truncateAddress(group.mint)}
+            </p>
+          )}
         </div>
       </div>
 
