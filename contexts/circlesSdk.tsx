@@ -41,23 +41,18 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   const chainId = useChainId();
   const { data: walletClient } = useWalletClient();
 
-  console.log('CirclesSDKProvider', circles, address, chainId, walletClient);
-
   const initializeSdk = useCallback(async () => {
     if (!address || !chainId || !walletClient) return;
     const ethersProvider = new BrowserProvider(walletClient);
-    console.log('===initializeSdk');
 
     const signer = await ethersProvider.getSigner();
 
-    console.log('signer', signer);
     try {
       const newSdk = new Sdk(chainConfigGnosis, {
         runner: signer,
         address: address as string,
       });
       setCircles(newSdk);
-      console.log('newSdk', newSdk);
     } catch (error) {
       console.error('Failed to initialize Circles SDK:', error);
     }
@@ -66,8 +61,6 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     initializeSdk();
   }, [initializeSdk]);
-
-  console.log('render circles context');
 
   return (
     <CirclesSdkContext.Provider value={{ circles }}>

@@ -6,6 +6,7 @@ import { WagmiProvider } from 'wagmi';
 import { config } from '@/wagmi';
 import Connect from '@/components/Connect';
 import { CirclesSDKProvider } from '@/contexts/circlesSdk';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -16,6 +17,7 @@ export function Providers(props: { children: ReactNode }) {
         <CirclesSDKProvider>
           <Connect />
           {props.children}
+          <ReactQueryDevtools initialIsOpen={false} />
         </CirclesSDKProvider>
       </QueryClientProvider>
     </WagmiProvider>

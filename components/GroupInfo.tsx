@@ -2,16 +2,7 @@ import { useState } from 'react';
 import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import ImgUpload from './ImgUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
-
-export type Group = {
-  name: string;
-  symbol: string;
-  description?: string;
-  image?: string;
-  balance?: string;
-  members?: number;
-  mint?: string;
-};
+import { Group } from '@/types';
 
 export default function GroupInfo({ group }: { group: Group }) {
   const [formData, setFormData] = useState({
