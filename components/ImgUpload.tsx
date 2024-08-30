@@ -55,7 +55,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
     <div className="flex items-center">
       <div
         {...getRootProps()}
-        className={`w-28 h-28 bg-white text-black/30 border border-dashed rounded-full cursor-pointer text-center flex items-center justify-center text-sm ${
+        className={`w-28 h-28 bg-white my-2 text-black/30 border-2 border-dashed rounded-full cursor-pointer text-center flex items-center justify-center text-xs ${
           isDragging ? "border-accent" : "border-zinc"
         }`}
       >

@@ -46,7 +46,10 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
 
   const handleFileSelected = (file: File | null) => {
     console.log(file);
-    // TODO: set image
+    setFormData((prevData) => ({
+      ...prevData,
+      previewImageUrl: file?.name,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,35 +66,35 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full h-full flex flex-col items-center justify-center gap-y-4"
+      className="w-full h-full flex flex-col items-center justify-center gap-y-4 text-xs md:text-sm/6 text-black"
     >
       <h1 className="text-2xl text-center font-bold text-accent">
         CREATE GROUP
       </h1>
-      <div className="flex w-full gap-x-2">
-        <Field className="w-4/5">
-          <Label className="text-sm/6 font-medium text-black">Name</Label>
+      <div className="flex flex-col md:flex-row w-full gap-x-2">
+        <Field className="w-full md:w-4/5">
+          <Label className="font-medium">Name</Label>
           <Input
             required
             type="text"
             name="name"
             value={formData.name}
             placeholder="Group Name..."
-            className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+            className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
             onChange={handleChange}
           />
           <p className="text-xs text-accent h-4 pl-1">
             {!validName && "Invalid name"}
           </p>
         </Field>
-        <Field className="w-1/5">
-          <Label className="text-sm/6 font-medium text-black">Symbol</Label>
+        <Field className="w-full md:w-1/5">
+          <Label className="font-medium">Symbol</Label>
           <Input
             required
             name="symbol"
             value={formData.symbol}
             placeholder="CRC..."
-            className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+            className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
             onChange={handleChange}
           />
           <p className="text-xs text-accent h-4 pl-1">
@@ -99,28 +102,28 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
           </p>
         </Field>
       </div>
-      <div className="flex items-center w-full">
-        <Field className="w-2/3">
-          <Label className="text-sm/6 font-medium text-black">
+      <div className="flex flex-col md:flex-row items-center w-full">
+        <Field className="w-full md:w-2/3">
+          <Label className="font-medium">
             Description
           </Label>
           <Textarea
             name="description"
             value={formData.description}
             placeholder="Group Description..."
-            className="mt-1 h-20 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+            className="mt-1 h-20 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
             onChange={handleChange}
           />
         </Field>
-        <Field className="w-1/3 flex flex-col items-center">
-          <Label className="text-sm/6 font-medium text-black">
+        <Field className="w-full md:w-1/3 flex flex-col items-center">
+          <Label className="font-medium">
             Group Image
           </Label>
           <ImgUpload onFileSelected={handleFileSelected} />
         </Field>
       </div>
       <Field className="w-full">
-        <Label className="text-sm/6 font-medium text-black">
+        <Label className="font-medium">
           Base Mint Policy
         </Label>
         <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
