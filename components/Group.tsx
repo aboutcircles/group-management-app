@@ -15,17 +15,9 @@ export default function Group() {
   useEffect(() => {
     const fetchGroup = async () => {
       if (!address || !circles) return;
-      const group = await findGroupByAddress(
-        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7' // works
-        // '0xec549ed5ab5c05ffcde00e77115bcb0728f36070'
-        // address.toLowerCase() // not working
-        // address // also not
-      );
+      const group = await findGroupByAddress(address);
       setGroup(group as GroupType);
-      const trustRelations = await getTrustRelations(
-        '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-        // address
-      );
+      const trustRelations = await getTrustRelations(address);
       setTrusts(trustRelations as TrustRelation[]);
     };
     fetchGroup();

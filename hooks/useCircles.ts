@@ -8,6 +8,7 @@ import { CirclesSdkContext } from '@/contexts/circlesSdk';
 import { TrustRelation, Group } from '@/types';
 import { Address } from 'viem';
 import { AvatarInterface } from '@circles-sdk/sdk';
+import { type Profile } from '@circles-sdk/profiles';
 import { useAccount } from 'wagmi';
 
 export default function useCircles() {
@@ -21,11 +22,10 @@ export default function useCircles() {
   const queryClient = useQueryClient();
   const { address } = useAccount();
 
-  console.log('groupAvatar', groupAvatar);
-
   useEffect(() => {
     const getGroupAvatar = async () => {
       if (!address || !circles) return;
+      console.log('fetch group avatar');
       try {
         const groupAvatar = await circles.getAvatar(
           // address as string
@@ -44,11 +44,12 @@ export default function useCircles() {
 
   const findGroupByAddress = useCallback(
     async (address: string): Promise<Group> => {
-      const queryKey = ['groupByAddress', address];
+      const _address = address.toLowerCase();
+      const queryKey = ['groupByAddress', _address];
 
       const queryFn = async () => {
         const getGroups = circles?.data.findGroups(1, {
-          groupAddressIn: [address],
+          groupAddressIn: [_address],
         });
 
         if (await getGroups?.queryNextPage()) {
@@ -67,10 +68,11 @@ export default function useCircles() {
 
   const getTrustRelations = useCallback(
     async (address: string): Promise<TrustRelation[]> => {
-      const queryKey = ['trustRelations', address];
+      const _address = address.toLowerCase();
+      const queryKey = ['trustRelations', _address];
 
       const queryFn = async () => {
-        const trustRelations = circles?.data.getTrustRelations(address, 10);
+        const trustRelations = circles?.data.getTrustRelations(_address, 10);
 
         if (await trustRelations?.queryNextPage()) {
           return trustRelations?.currentPage?.results ?? [];
@@ -82,7 +84,7 @@ export default function useCircles() {
       try {
         const data = (
           await queryClient.fetchQuery({ queryKey, queryFn })
-        ).filter((row) => row.truster.toLowerCase() === address.toLowerCase()); // only trusted by group
+        ).filter((row) => row.truster.toLowerCase() === _address); // only trusted by group
         return data as TrustRelation[];
       } catch (error) {
         console.error('Failed to get trust relations:', error);
@@ -120,22 +122,99 @@ export default function useCircles() {
     [circles]
   );
 
-  // const trust = useCallback(async () => {
-  //   (await circles?.getAvatar()).trust();
-  //   try {
-  //     console.log('creating group...');
-  //     const newGroup = await circles?.registerGroupV2(mintPolicy, profile);
-  //     console.log('newGroup', newGroup);
-  //     return newGroup;
-  //   } catch (error) {
-  //     console.error('Failed to register group:', error);
-  //   }
-  // }, [circles]);
+  const trust = useCallback(
+    async (address: string) => {
+      if (!groupAvatar) return;
+      try {
+        const _address = address.toLowerCase();
+        await groupAvatar.trust(_address);
+      } catch (error) {
+        console.error('Failed to trust:', error);
+      }
+    },
+    [groupAvatar]
+  );
+
+  const untrust = useCallback(
+    async (address: string) => {
+      if (!groupAvatar) return;
+      try {
+        const _address = address.toLowerCase();
+        await groupAvatar.untrust(_address);
+      } catch (error) {
+        console.error('Failed to untrust:', error);
+      }
+    },
+    [groupAvatar]
+  );
+
+  const getAvatarInfo = useCallback(
+    async (address: string): Promise<AvatarInterface> => {
+      const _address = address.toLowerCase();
+      const queryKey = ['avatarInfo', _address];
+
+      const queryFn = async () => {
+        if (!circles) return;
+        try {
+          const avatarInfo = await circles.getAvatar(_address);
+          return avatarInfo;
+        } catch (error) {
+          console.error('Failed to get avatar info:', error);
+          return {} as AvatarInterface;
+        }
+      };
+
+      try {
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data as AvatarInterface;
+      } catch (error) {
+        console.error('Failed to get avatar info:', error);
+        return {} as AvatarInterface;
+      }
+    },
+    [circles, queryClient]
+  );
+
+  const getAvatarProfileByAddress = useCallback(
+    async (address: string): Promise<Profile | null> => {
+      const _address = address.toLowerCase();
+      const queryKey = ['avatarProfile', _address];
+
+      const queryFn = async () => {
+        if (!circles) return;
+        try {
+          const avatarInfo = await circles.getAvatar(_address);
+          const cid = avatarInfo?.avatarInfo?.cidV0;
+          console.log('cid', cid);
+          if (!cid) return null;
+          const avatarProfile = await circles.profiles?.get(cid);
+          console.log('avatarProfile', avatarProfile);
+          return avatarProfile;
+        } catch (error) {
+          console.error('Failed to get avatar profile:', error);
+          return null;
+        }
+      };
+
+      try {
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data as Profile;
+      } catch (error) {
+        console.error('Failed to get avatar profile:', error);
+        return {} as Profile;
+      }
+    },
+    [circles, queryClient]
+  );
 
   return {
     circles,
     findGroupByAddress,
     getTrustRelations,
     registerGroup,
+    trust,
+    untrust,
+    getAvatarInfo,
+    getAvatarProfileByAddress,
   };
 }
