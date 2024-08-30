@@ -27,7 +27,7 @@ export default function MintPolicy({
 }: MintPolicyProps) {
   return (
     <Listbox value={mintPolicy} onChange={setMintPolicy}>
-      <ListboxButton className='relative block rounded-lg bg-black/5 py-1.5 pr-8 pl-3 mt-1 text-left text-xs md:text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 overflow-x-clip'>
+      <ListboxButton className='relative block rounded-lg bg-black/5 py-1.5 pr-8 pl-3 mt-1 text-left text-[11px] md:text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 overflow-x-clip'>
         <p className='overflow-x-clip'>{mintPolicy.name}</p>
         <ChevronDownIcon
           className='group pointer-events-none absolute top-1.5 right-1.5 md:top-2.5 md:right-2.5 size-4'
@@ -46,7 +46,7 @@ export default function MintPolicy({
             className='group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-black/10 overflow-x-clip'
           >
             <CheckIcon className='invisible size-4 fill-black group-data-[selected]:visible' />
-            <div className='w-full text-xs text-sm/6 text-black overflow-x-clip'>
+            <div className='w-full text-[11px] text-sm/6 text-black overflow-x-clip'>
               {policy.name}
             </div>
           </ListboxOption>

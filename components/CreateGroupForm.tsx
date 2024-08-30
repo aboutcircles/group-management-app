@@ -131,7 +131,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
       <button
         type="submit"
         disabled={!validName || !validSymbol}
-        className="flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out mt-4"
+        className="flex items-center bg-accent rounded-full text-sm px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out mt-4"
       >
         Create
         <ArrowRightIcon className="h-4 w-4 ml-1" />
