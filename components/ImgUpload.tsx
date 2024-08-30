@@ -57,7 +57,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
         />
       ) : (
         <div
-          className='w-40 h-40 rounded-full bg-white dark:bg-white text-black/30 dark:text-black/30 my-4 text-center flex items-center justify-center cursor-pointer text-sm'
+          className='w-28 h-28 rounded-full bg-white dark:bg-white text-black/30 dark:text-black/30 my-4 text-center flex items-center justify-center cursor-pointer text-sm'
           onClick={openModal}
         >
           Click to upload an image
