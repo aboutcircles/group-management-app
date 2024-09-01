@@ -72,41 +72,45 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         CREATE GROUP
       </h1>
       <div className="flex flex-col md:flex-row w-full gap-x-2">
-        <Field className="w-full md:w-4/5">
-          <Label className="font-medium">Name</Label>
-          <Input
-            required
-            type="text"
-            name="name"
-            value={formData.name}
-            placeholder="Group Name..."
-            className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
-            onChange={handleChange}
-          />
-          <p className="text-xs text-accent h-4 pl-1">
-            {!validName && "Invalid name"}
-          </p>
-        </Field>
-        <Field className="w-full md:w-1/5">
-          <Label className="font-medium">Symbol</Label>
-          <Input
-            required
-            name="symbol"
-            value={formData.symbol}
-            placeholder="CRC..."
-            className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
-            onChange={handleChange}
-          />
-          <p className="text-xs text-accent h-4 pl-1">
-            {!validSymbol && "Invalid symbol"}
-          </p>
+        <div className="flex flex-col w-full md:w-2/3">
+          <Field className="w-full">
+            <Label className="font-medium">Name</Label>
+            <Input
+              required
+              type="text"
+              name="name"
+              value={formData.name}
+              placeholder="Group Name..."
+              className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+              onChange={handleChange}
+            />
+            <p className="text-xs text-accent h-4 pl-1">
+              {!validName && "Invalid name"}
+            </p>
+          </Field>
+          <Field className="w-full">
+            <Label className="font-medium">Symbol</Label>
+            <Input
+              required
+              name="symbol"
+              value={formData.symbol}
+              placeholder="CRC..."
+              className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+              onChange={handleChange}
+            />
+            <p className="text-xs text-accent h-4 pl-1">
+              {!validSymbol && "Invalid symbol"}
+            </p>
+          </Field>
+        </div>
+        <Field className="w-full md:w-1/3 flex flex-col items-center">
+          <Label className="font-medium">Group Image</Label>
+          <ImgUpload onFileSelected={handleFileSelected} />
         </Field>
       </div>
       <div className="flex flex-col md:flex-row items-center w-full">
-        <Field className="w-full md:w-2/3">
-          <Label className="font-medium">
-            Description
-          </Label>
+        <Field className="w-full">
+          <Label className="font-medium">Description</Label>
           <Textarea
             name="description"
             value={formData.description}
@@ -115,17 +119,9 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
             onChange={handleChange}
           />
         </Field>
-        <Field className="w-full md:w-1/3 flex flex-col items-center">
-          <Label className="font-medium">
-            Group Image
-          </Label>
-          <ImgUpload onFileSelected={handleFileSelected} />
-        </Field>
       </div>
-      <Field className="w-full">
-        <Label className="font-medium">
-          Base Mint Policy
-        </Label>
+      <Field className="w-full flex flex-col">
+        <Label className="font-medium">Base Mint Policy</Label>
         <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
       </Field>
       <button
