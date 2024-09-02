@@ -9,6 +9,7 @@ import ImgUpload from "./ImgUpload";
 import { useRouter } from "next/navigation";
 import useCircles from "@/hooks/useCircles";
 import { GroupProfile } from "@circles-sdk/profiles";
+import Loader from "./Loader";
 
 type Step = "start" | "form" | "executed"; // TODO DRY
 
@@ -17,6 +18,7 @@ type CreateGroupFormProps = {
 };
 
 export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<GroupProfile>({
     name: "",
     symbol: "",
@@ -44,56 +46,53 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   const validSymbol =
     isValidSymbol(formData.symbol) || formData.symbol.length === 0;
 
-
   const handleFileSelected = (file: File | null) => {
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const img = new Image();
-          img.src = reader.result as string;
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const cropWidth = 256 // Set your desired crop width
-            const cropHeight = 256; // Set your desired crop height
-  
-            if (ctx) {
-              // Set canvas dimensions for the cropped image
-              canvas.width = cropWidth;
-              canvas.height = cropHeight;
-  
-              // Draw the image onto the canvas
-              ctx.drawImage(img, 0, 0, cropWidth, cropHeight);
-  
-              // Convert canvas to a base64-encoded data URL
-              const imageDataUrl = canvas.toDataURL("image/jpeg", 0.30);
-  
-              // Check if the image size exceeds 150 KB
-              if (imageDataUrl.length > 150 * 1024) {
-                console.warn("Image size exceeds 150 KB after compression");
-              }
-  
-              // Update formData with the previewImageUrl and imageUrl
-              setFormData((prevData) => ({
-                ...prevData,
-                previewImageUrl: imageDataUrl,
-              }));
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const cropWidth = 256; // Set your desired crop width
+          const cropHeight = 256; // Set your desired crop height
+
+          if (ctx) {
+            // Set canvas dimensions for the cropped image
+            canvas.width = cropWidth;
+            canvas.height = cropHeight;
+
+            // Draw the image onto the canvas
+            ctx.drawImage(img, 0, 0, cropWidth, cropHeight);
+
+            // Convert canvas to a base64-encoded data URL
+            const imageDataUrl = canvas.toDataURL("image/jpeg", 0.3);
+
+            // Check if the image size exceeds 150 KB
+            if (imageDataUrl.length > 150 * 1024) {
+              console.warn("Image size exceeds 150 KB after compression");
             }
-          };
+
+            // Update formData with the previewImageUrl and imageUrl
+            setFormData((prevData) => ({
+              ...prevData,
+              previewImageUrl: imageDataUrl,
+            }));
+          }
         };
-        reader.readAsDataURL(file);
-      }
-    };
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validName || !validSymbol) return;
-
-    // setStep('executed');
-    // TODO: Create group
-    // router.push('/group');
+    setIsLoading(true);
     const newGroup = await registerGroup(mintPolicy.name, formData);
     console.log("newGroup from form", newGroup);
+    setStep("executed");
   };
 
   return (
@@ -162,8 +161,19 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         disabled={!validName || !validSymbol}
         className="flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 mt-8 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4"
       >
-        Create
-        <ArrowRightIcon className="h-4 w-4 ml-1" />
+        {isLoading ? (
+          <>
+            <div className="mr-2">
+              <Loader />
+            </div>
+            Processing
+          </>
+        ) : (
+          <>
+            Create
+            <ArrowRightIcon className="h-4 w-4 ml-1" />
+          </>
+        )}
       </button>
     </form>
   );
