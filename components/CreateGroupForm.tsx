@@ -85,14 +85,6 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
       }
     };
 
-  // const handleFileSelected = (file: File | null) => {
-  //   console.log(file);
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     previewImageUrl: file?.name,
-  //   }));
-  // };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validName || !validSymbol) return;
