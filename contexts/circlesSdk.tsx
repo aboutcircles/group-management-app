@@ -1,7 +1,9 @@
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
-import { BrowserProvider } from 'ethers';
+import { BrowserProvider, ethers } from 'ethers';
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import { useAccount, useChainId, useWalletClient } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
+import { useSafeProvider } from '@/hooks/useSafeProvider';
+
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
@@ -14,16 +16,16 @@ export const chainConfigGnosis: CirclesConfig = {
   profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
 };
 
-// Chiado testnet:
-export const chainConfigChiado: CirclesConfig = {
-  pathfinderUrl: 'https://chiado-pathfinder.aboutcircles.com',
-  circlesRpcUrl: 'https://chiado-rpc.aboutcircles.com',
-  v1HubAddress: '0xdbf22d4e8962db3b2f1d9ff55be728a887e47710',
-  v2HubAddress: '0x2066CDA98F98397185483aaB26A89445addD6740',
-  migrationAddress: '0x2A545B54bb456A0189EbC53ed7090BfFc4a6Af94',
-  nameRegistryAddress: '0x64703664BBc8A3BaeD014171e86Dfc2dF2E07A08',
-  profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
-};
+// // Chiado testnet:
+// export const chainConfigChiado: CirclesConfig = {
+//   pathfinderUrl: 'https://chiado-pathfinder.aboutcircles.com',
+//   circlesRpcUrl: 'https://chiado-rpc.aboutcircles.com',
+//   v1HubAddress: '0xdbf22d4e8962db3b2f1d9ff55be728a887e47710',
+//   v2HubAddress: '0x2066CDA98F98397185483aaB26A89445addD6740',
+//   migrationAddress: '0x2A545B54bb456A0189EbC53ed7090BfFc4a6Af94',
+//   nameRegistryAddress: '0x64703664BBc8A3BaeD014171e86Dfc2dF2E07A08',
+//   profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
+// };
 
 interface SDKContextType {
   circles: Sdk | null;
@@ -37,30 +39,58 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [circles, setCircles] = useState<Sdk | null>(null);
+  
   const { address } = useAccount();
   const chainId = useChainId();
-  const { data: walletClient } = useWalletClient();
-
-  const initializeSdk = useCallback(async () => {
-    if (!address || !chainId || !walletClient) return;
-    const ethersProvider = new BrowserProvider(walletClient);
-
-    const signer = await ethersProvider.getSigner();
-
-    try {
-      const newSdk = new Sdk(chainConfigGnosis, {
-        runner: signer,
-        address: address as string,
-      });
-      setCircles(newSdk);
-    } catch (error) {
-      console.error('Failed to initialize Circles SDK:', error);
-    }
-  }, [address, chainId, walletClient, setCircles]);
+  const provider = useSafeProvider(); // Get the SafeAppProvider
 
   useEffect(() => {
+    async function initializeSdk() {
+      if (!address || !chainId || !provider) return;
+      const ethersProvider = new ethers.BrowserProvider(provider)
+
+      const signer = await ethersProvider.getSigner()
+
+      console.log('initializeSdk with SafeAppProvider');
+
+      try {
+        const newSdk = new Sdk(chainConfigGnosis, {
+          runner: signer,
+          address: address as string,
+        });
+        setCircles(newSdk);
+        console.log('newSdk initialized with SafeAppProvider', newSdk);
+      } catch (error) {
+        console.error('Failed to initialize Circles SDK:', error);
+      }
+    }
+
     initializeSdk();
-  }, [initializeSdk]);
+  }, [address, chainId, provider]); // Depend on provider
+
+
+
+
+
+  
+
+  // const initializeSdk = useCallback(async () => {
+  //   if (!address || !chainId || !walletClient) return;
+  //   const ethersProvider = new BrowserProvider(walletClient);
+
+  //   const signer = await ethersProvider.getSigner();
+
+  //   try {
+  //     const newSdk = new Sdk(chainConfigGnosis, {
+  //       runner: signer,
+  //       address: address as string,
+  //     });
+  //     setCircles(newSdk);
+  //   } catch (error) {
+  //     console.error('Failed to initialize Circles SDK:', error);
+  //   }
+  // }, [address, chainId, walletClient, setCircles]);
+
 
   return (
     <CirclesSdkContext.Provider value={{ circles }}>
