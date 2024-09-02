@@ -44,13 +44,46 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   const validSymbol =
     isValidSymbol(formData.symbol) || formData.symbol.length === 0;
 
+
   const handleFileSelected = (file: File | null) => {
-    console.log(file);
-    setFormData((prevData) => ({
-      ...prevData,
-      previewImageUrl: file?.name,
-    }));
-  };
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.src = reader.result as string;
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            const cropWidth = 256 // Set your desired crop width
+            const cropHeight = 256; // Set your desired crop height
+  
+            if (ctx) {
+              // Set canvas dimensions for the cropped image
+              canvas.width = cropWidth;
+              canvas.height = cropHeight;
+  
+              // Draw the image onto the canvas
+              ctx.drawImage(img, 0, 0, cropWidth, cropHeight);
+  
+              // Convert canvas to a base64-encoded data URL
+              const imageDataUrl = canvas.toDataURL("image/jpeg", 0.30);
+  
+              // Check if the image size exceeds 150 KB
+              if (imageDataUrl.length > 150 * 1024) {
+                console.warn("Image size exceeds 150 KB after compression");
+              }
+  
+              // Update formData with the previewImageUrl and imageUrl
+              setFormData((prevData) => ({
+                ...prevData,
+                previewImageUrl: imageDataUrl,
+              }));
+            }
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
