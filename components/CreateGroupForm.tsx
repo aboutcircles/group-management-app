@@ -2,7 +2,7 @@
 
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Description, Field, Input, Label, Textarea } from "@headlessui/react";
+import { Field, Input, Label, Textarea } from "@headlessui/react";
 import { isValidName, isValidSymbol } from "@/utils/isValid";
 import MintPolicy, { mintPolicies } from "./MintPolicy";
 import ImgUpload from "./ImgUpload";
@@ -66,9 +66,9 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full h-full flex flex-col items-center justify-center gap-y-4 text-xs md:text-sm/6 text-black"
+      className="w-full h-full flex flex-col items-center justify-center text-xs md:text-sm/6 text-black"
     >
-      <h1 className="text-2xl text-center font-bold text-accent">
+      <h1 className="text-xl text-center font-extrabold text-accent mb-8">
         CREATE GROUP
       </h1>
       <div className="flex flex-col md:flex-row w-full gap-x-2">
@@ -81,7 +81,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
               name="name"
               value={formData.name}
               placeholder="Group Name..."
-              className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+              className="mt-1 shadow-sm block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
               onChange={handleChange}
             />
             <p className="text-xs text-accent h-4 pl-1">
@@ -95,7 +95,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
               name="symbol"
               value={formData.symbol}
               placeholder="CRC..."
-              className="mt-1 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+              className="mt-1 shadow-sm block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
               onChange={handleChange}
             />
             <p className="text-xs text-accent h-4 pl-1">
@@ -115,19 +115,19 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
             name="description"
             value={formData.description}
             placeholder="Group Description..."
-            className="mt-1 h-20 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+            className="mt-1 shadow-sm h-20 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
             onChange={handleChange}
           />
         </Field>
       </div>
-      <Field className="w-full flex flex-col">
+      <Field className="w-full flex flex-col mt-4">
         <Label className="font-medium">Base Mint Policy</Label>
         <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
       </Field>
       <button
         type="submit"
         disabled={!validName || !validSymbol}
-        className="flex items-center bg-accent rounded-full text-sm px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out mt-4"
+        className="flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 mt-8 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4"
       >
         Create
         <ArrowRightIcon className="h-4 w-4 ml-1" />

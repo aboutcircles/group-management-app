@@ -27,7 +27,7 @@ export default function MintPolicy({
 }: MintPolicyProps) {
   return (
     <Listbox value={mintPolicy} onChange={setMintPolicy}>
-      <ListboxButton className='relative block rounded-lg bg-black/5 py-1.5 pr-8 pl-3 mt-1 text-left text-[11px] md:text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 overflow-x-clip'>
+      <ListboxButton className='relative block rounded-lg bg-black/5 py-1.5 pr-8 pl-3 mt-1 text-left text-[11px] md:text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 overflow-x-clip shadow-sm'>
         <p className='overflow-x-clip'>{mintPolicy.name}</p>
         <ChevronDownIcon
           className='group pointer-events-none absolute top-1.5 right-1.5 md:top-2.5 md:right-2.5 size-4'
