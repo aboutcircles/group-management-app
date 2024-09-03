@@ -39,10 +39,10 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     async function initializeSdk() {
       if (!address || !chainId || !provider) return;
 
-      const ethersProvider = new ethers.BrowserProvider(provider);
+      const SafeEthersProvider = new ethers.BrowserProvider(provider);
 
       const adapter = new BrowserProviderContractRunner();
-      adapter.provider = ethersProvider;
+      adapter.provider = SafeEthersProvider;
 
       await adapter.init();
 
