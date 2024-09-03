@@ -11,7 +11,7 @@ import useCircles from "@/hooks/useCircles";
 import { GroupProfile } from "@circles-sdk/profiles";
 import Loader from "./Loader";
 
-type Step = "start" | "form" | "executed"; // TODO DRY
+type Step = "start" | "form" | "executed" | "error"; // TODO DRY
 
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -47,47 +47,51 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     isValidSymbol(formData.symbol) || formData.symbol.length === 0;
 
   const handleFileSelected = (file: File | null) => {
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const img = new Image();
-          img.src = reader.result as string;
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const cropWidth = 256 // Set your desired crop width
-            const cropHeight = 256; // Set your desired crop height
-  
-            if (ctx) {
-              canvas.width = cropWidth;
-              canvas.height = cropHeight;
-  
-              ctx.drawImage(img, 0, 0, cropWidth, cropHeight);
-  
-              const imageDataUrl = canvas.toDataURL("image/jpeg", 0.30);
-  
-              if (imageDataUrl.length > 150 * 1024) {
-                console.warn("Image size exceeds 150 KB after compression");
-              }
-  
-              setFormData((prevData) => ({
-                ...prevData,
-                previewImageUrl: imageDataUrl,
-              }));
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const cropWidth = 256; // Set your desired crop width
+          const cropHeight = 256; // Set your desired crop height
+
+          if (ctx) {
+            canvas.width = cropWidth;
+            canvas.height = cropHeight;
+
+            ctx.drawImage(img, 0, 0, cropWidth, cropHeight);
+
+            const imageDataUrl = canvas.toDataURL("image/jpeg", 0.3);
+
+            if (imageDataUrl.length > 150 * 1024) {
+              console.warn("Image size exceeds 150 KB after compression");
             }
-          };
+
+            setFormData((prevData) => ({
+              ...prevData,
+              previewImageUrl: imageDataUrl,
+            }));
+          }
         };
-        reader.readAsDataURL(file);
-      }
-    };
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validName || !validSymbol) return;
     setIsLoading(true);
     const newGroup = await registerGroup(mintPolicy.name, formData);
-    console.log("newGroup from form", newGroup);
-    setStep("executed");
+    if (newGroup) {
+      console.log("newGroup from form", newGroup);
+      setStep("executed");
+    } else {
+      setStep("error");
+    }
   };
 
   return (

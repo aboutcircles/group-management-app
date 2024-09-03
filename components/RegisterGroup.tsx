@@ -2,12 +2,13 @@ import {
   ArrowRightIcon,
   ArrowUturnLeftIcon,
   CheckIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import CreateGroupForm from "./CreateGroupForm";
 import Link from "next/link";
 
-type Step = "start" | "form" | "executed";
+type Step = "start" | "form" | "executed" |"error";
 
 export default function RegisterGroup() {
   const [step, setStep] = useState<Step>("start");
@@ -37,6 +38,26 @@ export default function RegisterGroup() {
             View it
             <Link
               href={"https://gnosis.blockscout.com/tx/" + "tx"}
+              target="_blank"
+              className="text-accent underline ml-1"
+            >
+              here
+            </Link>
+            .
+          </div>
+          <button
+            className="text-[#DD7143] flex items-center px-4 py-1 rounded-full mt-4 text-base font-semibold"
+            onClick={() => setStep("start")}
+          >
+            Back <ArrowUturnLeftIcon className="h-4 w-4 ml-2" />
+          </button>
+        </div>
+      ) : step === "error" ? (
+        <div className="w-full flex flex-col items-center">
+          <div className="flex items-center">
+            <XMarkIcon className="h-5 w-5" /> Something went wrong with your transaction, try again or contact the support
+            <Link
+              href="https://www.aboutcircles.com/community"
               target="_blank"
               className="text-accent underline ml-1"
             >
