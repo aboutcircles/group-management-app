@@ -11,9 +11,9 @@ export const chainConfigGnosis: CirclesConfig = {
   pathfinderUrl: 'https://pathfinder.aboutcircles.com',
   circlesRpcUrl: 'https://rpc.helsinki.aboutcircles.com',
   v1HubAddress: '0x29b9a7fbb8995b2423a71cc17cf9810798f6c543',
-  v2HubAddress: '0x7bC1F123089Bc1f384b6379d0587968d1CD5830a',
-  migrationAddress: '0xEaBa6046103C3A2f5A681fD4323f78C647Fb4292',
-  nameRegistryAddress: '0xb95ef3f3e693531d9588815bca954dc8dce30937',
+  v2HubAddress: '0xa5c7ADAE2fd3844f12D52266Cb7926f8649869Da',
+  migrationAddress: '0xe1dCE89512bE1AeDf94faAb7115A1Ba6AEff4201',
+  nameRegistryAddress: '0x738fFee24770d0DE1f912adf2B48b0194780E9AD',
   profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
 };
 
@@ -48,6 +48,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
 
       console.log('initializeSdk with SafeAppProvider');
 
+
       try {
         const newSdk = new Sdk(chainConfigGnosis, adapter)
         setCircles(newSdk);
@@ -59,7 +60,6 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
 
     initializeSdk();
   }, [address, chainId, provider]); // Depend on provider
-
 
   return (
     <CirclesSdkContext.Provider value={{ circles }}>
