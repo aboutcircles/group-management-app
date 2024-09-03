@@ -2,7 +2,6 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 // import { useQuery } from '@tanstack/react-query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-
 import type { GroupProfile } from '@circles-sdk/profiles';
 import { CirclesSdkContext } from '@/contexts/circlesSdk';
 import { TrustRelation, Group } from '@/types';

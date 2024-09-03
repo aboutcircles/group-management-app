@@ -1,4 +1,5 @@
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
+import { BrowserProviderContractRunner } from '@circles-sdk/adapter-ethers';
 import { BrowserProvider, ethers } from 'ethers';
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { useAccount, useChainId } from 'wagmi';
@@ -15,17 +16,6 @@ export const chainConfigGnosis: CirclesConfig = {
   nameRegistryAddress: '0xb95ef3f3e693531d9588815bca954dc8dce30937',
   profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
 };
-
-// // Chiado testnet:
-// export const chainConfigChiado: CirclesConfig = {
-//   pathfinderUrl: 'https://chiado-pathfinder.aboutcircles.com',
-//   circlesRpcUrl: 'https://chiado-rpc.aboutcircles.com',
-//   v1HubAddress: '0xdbf22d4e8962db3b2f1d9ff55be728a887e47710',
-//   v2HubAddress: '0x2066CDA98F98397185483aaB26A89445addD6740',
-//   migrationAddress: '0x2A545B54bb456A0189EbC53ed7090BfFc4a6Af94',
-//   nameRegistryAddress: '0x64703664BBc8A3BaeD014171e86Dfc2dF2E07A08',
-//   profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
-// };
 
 interface SDKContextType {
   circles: Sdk | null;
@@ -44,20 +34,22 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   const chainId = useChainId();
   const provider = useSafeProvider(); // Get the SafeAppProvider
 
+
   useEffect(() => {
     async function initializeSdk() {
       if (!address || !chainId || !provider) return;
-      const ethersProvider = new ethers.BrowserProvider(provider)
 
-      const signer = await ethersProvider.getSigner()
+      const ethersProvider = new ethers.BrowserProvider(provider);
+
+      const adapter = new BrowserProviderContractRunner();
+      adapter.provider = ethersProvider;
+
+      await adapter.init();
 
       console.log('initializeSdk with SafeAppProvider');
 
       try {
-        const newSdk = new Sdk(chainConfigGnosis, {
-          runner: signer,
-          address: address as string,
-        });
+        const newSdk = new Sdk(chainConfigGnosis, adapter)
         setCircles(newSdk);
         console.log('newSdk initialized with SafeAppProvider', newSdk);
       } catch (error) {
@@ -67,29 +59,6 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
 
     initializeSdk();
   }, [address, chainId, provider]); // Depend on provider
-
-
-
-
-
-  
-
-  // const initializeSdk = useCallback(async () => {
-  //   if (!address || !chainId || !walletClient) return;
-  //   const ethersProvider = new BrowserProvider(walletClient);
-
-  //   const signer = await ethersProvider.getSigner();
-
-  //   try {
-  //     const newSdk = new Sdk(chainConfigGnosis, {
-  //       runner: signer,
-  //       address: address as string,
-  //     });
-  //     setCircles(newSdk);
-  //   } catch (error) {
-  //     console.error('Failed to initialize Circles SDK:', error);
-  //   }
-  // }, [address, chainId, walletClient, setCircles]);
 
 
   return (
