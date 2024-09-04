@@ -3,7 +3,6 @@ import { gnosis, gnosisChiado } from 'wagmi/chains';
 import {
   coinbaseWallet,
   walletConnect,
-  metaMask,
   safe,
 } from 'wagmi/connectors';
 
@@ -16,11 +15,6 @@ export const config = createConfig({
       projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
     }),
     safe(),
-    metaMask({
-      dappMetadata: {
-        name: 'Circles Group Management',
-      },
-    }),
   ],
   ssr: true,
   transports: {
