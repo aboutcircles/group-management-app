@@ -30,7 +30,8 @@ export default function useCircles() {
         const groupAvatar = await circles.getAvatar(
           // address as string
           // TODO delete test data
-          '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+          // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+          address.toLowerCase()
         );
         if (groupAvatar) {
           setGroupAvatar(groupAvatar);
@@ -41,6 +42,16 @@ export default function useCircles() {
     };
     getGroupAvatar();
   }, [address, circles]);
+
+  // useEffect(() => {
+  //   const groupInfo = async () => {
+  //     if (!circles) return;
+  //     const info = await circles.data.getGroupInfo(groupAvatar?.address);
+  //   };
+  //   groupInfo();
+  // }, [groupAvatar, circles]);
+
+  console.log('===groupAvatar', groupAvatar, groupAvatar?.avatarInfo);
 
   const findGroupByAddress = useCallback(
     async (address: string): Promise<Group> => {
@@ -216,5 +227,6 @@ export default function useCircles() {
     untrust,
     getAvatarInfo,
     getAvatarProfileByAddress,
+    groupAvatar,
   };
 }

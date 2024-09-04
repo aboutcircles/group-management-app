@@ -2,19 +2,21 @@ import { Button, Field, Input, Label } from '@headlessui/react';
 import { useState } from 'react';
 import { isAddress } from 'viem';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import useCircles from '@/hooks/useCircles';
 import { Profile } from '@circles-sdk/profiles';
 import ProfilePreview from '@/components/ProfilePreview';
+import { TrustRelation } from '@/types';
 
 type ProfileWithAddress = Profile & { address: string };
 
-export default function AddMember() {
+export default function SearchMember({ trusts }: { trusts: TrustRelation[] }) {
   const [address, setAddress] = useState<string>('');
   const [validAddress, setValidAddress] = useState<boolean>(true);
   const { getAvatarProfileByAddress, trust, untrust } = useCircles();
   const [profile, setProfile] = useState<ProfileWithAddress | null>(null);
   const [profileNotFound, setProfileNotFound] = useState<boolean>(false);
+  const [alreadyTrusted, setAlreadyTrusted] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
@@ -30,20 +32,38 @@ export default function AddMember() {
       return;
     }
     setValidAddress(true);
+
+    if (
+      trusts.find(
+        (trust) => trust.trustee.toLowerCase() === address.toLowerCase()
+      )
+    ) {
+      setAlreadyTrusted(true);
+      // TODO: find profile in trusted (when in will be passed/implemented)
+    } else {
+      setAlreadyTrusted(false);
+    }
+
     const profileInfo = await getAvatarProfileByAddress(address);
+    console.log('profileInfo', profileInfo);
 
     // TODO: check if profile is already in the list
     if (!profileInfo) {
       setProfileNotFound(true);
+      setProfile(null);
+    } else {
+      setProfile({ ...profileInfo, address } as ProfileWithAddress);
+      setAddress('');
     }
-    setProfile({ ...profileInfo, address } as ProfileWithAddress);
-
-    setAddress('');
   };
 
   const handleTrust = async () => {
     if (!profile) return;
-    await trust(profile.address);
+    if (alreadyTrusted) {
+      await untrust(profile.address);
+    } else {
+      await trust(profile.address);
+    }
   };
 
   return (
@@ -87,7 +107,15 @@ export default function AddMember() {
             className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
             onClick={handleTrust}
           >
-            Trust <PlusIcon className='h-4 w-4 ml-1' />
+            {alreadyTrusted ? (
+              <>
+                Untrust <XMarkIcon className='h-4 w-4 ml-1' />
+              </>
+            ) : (
+              <>
+                Trust <PlusIcon className='h-4 w-4 ml-1' />
+              </>
+            )}
           </Button>
         </div>
       )}

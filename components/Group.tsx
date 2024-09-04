@@ -8,15 +8,20 @@ import { TrustRelation, Group as GroupType } from '@/types';
 
 export default function Group() {
   const { address } = useAccount();
-  const { findGroupByAddress, getTrustRelations, circles } = useCircles();
-  const [group, setGroup] = useState<GroupType | undefined>(undefined);
+  const {
+    findGroupByAddress,
+    getTrustRelations,
+    circles,
+    groupAvatar: group,
+  } = useCircles();
+  // const [group, setGroup] = useState<GroupType | undefined>(undefined);
   const [trusts, setTrusts] = useState<TrustRelation[]>([]);
 
   useEffect(() => {
     const fetchGroup = async () => {
       if (!address || !circles) return;
-      const group = await findGroupByAddress(address);
-      setGroup(group as GroupType);
+      // const group = await findGroupByAddress(address);
+      // setGroup(group as GroupType);
       const trustRelations = await getTrustRelations(address);
       setTrusts(trustRelations as TrustRelation[]);
     };
