@@ -11,36 +11,38 @@ import { type Profile } from '@circles-sdk/profiles';
 import { useAccount } from 'wagmi';
 
 export default function useCircles() {
-  const { circles } = useContext(CirclesSdkContext);
-  const [groupAvatar, setGroupAvatar] = useState<AvatarInterface | null>(null);
+  const { circles, groupAvatar, updateGroupAvatar } =
+    useContext(CirclesSdkContext);
 
   // if (!circles) {
   //   throw new Error('useCirclesSdk must be used within a CirclesSDKProvider');
   // }
 
   const queryClient = useQueryClient();
-  const { address } = useAccount();
+  // const { address } = useAccount();
 
-  useEffect(() => {
-    const getGroupAvatar = async () => {
-      if (!address || !circles) return;
-      console.log('fetch group avatar');
-      try {
-        const groupAvatar = await circles.getAvatar(
-          // address as string
-          // TODO delete test data
-          // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-          address.toLowerCase()
-        );
-        if (groupAvatar) {
-          setGroupAvatar(groupAvatar);
-        }
-      } catch (error) {
-        console.error('Failed to get group avatar:', error);
-      }
-    };
-    getGroupAvatar();
-  }, [address, circles]);
+  // useEffect(() => {
+  //   const getGroupAvatar = async () => {
+  //     if (!address || !circles) return;
+  //     console.log('fetch group avatar');
+  //     console.log('address', address);
+  //     console.log('circles', circles);
+  //     try {
+  //       const groupAvatar = await circles.getAvatar(
+  //         // address as string
+  //         // TODO delete test data
+  //         // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+  //         address.toLowerCase()
+  //       );
+  //       if (groupAvatar) {
+  //         setGroupAvatar(groupAvatar);
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to get group avatar:', error);
+  //     }
+  //   };
+  //   getGroupAvatar();
+  // }, [address, circles]);
 
   // useEffect(() => {
   //   const groupInfo = async () => {
@@ -122,14 +124,14 @@ export default function useCircles() {
         );
         console.log('newGroup', newGroupAvatar);
         if (newGroupAvatar) {
-          setGroupAvatar(newGroupAvatar);
+          updateGroupAvatar(newGroupAvatar);
         }
         return newGroupAvatar;
       } catch (error) {
         console.error('Failed to register group:', error);
       }
     },
-    [circles]
+    [circles, updateGroupAvatar]
   );
 
   const trust = useCallback(

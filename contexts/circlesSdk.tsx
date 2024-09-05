@@ -4,7 +4,8 @@ import { BrowserProvider, ethers } from 'ethers';
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { useSafeProvider } from '@/hooks/useSafeProvider';
-
+import { AvatarInterface } from '@circles-sdk/sdk';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
@@ -19,21 +20,25 @@ export const chainConfigGnosis: CirclesConfig = {
 
 interface SDKContextType {
   circles: Sdk | null;
+  groupAvatar: AvatarInterface | null;
+  updateGroupAvatar: (newAvatar: AvatarInterface) => void;
 }
 
 export const CirclesSdkContext = createContext<SDKContextType>({
   circles: null,
+  groupAvatar: null,
+  updateGroupAvatar: () => {},
 });
 
 export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [circles, setCircles] = useState<Sdk | null>(null);
-  
+  const [groupAvatar, setGroupAvatar] = useState<AvatarInterface | null>(null);
+
   const { address } = useAccount();
   const chainId = useChainId();
   const provider = useSafeProvider(); // Get the SafeAppProvider
-
 
   useEffect(() => {
     async function initializeSdk() {
@@ -47,10 +52,8 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
       await adapter.init();
 
       console.log('initializeSdk with SafeAppProvider');
-
-
       try {
-        const newSdk = new Sdk(chainConfigGnosis, adapter)
+        const newSdk = new Sdk(chainConfigGnosis, adapter);
         setCircles(newSdk);
         console.log('newSdk initialized with SafeAppProvider', newSdk);
       } catch (error) {
@@ -61,8 +64,38 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     initializeSdk();
   }, [address, chainId, provider]); // Depend on provider
 
+  useEffect(() => {
+    const getGroupAvatar = async () => {
+      if (!address || !circles) return;
+      console.log('fetch group avatar');
+      console.log('address', address);
+      console.log('circles', circles);
+      try {
+        const groupAvatar = await circles.getAvatar(
+          // address as string
+          // TODO delete test data
+          // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
+          address.toLowerCase()
+        );
+        if (groupAvatar) {
+          setGroupAvatar(groupAvatar);
+        }
+      } catch (error) {
+        console.error('Failed to get group avatar:', error);
+      }
+    };
+
+    getGroupAvatar();
+  }, [address, circles]);
+
+  const updateGroupAvatar = useCallback((newAvatar: AvatarInterface) => {
+    setGroupAvatar(newAvatar);
+  }, []);
+
   return (
-    <CirclesSdkContext.Provider value={{ circles }}>
+    <CirclesSdkContext.Provider
+      value={{ circles, groupAvatar, updateGroupAvatar }}
+    >
       {children}
     </CirclesSdkContext.Provider>
   );

@@ -9,7 +9,9 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log('----------group Page use effect----------');
     if (!groupAvatar) {
+      console.log('------- redirect to create');
       router.push('/create');
     }
   }, [router, groupAvatar]);

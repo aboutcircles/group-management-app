@@ -9,23 +9,25 @@ import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const { address } = useAccount();
-  const provider = useSafeProvider();
+  // const provider = useSafeProvider();
   const router = useRouter();
   const { groupAvatar } = useCircles();
 
   useEffect(() => {
+    console.log('----------create Page use effect----------');
     if (groupAvatar) {
+      console.log('------- redirect to group');
       router.push('/group');
     }
   }, [router, groupAvatar]);
 
-  useEffect(() => {
-    if (provider) {
-      console.log('Got SafeAppProvider:', provider);
-    } else {
-      console.log('Provider is not yet available.');
-    }
-  }, [provider]);
+  // useEffect(() => {
+  //   if (provider) {
+  //     console.log('Got SafeAppProvider:', provider);
+  //   } else {
+  //     console.log('Provider is not yet available.');
+  //   }
+  // }, [provider]);
 
   return <>{address ? <RegisterGroup /> : <Fallback />}</>;
 }
