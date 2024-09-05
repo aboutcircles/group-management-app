@@ -14,9 +14,7 @@ export default function Page() {
   const { groupAvatar } = useCircles();
 
   useEffect(() => {
-    console.log('----------create Page use effect----------');
     if (groupAvatar) {
-      console.log('------- redirect to group');
       router.push('/group');
     }
   }, [router, groupAvatar]);

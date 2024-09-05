@@ -11,7 +11,7 @@ import { type Profile } from '@circles-sdk/profiles';
 import { useAccount } from 'wagmi';
 
 export default function useCircles() {
-  const { circles, groupAvatar, updateGroupAvatar } =
+  const { circles, groupAvatar, updateGroupAvatar, groupAvatarIsFetched } =
     useContext(CirclesSdkContext);
 
   // if (!circles) {
@@ -19,40 +19,6 @@ export default function useCircles() {
   // }
 
   const queryClient = useQueryClient();
-  // const { address } = useAccount();
-
-  // useEffect(() => {
-  //   const getGroupAvatar = async () => {
-  //     if (!address || !circles) return;
-  //     console.log('fetch group avatar');
-  //     console.log('address', address);
-  //     console.log('circles', circles);
-  //     try {
-  //       const groupAvatar = await circles.getAvatar(
-  //         // address as string
-  //         // TODO delete test data
-  //         // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-  //         address.toLowerCase()
-  //       );
-  //       if (groupAvatar) {
-  //         setGroupAvatar(groupAvatar);
-  //       }
-  //     } catch (error) {
-  //       console.error('Failed to get group avatar:', error);
-  //     }
-  //   };
-  //   getGroupAvatar();
-  // }, [address, circles]);
-
-  // useEffect(() => {
-  //   const groupInfo = async () => {
-  //     if (!circles) return;
-  //     const info = await circles.data.getGroupInfo(groupAvatar?.address);
-  //   };
-  //   groupInfo();
-  // }, [groupAvatar, circles]);
-
-  console.log('===groupAvatar', groupAvatar, groupAvatar?.avatarInfo);
 
   const findGroupByAddress = useCallback(
     async (address: string): Promise<Group> => {
@@ -229,5 +195,6 @@ export default function useCircles() {
     getAvatarInfo,
     getAvatarProfileByAddress,
     groupAvatar,
+    groupAvatarIsFetched,
   };
 }

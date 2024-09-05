@@ -20,21 +20,23 @@ export const chainConfigGnosis: CirclesConfig = {
 
 interface SDKContextType {
   circles: Sdk | null;
-  groupAvatar: AvatarInterface | null;
+  groupAvatar: AvatarInterface | null | undefined;
   updateGroupAvatar: (newAvatar: AvatarInterface) => void;
+  groupAvatarIsFetched: boolean;
 }
 
 export const CirclesSdkContext = createContext<SDKContextType>({
   circles: null,
   groupAvatar: null,
   updateGroupAvatar: () => {},
+  groupAvatarIsFetched: false,
 });
 
 export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [circles, setCircles] = useState<Sdk | null>(null);
-  const [groupAvatar, setGroupAvatar] = useState<AvatarInterface | null>(null);
+  // const [groupAvatar, setGroupAvatar] = useState<AvatarInterface | null>(null);
 
   const { address } = useAccount();
   const chainId = useChainId();
@@ -64,37 +66,42 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     initializeSdk();
   }, [address, chainId, provider]); // Depend on provider
 
-  useEffect(() => {
-    const getGroupAvatar = async () => {
-      if (!address || !circles) return;
-      console.log('fetch group avatar');
-      console.log('address', address);
-      console.log('circles', circles);
+  const {
+    data: groupAvatar,
+    isLoading,
+    isFetched: groupAvatarIsFetched,
+    refetch,
+  } = useQuery({
+    queryKey: ['groupAvatar', address],
+    queryFn: async () => {
+      if (!address || !circles) {
+        return null;
+      }
       try {
-        const groupAvatar = await circles.getAvatar(
-          // address as string
-          // TODO delete test data
-          // '0x3487e4ae480bc5e461a7bcfd5de81513335193e7'
-          address.toLowerCase()
-        );
-        if (groupAvatar) {
-          setGroupAvatar(groupAvatar);
-        }
+        const avatar = await circles.getAvatar(address.toLowerCase());
+        return avatar || null;
       } catch (error) {
         console.error('Failed to get group avatar:', error);
+        return null;
       }
-    };
+    },
+    enabled: !!address && !!circles,
+    retry: 3,
+    retryDelay: 1000,
+  });
 
-    getGroupAvatar();
-  }, [address, circles]);
-
-  const updateGroupAvatar = useCallback((newAvatar: AvatarInterface) => {
-    setGroupAvatar(newAvatar);
-  }, []);
+  const refetchGroupAvatar = () => {
+    refetch();
+  };
 
   return (
     <CirclesSdkContext.Provider
-      value={{ circles, groupAvatar, updateGroupAvatar }}
+      value={{
+        circles,
+        groupAvatar,
+        groupAvatarIsFetched,
+        updateGroupAvatar: refetchGroupAvatar,
+      }}
     >
       {children}
     </CirclesSdkContext.Provider>

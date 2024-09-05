@@ -10,20 +10,16 @@ export default function Page() {
   const { address } = useAccount();
   const router = useRouter();
 
-  const { circles, groupAvatar } = useCircles();
+  const { circles, groupAvatar, groupAvatarIsFetched } = useCircles();
 
   useEffect(() => {
-    if (!address || !circles) return;
-    console.log('----------index Page use effect----------');
-    console.log('groupAvatar', groupAvatar);
+    if (!address || !circles || !groupAvatarIsFetched) return;
     if (!groupAvatar) {
-      console.log('------- redirect to create');
       router.push('/create');
     } else {
-      console.log('------- redirect to group');
       router.push('/group');
     }
-  }, [address, router, groupAvatar, circles]);
+  }, [address, router, groupAvatar, circles, groupAvatarIsFetched]);
 
   return <>{!address && <Fallback />}</>;
 }
