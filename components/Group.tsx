@@ -12,7 +12,9 @@ export default function Group() {
     findGroupByAddress,
     getTrustRelations,
     circles,
-    groupAvatar: group,
+    // groupAvatar: group,
+    groupInfo: group,
+    groupInfoIsFetched,
   } = useCircles();
   // const [group, setGroup] = useState<GroupType | undefined>(undefined);
   const [trusts, setTrusts] = useState<TrustRelation[]>([]);
@@ -28,10 +30,7 @@ export default function Group() {
     fetchGroup();
   }, [address, circles, findGroupByAddress, getTrustRelations]);
 
-  if (!group || !circles) return <div>Loading...</div>;
-
-  console.log('groups', group);
-  console.log('trusts', trusts);
+  if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
 
   return (
     <TabGroup>

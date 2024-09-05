@@ -1,11 +1,13 @@
 import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
 import { BrowserProviderContractRunner } from '@circles-sdk/adapter-ethers';
-import { BrowserProvider, ethers } from 'ethers';
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { ethers } from 'ethers';
+import React, { createContext, useState, useEffect } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { useSafeProvider } from '@/hooks/useSafeProvider';
 import { AvatarInterface } from '@circles-sdk/sdk';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { Group } from '@/types';
+import { type GroupRow } from '@circles-sdk/data';
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
@@ -23,6 +25,8 @@ interface SDKContextType {
   groupAvatar: AvatarInterface | null | undefined;
   updateGroupAvatar: (newAvatar: AvatarInterface) => void;
   groupAvatarIsFetched: boolean;
+  groupInfo: Group | null | undefined;
+  groupInfoIsFetched: boolean;
 }
 
 export const CirclesSdkContext = createContext<SDKContextType>({
@@ -30,14 +34,14 @@ export const CirclesSdkContext = createContext<SDKContextType>({
   groupAvatar: null,
   updateGroupAvatar: () => {},
   groupAvatarIsFetched: false,
+  groupInfo: null,
+  groupInfoIsFetched: false,
 });
 
 export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [circles, setCircles] = useState<Sdk | null>(null);
-  // const [groupAvatar, setGroupAvatar] = useState<AvatarInterface | null>(null);
-
   const { address } = useAccount();
   const chainId = useChainId();
   const provider = useSafeProvider(); // Get the SafeAppProvider
@@ -94,6 +98,52 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     refetch();
   };
 
+  const {
+    data: groupInfo,
+    isLoading: groupInfoIsLoading,
+    isFetched: groupInfoIsFetched,
+    refetch: refetchGroupInfo,
+  } = useQuery({
+    queryKey: ['groupInfo', address?.toLowerCase()],
+    queryFn: async () => {
+      if (!address || !circles || !groupAvatar || !groupAvatarIsFetched) {
+        return null;
+      }
+      const _address = address.toLowerCase();
+      try {
+        const getGroups = circles.data.findGroups(1, {
+          groupAddressIn: [_address],
+        });
+
+        if (await getGroups?.queryNextPage()) {
+          const groupsResult = getGroups?.currentPage?.results ?? [];
+          const group = groupsResult[0] as GroupRow; //Group;
+          if (!group) {
+            throw new Error('Group not found');
+          }
+          const cid = groupAvatar?.avatarInfo?.cidV0;
+
+          if (!cid) return group; // Return just the group if no avatar CID
+
+          const avatarProfile = await circles.profiles?.get(cid);
+
+          return {
+            ...group,
+            ...avatarProfile,
+          } as Group;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.error('Failed to find group by address:', error);
+        return null;
+      }
+    },
+    enabled: !!address && !!circles && !!groupAvatar && groupAvatarIsFetched,
+    retry: 3,
+    retryDelay: 1000,
+  });
+
   return (
     <CirclesSdkContext.Provider
       value={{
@@ -101,6 +151,8 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
         groupAvatar,
         groupAvatarIsFetched,
         updateGroupAvatar: refetchGroupAvatar,
+        groupInfo,
+        groupInfoIsFetched,
       }}
     >
       {children}

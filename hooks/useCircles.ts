@@ -11,8 +11,14 @@ import { type Profile } from '@circles-sdk/profiles';
 import { useAccount } from 'wagmi';
 
 export default function useCircles() {
-  const { circles, groupAvatar, updateGroupAvatar, groupAvatarIsFetched } =
-    useContext(CirclesSdkContext);
+  const {
+    circles,
+    groupAvatar,
+    groupAvatarIsFetched,
+    updateGroupAvatar,
+    groupInfo,
+    groupInfoIsFetched,
+  } = useContext(CirclesSdkContext);
 
   // if (!circles) {
   //   throw new Error('useCirclesSdk must be used within a CirclesSDKProvider');
@@ -196,5 +202,7 @@ export default function useCircles() {
     getAvatarProfileByAddress,
     groupAvatar,
     groupAvatarIsFetched,
+    groupInfo,
+    groupInfoIsFetched,
   };
 }
