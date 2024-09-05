@@ -14,6 +14,8 @@ import type { Profile } from '@circles-sdk/profiles';
 
 export type Group = GroupRow & Profile;
 
+export type ProfileWithAddress = Profile & { address: Address };
+
 export type TrustRelation = {
   blockNumber: number;
   expiryTime: number;

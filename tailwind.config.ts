@@ -17,6 +17,7 @@ const config: Config = {
       black: colors.black,
       zinc: colors.zinc,
       gray: '#ADAAA7',
+      // red: '#ff1411',
       transparent: 'transparent',
     },
   },

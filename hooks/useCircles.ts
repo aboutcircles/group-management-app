@@ -4,7 +4,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { GroupProfile } from '@circles-sdk/profiles';
 import { CirclesSdkContext } from '@/contexts/circlesSdk';
-import { TrustRelation, Group } from '@/types';
+import { TrustRelation, Group, ProfileWithAddress } from '@/types';
 import { Address } from 'viem';
 import { AvatarInterface } from '@circles-sdk/sdk';
 import { type Profile } from '@circles-sdk/profiles';
@@ -159,6 +159,39 @@ export default function useCircles() {
     [circles, queryClient]
   );
 
+  const fetchAvatarInfos = useCallback(
+    async (contactAddresses: Address[]): Promise<AvatarInterface[]> => {
+      const queryKey = ['avatarInfos', contactAddresses];
+
+      const queryFn = async () => {
+        if (!circles) return [] as AvatarInterface[];
+        try {
+          const avatars = await circles.data.getAvatarInfos(contactAddresses);
+          console.log('avatars', avatars);
+          return avatars;
+          // return (
+          //   avatars?.reduce((acc, avatarInfo) => {
+          //     acc[avatarInfo.avatar] = avatarInfo;
+          //     return acc;
+          //   }, {} as Record<string, AvatarInterface>) ?? {}
+          // );
+        } catch (error) {
+          console.error('Failed to get avatar infos:', error);
+          return [];
+        }
+      };
+
+      try {
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data as AvatarInterface[];
+      } catch (error) {
+        console.error('Failed to get avatar infos:', error);
+        return [];
+      }
+    },
+    [circles, queryClient]
+  );
+
   const getAvatarProfileByAddress = useCallback(
     async (address: string): Promise<Profile | null> => {
       const _address = address.toLowerCase();
@@ -191,6 +224,48 @@ export default function useCircles() {
     [circles, queryClient]
   );
 
+  const getAvatarsProfilesByAddresses = useCallback(
+    async (contactAddresses: Address[]): Promise<ProfileWithAddress[]> => {
+      const queryKey = ['avatarProfilesByAddresses', contactAddresses];
+
+      const queryFn = async () => {
+        if (!circles || contactAddresses.length === 0) return [];
+        try {
+          const avatars = await circles.data.getAvatarInfos(contactAddresses);
+          console.log('avatars', avatars);
+          const cids = avatars
+            .map((avatar) => avatar?.cidV0)
+            .filter((cid) => cid !== undefined);
+          if (cids.length === 0) return [];
+          const profiles = await circles.profiles?.getMany(cids);
+          console.log('profiles', profiles);
+          // return profiles;
+
+          if (!profiles) return [];
+
+          const profilesWithAddress = avatars.map((avatar) => {
+            const profile = profiles[avatar.cidV0 as string];
+            return { ...profile, address: avatar?.avatar };
+          });
+
+          return profilesWithAddress;
+        } catch (error) {
+          console.error('Failed to get avatar profiles:', error);
+          return [];
+        }
+      };
+
+      try {
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data as ProfileWithAddress[];
+      } catch (error) {
+        console.error('Failed to get avatar profiles:', error);
+        return [];
+      }
+    },
+    [circles, queryClient]
+  );
+
   return {
     circles,
     findGroupByAddress,
@@ -204,5 +279,7 @@ export default function useCircles() {
     groupAvatarIsFetched,
     groupInfo,
     groupInfoIsFetched,
+    fetchAvatarInfos,
+    getAvatarsProfilesByAddresses,
   };
 }

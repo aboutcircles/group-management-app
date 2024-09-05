@@ -1,16 +1,20 @@
 import { Button, Field, Input, Label } from '@headlessui/react';
 import { useState } from 'react';
 import { isAddress } from 'viem';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  MagnifyingGlassIcon,
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import useCircles from '@/hooks/useCircles';
-import { Profile } from '@circles-sdk/profiles';
 import ProfilePreview from '@/components/ProfilePreview';
-import { TrustRelation } from '@/types';
+import { ProfileWithAddress } from '@/types';
 
-type ProfileWithAddress = Profile & { address: string };
-
-export default function SearchMember({ trusts }: { trusts: TrustRelation[] }) {
+export default function SearchMember({
+  members,
+}: {
+  members: ProfileWithAddress[];
+}) {
   const [address, setAddress] = useState<string>('');
   const [validAddress, setValidAddress] = useState<boolean>(true);
   const { getAvatarProfileByAddress, trust, untrust } = useCircles();
@@ -34,8 +38,8 @@ export default function SearchMember({ trusts }: { trusts: TrustRelation[] }) {
     setValidAddress(true);
 
     if (
-      trusts.find(
-        (trust) => trust.trustee.toLowerCase() === address.toLowerCase()
+      members.find(
+        (trust) => trust.address.toLowerCase() === address.toLowerCase()
       )
     ) {
       setAlreadyTrusted(true);
@@ -45,7 +49,6 @@ export default function SearchMember({ trusts }: { trusts: TrustRelation[] }) {
     }
 
     const profileInfo = await getAvatarProfileByAddress(address);
-    console.log('profileInfo', profileInfo);
 
     // TODO: check if profile is already in the list
     if (!profileInfo) {
@@ -74,7 +77,7 @@ export default function SearchMember({ trusts }: { trusts: TrustRelation[] }) {
       >
         <Field className='w-full'>
           <Label className='text-sm/6 font-medium text-black px-2'>
-            Add member by address
+            Add/remove member by address
           </Label>
           <div className='relative mt-1'>
             <Input
@@ -103,20 +106,21 @@ export default function SearchMember({ trusts }: { trusts: TrustRelation[] }) {
       {profile && (
         <div className='w-full flex items-center justify-between p-4 pt-0'>
           <ProfilePreview profile={profile} />
-          <Button
-            className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-            onClick={handleTrust}
-          >
-            {alreadyTrusted ? (
-              <>
-                Untrust <XMarkIcon className='h-4 w-4 ml-1' />
-              </>
-            ) : (
-              <>
-                Trust <PlusIcon className='h-4 w-4 ml-1' />
-              </>
-            )}
-          </Button>
+          {alreadyTrusted ? (
+            <Button
+              className='flex items-center bg-black rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
+              onClick={handleTrust}
+            >
+              Untrust <XMarkIcon className='h-4 w-4 ml-1' />
+            </Button>
+          ) : (
+            <Button
+              className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
+              onClick={handleTrust}
+            >
+              Trust <PlusIcon className='h-4 w-4 ml-1' />
+            </Button>
+          )}
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import useCircles from '@/hooks/useCircles';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import ManageMembers from '@/components/ManageMembers';
-import { TrustRelation, Group as GroupType } from '@/types';
+import { ProfileWithAddress, TrustRelation } from '@/types';
 
 export default function Group() {
   const { address } = useAccount();
@@ -12,25 +12,40 @@ export default function Group() {
     findGroupByAddress,
     getTrustRelations,
     circles,
-    // groupAvatar: group,
     groupInfo: group,
     groupInfoIsFetched,
+    fetchAvatarInfos,
+    getAvatarsProfilesByAddresses,
   } = useCircles();
-  // const [group, setGroup] = useState<GroupType | undefined>(undefined);
-  const [trusts, setTrusts] = useState<TrustRelation[]>([]);
+  // const [trusts, setTrusts] = useState<TrustRelation[]>([]);
+  const [members, setMembers] = useState<ProfileWithAddress[]>([]);
 
   useEffect(() => {
     const fetchGroup = async () => {
       if (!address || !circles) return;
-      // const group = await findGroupByAddress(address);
-      // setGroup(group as GroupType);
       const trustRelations = await getTrustRelations(address);
-      setTrusts(trustRelations as TrustRelation[]);
+      // setTrusts(trustRelations as TrustRelation[]);
+
+      const trustAddresses = trustRelations.map((item) => item.trustee);
+      const avatarProfiles = await getAvatarsProfilesByAddresses(
+        trustAddresses
+      );
+      setMembers(avatarProfiles);
+      console.log('avatarProfiles', avatarProfiles);
     };
     fetchGroup();
-  }, [address, circles, findGroupByAddress, getTrustRelations]);
+  }, [
+    address,
+    circles,
+    fetchAvatarInfos,
+    findGroupByAddress,
+    getAvatarsProfilesByAddresses,
+    getTrustRelations,
+  ]);
 
   if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
+
+  // console.log('trusts', trusts);
 
   return (
     <TabGroup>
@@ -39,7 +54,7 @@ export default function Group() {
           Group info
         </Tab>
         <Tab className='outline-none w-1/2 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4'>
-          Manage group
+          Members
         </Tab>
       </TabList>
       <TabPanels>
@@ -47,7 +62,7 @@ export default function Group() {
           <GroupInfo group={group} />
         </TabPanel>
         <TabPanel>
-          <ManageMembers trusts={trusts} />
+          <ManageMembers members={members} />
         </TabPanel>
       </TabPanels>
     </TabGroup>
