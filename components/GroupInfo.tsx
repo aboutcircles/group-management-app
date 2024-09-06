@@ -46,7 +46,10 @@ export default function GroupInfo({ group }: { group: Group }) {
       {/* <h1 className='text-2xl text-center font-bold'>CREATE GROUP</h1> */}
       <div className='flex w-full gap-x-2'>
         <Field className=''>
-          <ImgUpload onFileSelected={handleFileSelected} imgUrl={group.image} />
+          <ImgUpload
+            onFileSelected={handleFileSelected}
+            imgUrl={group.imageUrl}
+          />
         </Field>
         <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
           <h2 className='w-full font-bold text-2xl px-3'>{group.name}</h2>
@@ -62,7 +65,7 @@ export default function GroupInfo({ group }: { group: Group }) {
           {/* <p className='text-xs text-gray mx-3'>{group.members} members</p> */}
           <div className='flex'>
             <p className='font-bold mx-3'>{group.symbol}</p>
-            <p className=''>{group.balance}</p>
+            {/* <p className=''>{group.balance}</p> */}
           </div>
           {group.mint && (
             <p className='text-xs text-gray mx-3'>
