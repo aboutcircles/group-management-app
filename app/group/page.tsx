@@ -5,7 +5,18 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function Page() {
-  const { groupAvatar } = useCircles();
+  const { groupAvatar, subscribeToAvatarEvents } = useCircles();
+
+  useEffect(() => {
+    const unsubscribe = subscribeToAvatarEvents();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [subscribeToAvatarEvents]);
+  
   const router = useRouter();
 
   useEffect(() => {

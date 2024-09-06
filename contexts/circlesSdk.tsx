@@ -1,27 +1,28 @@
-import { CirclesConfig, Sdk } from '@circles-sdk/sdk';
-import { BrowserProviderContractRunner } from '@circles-sdk/adapter-ethers';
-import { ethers } from 'ethers';
-import React, { createContext, useState, useEffect } from 'react';
-import { useAccount, useChainId } from 'wagmi';
-import { useSafeProvider } from '@/hooks/useSafeProvider';
-import { AvatarInterface } from '@circles-sdk/sdk';
-import { useQuery } from '@tanstack/react-query';
-import { Group } from '@/types';
-import { type GroupRow } from '@circles-sdk/data';
+import { CirclesConfig, Sdk } from "@circles-sdk/sdk";
+import { BrowserProviderContractRunner } from "@circles-sdk/adapter-ethers";
+import { ethers } from "ethers";
+import React, { createContext, useState, useEffect } from "react";
+import { useAccount, useChainId } from "wagmi";
+import { useSafeProvider } from "@/hooks/useSafeProvider";
+import { AvatarInterface } from "@circles-sdk/sdk";
+import { useQuery } from "@tanstack/react-query";
+import { Group } from "@/types";
+import { CirclesData, CirclesEvent, CirclesRpc, Observable, type GroupRow } from "@circles-sdk/data";
 
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
-  pathfinderUrl: 'https://pathfinder.aboutcircles.com',
-  circlesRpcUrl: 'https://rpc.helsinki.aboutcircles.com',
-  v1HubAddress: '0x29b9a7fbb8995b2423a71cc17cf9810798f6c543',
-  v2HubAddress: '0xa5c7ADAE2fd3844f12D52266Cb7926f8649869Da',
-  migrationAddress: '0xe1dCE89512bE1AeDf94faAb7115A1Ba6AEff4201',
-  nameRegistryAddress: '0x738fFee24770d0DE1f912adf2B48b0194780E9AD',
-  profileServiceUrl: 'https://chiado-pathfinder.aboutcircles.com/profiles/',
+  pathfinderUrl: "https://pathfinder.aboutcircles.com",
+  circlesRpcUrl: "https://rpc.helsinki.aboutcircles.com",
+  v1HubAddress: "0x29b9a7fbb8995b2423a71cc17cf9810798f6c543",
+  v2HubAddress: "0xa5c7ADAE2fd3844f12D52266Cb7926f8649869Da",
+  migrationAddress: "0xe1dCE89512bE1AeDf94faAb7115A1Ba6AEff4201",
+  nameRegistryAddress: "0x738fFee24770d0DE1f912adf2B48b0194780E9AD",
+  profileServiceUrl: "https://chiado-pathfinder.aboutcircles.com/profiles/",
 };
 
 interface SDKContextType {
   circles: Sdk | null;
+  avatarEvents: Observable<CirclesEvent> | null;
   groupAvatar: AvatarInterface | null | undefined;
   updateGroupAvatar: (newAvatar: AvatarInterface) => void;
   groupAvatarIsFetched: boolean;
@@ -31,6 +32,7 @@ interface SDKContextType {
 
 export const CirclesSdkContext = createContext<SDKContextType>({
   circles: null,
+  avatarEvents: null,
   groupAvatar: null,
   updateGroupAvatar: () => {},
   groupAvatarIsFetched: false,
@@ -42,6 +44,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [circles, setCircles] = useState<Sdk | null>(null);
+  const [avatarEvents, setAvatarEvents] = useState<Observable<CirclesEvent> | null>(null);
   const { address } = useAccount();
   const chainId = useChainId();
   const provider = useSafeProvider(); // Get the SafeAppProvider
@@ -57,13 +60,19 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
 
       await adapter.init();
 
-      console.log('initializeSdk with SafeAppProvider');
+      console.log("initializeSdk with SafeAppProvider");
       try {
         const newSdk = new Sdk(chainConfigGnosis, adapter);
+        const circlesRpc = new CirclesRpc(
+          "https://rpc.helsinki.aboutcircles.com"
+        );
+        const data = new CirclesData(circlesRpc);
+        const avatarEvents = await data.subscribeToEvents(address);
         setCircles(newSdk);
-        console.log('newSdk initialized with SafeAppProvider', newSdk);
+        setAvatarEvents(avatarEvents);
+        console.log("newSdk initialized with SafeAppProvider", newSdk);
       } catch (error) {
-        console.error('Failed to initialize Circles SDK:', error);
+        console.error("Failed to initialize Circles SDK:", error);
       }
     }
 
@@ -76,7 +85,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     isFetched: groupAvatarIsFetched,
     refetch,
   } = useQuery({
-    queryKey: ['groupAvatar', address],
+    queryKey: ["groupAvatar", address],
     queryFn: async () => {
       if (!address || !circles) {
         return null;
@@ -85,7 +94,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
         const avatar = await circles.getAvatar(address.toLowerCase());
         return avatar || null;
       } catch (error) {
-        console.error('Failed to get group avatar:', error);
+        console.error("Failed to get group avatar:", error);
         return null;
       }
     },
@@ -104,7 +113,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     isFetched: groupInfoIsFetched,
     refetch: refetchGroupInfo,
   } = useQuery({
-    queryKey: ['groupInfo', address?.toLowerCase()],
+    queryKey: ["groupInfo", address?.toLowerCase()],
     queryFn: async () => {
       if (!address || !circles || !groupAvatar || !groupAvatarIsFetched) {
         return null;
@@ -119,7 +128,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
           const groupsResult = getGroups?.currentPage?.results ?? [];
           const group = groupsResult[0] as GroupRow; //Group;
           if (!group) {
-            throw new Error('Group not found');
+            throw new Error("Group not found");
           }
           const cid = groupAvatar?.avatarInfo?.cidV0;
 
@@ -135,7 +144,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
           return null;
         }
       } catch (error) {
-        console.error('Failed to find group by address:', error);
+        console.error("Failed to find group by address:", error);
         return null;
       }
     },
@@ -148,6 +157,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
     <CirclesSdkContext.Provider
       value={{
         circles,
+        avatarEvents,
         groupAvatar,
         groupAvatarIsFetched,
         updateGroupAvatar: refetchGroupAvatar,
