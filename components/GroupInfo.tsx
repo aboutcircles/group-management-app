@@ -11,6 +11,8 @@ export default function GroupInfo({ group }: { group: Group }) {
     description: group.description,
   });
 
+  console.log('group', group);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -48,7 +50,7 @@ export default function GroupInfo({ group }: { group: Group }) {
         <Field className=''>
           <ImgUpload
             onFileSelected={handleFileSelected}
-            imgUrl={group.imageUrl}
+            imgUrl={group.previewImageUrl}
           />
         </Field>
         <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
