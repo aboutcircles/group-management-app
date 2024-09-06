@@ -8,18 +8,24 @@ import { Address } from 'viem';
 
 export default function ManageMembers({
   members,
+  setMembers,
 }: {
   members: ProfileWithAddress[];
+  setMembers: (members: ProfileWithAddress[]) => void;
 }) {
-  const { getAvatarProfileByAddress, trust, untrust } = useCircles();
+  const { untrust } = useCircles();
 
   const handleUntrust = async (address: Address) => {
-    await untrust(address);
+    const result = await untrust(address);
+    console.log('result untrust', result);
+    if (result) {
+      setMembers(members.filter((member) => member.address !== address));
+    }
   };
 
   return (
     <div className='w-full min-h-[224px] flex flex-col items-center'>
-      <SearchMember members={members} />
+      <SearchMember members={members} setMembers={setMembers} />
       <h2 className='mt-5 pl-6 text-sm/6 font-medium text-black px-2 self-start'>
         Members
       </h2>

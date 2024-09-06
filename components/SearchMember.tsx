@@ -12,8 +12,10 @@ import { ProfileWithAddress } from '@/types';
 
 export default function SearchMember({
   members,
+  setMembers,
 }: {
   members: ProfileWithAddress[];
+  setMembers: (members: ProfileWithAddress[]) => void;
 }) {
   const [address, setAddress] = useState<string>('');
   const [validAddress, setValidAddress] = useState<boolean>(true);
@@ -63,9 +65,21 @@ export default function SearchMember({
   const handleTrust = async () => {
     if (!profile) return;
     if (alreadyTrusted) {
-      await untrust(profile.address);
+      const result = await untrust(profile.address);
+      console.log('result untrust', result);
+      if (result) {
+        setMembers(
+          members.filter((member) => member.address !== profile.address)
+        );
+        setProfile(null);
+      }
     } else {
-      await trust(profile.address);
+      const result = await trust(profile.address);
+      console.log('result trust', result);
+      if (result) {
+        setMembers([profile, ...members]);
+        setProfile(null);
+      }
     }
   };
 

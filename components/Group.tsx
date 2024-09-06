@@ -17,21 +17,19 @@ export default function Group() {
     fetchAvatarInfos,
     getAvatarsProfilesByAddresses,
   } = useCircles();
-  // const [trusts, setTrusts] = useState<TrustRelation[]>([]);
   const [members, setMembers] = useState<ProfileWithAddress[]>([]);
 
   useEffect(() => {
     const fetchGroup = async () => {
       if (!address || !circles) return;
       const trustRelations = await getTrustRelations(address);
-      // setTrusts(trustRelations as TrustRelation[]);
 
       const trustAddresses = trustRelations.map((item) => item.trustee);
       const avatarProfiles = await getAvatarsProfilesByAddresses(
         trustAddresses
       );
       setMembers(avatarProfiles);
-      console.log('avatarProfiles', avatarProfiles);
+      // console.log('avatarProfiles', avatarProfiles);
     };
     fetchGroup();
   }, [
@@ -62,7 +60,7 @@ export default function Group() {
           <GroupInfo group={group} />
         </TabPanel>
         <TabPanel>
-          <ManageMembers members={members} />
+          <ManageMembers members={members} setMembers={setMembers} />
         </TabPanel>
       </TabPanels>
     </TabGroup>

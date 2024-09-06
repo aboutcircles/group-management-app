@@ -9,6 +9,7 @@ import { Address } from 'viem';
 import { AvatarInterface } from '@circles-sdk/sdk';
 import { type Profile } from '@circles-sdk/profiles';
 import { useAccount } from 'wagmi';
+import { ContractTransactionReceipt } from 'ethers';
 
 export default function useCircles() {
   const {
@@ -107,11 +108,14 @@ export default function useCircles() {
   );
 
   const trust = useCallback(
-    async (address: string) => {
+    async (
+      address: string
+    ): Promise<ContractTransactionReceipt | undefined> => {
       if (!groupAvatar) return;
       try {
         const _address = address.toLowerCase();
-        await groupAvatar.trust(_address);
+        const result = await groupAvatar.trust(_address);
+        return result;
       } catch (error) {
         console.error('Failed to trust:', error);
       }
@@ -120,11 +124,13 @@ export default function useCircles() {
   );
 
   const untrust = useCallback(
-    async (address: string) => {
+    async (
+      address: string
+    ): Promise<ContractTransactionReceipt | undefined> => {
       if (!groupAvatar) return;
       try {
         const _address = address.toLowerCase();
-        await groupAvatar.untrust(_address);
+        return await groupAvatar.untrust(_address);
       } catch (error) {
         console.error('Failed to untrust:', error);
       }
