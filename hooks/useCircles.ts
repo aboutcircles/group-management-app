@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext } from 'react';
 // import { useQuery } from '@tanstack/react-query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { GroupProfile } from '@circles-sdk/profiles';
@@ -7,6 +7,8 @@ import { CirclesSdkContext } from '@/contexts/circlesSdk';
 import { TrustRelation, Group, ProfileWithAddress } from '@/types';
 import { Address } from 'viem';
 import { AvatarInterface } from '@circles-sdk/sdk';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { type Profile } from '@circles-sdk/profiles';
 import { useAccount } from 'wagmi';
 import { ContractTransactionReceipt } from 'ethers';
@@ -14,6 +16,7 @@ import { ContractTransactionReceipt } from 'ethers';
 export default function useCircles() {
   const {
     circles,
+    avatarEvents,
     groupAvatar,
     groupAvatarIsFetched,
     updateGroupAvatar,
@@ -26,6 +29,23 @@ export default function useCircles() {
   // }
 
   const queryClient = useQueryClient();
+
+  const subscribeToAvatarEvents = useCallback(() => {
+    if (!avatarEvents) {
+      console.error('Avatar events not found');
+      return;
+    }
+
+    const unsubscribe = avatarEvents.subscribe((event) => {
+      toast.success(`Transaction completed: ${event}`);
+      console.log('Transaction completed:', event);
+    });
+
+    return () => {
+      unsubscribe();
+      console.log('Unsubscribe from avatar events');
+    };
+  }, [avatarEvents]);
 
   const findGroupByAddress = useCallback(
     async (address: string): Promise<Group> => {
@@ -274,6 +294,7 @@ export default function useCircles() {
 
   return {
     circles,
+    subscribeToAvatarEvents,
     findGroupByAddress,
     getTrustRelations,
     registerGroup,
