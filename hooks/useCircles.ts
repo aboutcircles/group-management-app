@@ -1,16 +1,14 @@
 'use client';
 import { useCallback, useContext } from 'react';
-// import { useQuery } from '@tanstack/react-query';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import type { GroupProfile } from '@circles-sdk/profiles';
 import { CirclesSdkContext } from '@/contexts/circlesSdk';
-import { TrustRelation, Group, ProfileWithAddress } from '@/types';
+import { Group, ProfileWithAddress } from '@/types';
 import { Address } from 'viem';
-import { AvatarInterface } from '@circles-sdk/sdk';
+import { AvatarInterface, TrustRelationRow } from '@circles-sdk/sdk';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { type Profile } from '@circles-sdk/profiles';
-import { useAccount } from 'wagmi';
 import { ContractTransactionReceipt } from 'ethers';
 
 export default function useCircles() {
@@ -72,25 +70,32 @@ export default function useCircles() {
   );
 
   const getTrustRelations = useCallback(
-    async (address: string): Promise<TrustRelation[]> => {
+    async (address: string): Promise<TrustRelationRow[]> => {
       const _address = address.toLowerCase();
       const queryKey = ['trustRelations', _address];
 
       const queryFn = async () => {
-        const trustRelations = circles?.data.getTrustRelations(_address, 10);
+        // const trustRelations = circles?.data.getTrustRelations(_address, 10);
 
-        if (await trustRelations?.queryNextPage()) {
-          return trustRelations?.currentPage?.results ?? [];
-        } else {
-          return [];
-        }
+        const trustRelations = await circles?.data.getAggregatedTrustRelations(
+          _address
+        );
+
+        return trustRelations;
+        // if (await trustRelations?.queryNextPage()) {
+        //   return trustRelations?.currentPage?.results ?? [];
+        // } else {
+        //   return [];
+        // }
       };
 
       try {
-        const data = (
-          await queryClient.fetchQuery({ queryKey, queryFn })
-        ).filter((row) => row.truster.toLowerCase() === _address); // only trusted by group
-        return data as TrustRelation[];
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data as TrustRelationRow[];
+        // const data = (
+        //   await queryClient.fetchQuery({ queryKey, queryFn })
+        // ).filter((row) => row.truster.toLowerCase() === _address); // only trusted by group
+        // return data as TrustRelation[];
       } catch (error) {
         console.error('Failed to get trust relations:', error);
         return [];

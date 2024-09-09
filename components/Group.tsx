@@ -4,7 +4,8 @@ import useCircles from '@/hooks/useCircles';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import ManageMembers from '@/components/ManageMembers';
-import { ProfileWithAddress, TrustRelation } from '@/types';
+import { ProfileWithAddress } from '@/types';
+import { Address } from 'viem';
 
 export default function Group() {
   const { address } = useAccount();
@@ -23,13 +24,28 @@ export default function Group() {
     const fetchGroup = async () => {
       if (!address || !circles) return;
       const trustRelations = await getTrustRelations(address);
+      console.log('trustRelations', trustRelations);
 
-      const trustAddresses = trustRelations.map((item) => item.trustee);
+      const trustAddresses: Address[] = [];
+      const relations: Record<string, string> = {};
+
+      trustRelations.forEach((item) => {
+        trustAddresses.push(item.objectAvatar as Address);
+        relations[item.objectAvatar] = item.relation;
+      });
+
       const avatarProfiles = await getAvatarsProfilesByAddresses(
-        trustAddresses
+        trustAddresses as Address[]
       );
-      setMembers(avatarProfiles);
-      // console.log('avatarProfiles', avatarProfiles);
+
+      const avatarProfilesWithRelations = avatarProfiles.map((profile) => {
+        return {
+          ...profile,
+          relation: relations[profile.address],
+        };
+      });
+
+      setMembers(avatarProfilesWithRelations);
     };
     fetchGroup();
   }, [
@@ -43,7 +59,7 @@ export default function Group() {
 
   if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
 
-  // console.log('trusts', trusts);
+  console.log('members', members);
 
   return (
     <TabGroup>

@@ -1,28 +1,25 @@
 import { Button, Field, Input, Label } from '@headlessui/react';
 import { useState } from 'react';
 import { isAddress } from 'viem';
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import useCircles from '@/hooks/useCircles';
 import ProfilePreview from '@/components/ProfilePreview';
 import { ProfileWithAddress } from '@/types';
 
 export default function SearchMember({
   members,
-  setMembers,
+  handleTrust,
+  handleUntrust,
 }: {
   members: ProfileWithAddress[];
-  setMembers: (members: ProfileWithAddress[]) => void;
+  handleTrust: (profile: ProfileWithAddress) => Promise<boolean>;
+  handleUntrust: (profile: ProfileWithAddress) => Promise<boolean>;
 }) {
   const [address, setAddress] = useState<string>('');
   const [validAddress, setValidAddress] = useState<boolean>(true);
-  const { getAvatarProfileByAddress, trust, untrust } = useCircles();
+  const { getAvatarProfileByAddress } = useCircles();
   const [profile, setProfile] = useState<ProfileWithAddress | null>(null);
   const [profileNotFound, setProfileNotFound] = useState<boolean>(false);
-  const [alreadyTrusted, setAlreadyTrusted] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
@@ -39,20 +36,19 @@ export default function SearchMember({
     }
     setValidAddress(true);
 
-    if (
-      members.find(
-        (trust) => trust.address.toLowerCase() === address.toLowerCase()
-      )
-    ) {
-      setAlreadyTrusted(true);
-      // TODO: find profile in trusted (when in will be passed/implemented)
-    } else {
-      setAlreadyTrusted(false);
+    const existingMember = members.find(
+      (member) => member.address.toLowerCase() === address.toLowerCase()
+    );
+
+    if (existingMember) {
+      setProfile(existingMember);
+      setAddress('');
+      return;
     }
 
+    // if not in the member list:
     const profileInfo = await getAvatarProfileByAddress(address);
 
-    // TODO: check if profile is already in the list
     if (!profileInfo) {
       setProfileNotFound(true);
       setProfile(null);
@@ -62,26 +58,31 @@ export default function SearchMember({
     }
   };
 
-  const handleTrust = async () => {
-    if (!profile) return;
-    if (alreadyTrusted) {
-      const result = await untrust(profile.address);
-      console.log('result untrust', result);
-      if (result) {
-        setMembers(
-          members.filter((member) => member.address !== profile.address)
-        );
-        setProfile(null);
-      }
-    } else {
-      const result = await trust(profile.address);
-      console.log('result trust', result);
-      if (result) {
-        setMembers([profile, ...members]);
-        setProfile(null);
-      }
+  const handleTrustInSearch = async (profile: ProfileWithAddress) => {
+    const result = await handleTrust(profile);
+    if (result) {
+      setProfile(null);
     }
   };
+
+  const handleUntrustInSearch = async (profile: ProfileWithAddress) => {
+    const result = await handleUntrust(profile);
+    if (result) {
+      setProfile(null);
+    }
+  };
+  // const handleTrustInSearch = async (
+  //   profile: ProfileWithAddress,
+  //   action: 'trust' | 'untrust'
+  // ) => {
+  //   const result =
+  //     action === 'trust'
+  //       ? await handleTrust(profile)
+  //       : await handleUntrust(profile);
+  //   if (result) {
+  //     setProfile(null);
+  //   }
+  // };
 
   return (
     <div className='w-full max-w-screen-sm'>
@@ -119,22 +120,12 @@ export default function SearchMember({
       </form>
       {profile && (
         <div className='w-full flex items-center justify-between p-4 pt-0'>
-          <ProfilePreview profile={profile} />
-          {alreadyTrusted ? (
-            <Button
-              className='flex items-center bg-black rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-              onClick={handleTrust}
-            >
-              Untrust <XMarkIcon className='h-4 w-4 ml-1' />
-            </Button>
-          ) : (
-            <Button
-              className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-              onClick={handleTrust}
-            >
-              Trust <PlusIcon className='h-4 w-4 ml-1' />
-            </Button>
-          )}
+          <ProfilePreview
+            profile={profile}
+            handleTrust={handleTrustInSearch}
+            handleUntrust={handleUntrustInSearch}
+            full
+          />
         </div>
       )}
     </div>
