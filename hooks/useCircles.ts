@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { type Profile } from '@circles-sdk/profiles';
 import { ContractTransactionReceipt } from 'ethers';
+import { CirclesEvent } from '@circles-sdk/data';
 
 export default function useCircles() {
   const {
@@ -28,22 +29,25 @@ export default function useCircles() {
 
   const queryClient = useQueryClient();
 
-  const subscribeToAvatarEvents = useCallback(() => {
-    if (!avatarEvents) {
-      console.error('Avatar events not found');
-      return;
-    }
+  const subscribeToAvatarEvents = useCallback(
+    (onEvent: (event: CirclesEvent) => void) => {
+      if (!avatarEvents) {
+        console.error('Avatar events not found');
+        return;
+      }
 
-    const unsubscribe = avatarEvents.subscribe((event) => {
-      toast.success(`Transaction completed: ${event}`);
-      console.log('Transaction completed:', event);
-    });
+      const unsubscribe = avatarEvents.subscribe((event) => {
+        console.log('Transaction completed:', event);
+        onEvent(event);
+      });
 
-    return () => {
-      unsubscribe();
-      console.log('Unsubscribe from avatar events');
-    };
-  }, [avatarEvents]);
+      return () => {
+        unsubscribe();
+        console.log('Unsubscribe from avatar events');
+      };
+    },
+    [avatarEvents]
+  );
 
   const findGroupByAddress = useCallback(
     async (address: string): Promise<Group> => {

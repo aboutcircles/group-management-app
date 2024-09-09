@@ -4,6 +4,7 @@ import './globals.css';
 import { Providers } from './providers';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/NavBar';
+import { ToastContainer } from 'react-toastify';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
         <Providers>
+          <ToastContainer autoClose={false} draggable={false} />
           <main className='flex min-h-screen flex-col items-center justify-center bg-background'>
             <div className='w-full md:w-[775px] sm:my-4 bg-primary shadow-sm p-4 min-h-screen sm:min-h-0 sm:h-auto sm:rounded-3xl flex gap-y-4 flex-col justify-around items-center'>
               <Navbar />

@@ -6,6 +6,8 @@ import { useSafeProvider } from "@/hooks/useSafeProvider";
 import { useEffect } from "react";
 import useCircles from "@/hooks/useCircles";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import TransactionToast from "@/components/TransactionToast";
 
 export default function Page() {
   const { address } = useAccount();
@@ -14,7 +16,11 @@ export default function Page() {
   const { groupAvatar, subscribeToAvatarEvents } = useCircles();
 
   useEffect(() => {
-    const unsubscribe = subscribeToAvatarEvents();
+    const unsubscribe = subscribeToAvatarEvents((event) => {
+      if (event && event.transactionHash) {
+        toast(<TransactionToast transactionHash={event.transactionHash} />);
+      }
+    });
 
     return () => {
       if (unsubscribe) {

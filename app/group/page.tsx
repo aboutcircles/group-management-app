@@ -1,14 +1,20 @@
-'use client';
-import Group from '@/components/Group';
-import useCircles from '@/hooks/useCircles';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+"use client";
+import Group from "@/components/Group";
+import TransactionToast from "@/components/TransactionToast";
+import useCircles from "@/hooks/useCircles";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const { groupAvatar, subscribeToAvatarEvents } = useCircles();
 
   useEffect(() => {
-    const unsubscribe = subscribeToAvatarEvents();
+    const unsubscribe = subscribeToAvatarEvents((event) => {
+      if (event && event.transactionHash) {
+        toast(<TransactionToast transactionHash={event.transactionHash} />);
+      }
+    });
 
     return () => {
       if (unsubscribe) {
@@ -16,12 +22,12 @@ export default function Page() {
       }
     };
   }, [subscribeToAvatarEvents]);
-  
+
   const router = useRouter();
 
   useEffect(() => {
     if (!groupAvatar) {
-      router.push('/create');
+      router.push("/create");
     }
   }, [router, groupAvatar]);
 
