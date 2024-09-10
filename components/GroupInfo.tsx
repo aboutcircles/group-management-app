@@ -128,12 +128,11 @@ export default function GroupInfo({ group }: { group: Group }) {
         </Field>
         <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
           <Field className='w-full'>
-          <h2 className='w-full font-bold text-xl px-3'> Group Name </h2>
             <Textarea
             name='name'
             value={formData.name}
             placeholder='Group Name'
-            className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-1xl text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+            className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
             onChange={handleChange}
         />
       </Field>
