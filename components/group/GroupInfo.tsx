@@ -2,14 +2,9 @@ import { useState } from 'react';
 import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import ImgUpload from './ImgUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { isValidName, isValidSymbol } from "@/utils/isValid";
 import { Group } from '@/types';
 import {cidV0ToUint8Array} from "@circles-sdk/utils";
-import { CirclesSdkContext } from '@/contexts/circlesSdk';
 import useCircles from '@/hooks/useCircles';
-
-
-
 
 export default function GroupInfo({ group }: { group: Group }) {
   const [formData, setFormData] = useState({
@@ -18,9 +13,6 @@ export default function GroupInfo({ group }: { group: Group }) {
     previewImageUrl: group.previewImageUrl,
     imageUrl: group.imageUrl,
   });
-
-  console.log('group', group);
-
 
   const { circles} = useCircles();
 

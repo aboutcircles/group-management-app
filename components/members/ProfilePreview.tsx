@@ -7,7 +7,7 @@ import {
   ArrowUpTrayIcon,
   ArrowDownTrayIcon,
 } from '@heroicons/react/20/solid';
-import { Tooltip } from '@/components/Tooltip';
+import { Tooltip } from '@/components/common/Tooltip';
 import { Button } from '@headlessui/react';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 

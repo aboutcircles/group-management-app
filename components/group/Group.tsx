@@ -1,11 +1,19 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import GroupInfo from '@/components/GroupInfo';
+import GroupInfo from '@/components/group/GroupInfo';
 import useCircles from '@/hooks/useCircles';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import ManageMembers from '@/components/ManageMembers';
-import { ProfileWithAddress } from '@/types';
+import ManageMembers from '@/components/members/ManageMembers';
+import { circlesEventTypes, ProfileWithAddress } from '@/types';
 import { Address } from 'viem';
+import {
+  CirclesEvent,
+  CirclesEventType,
+  CirclesQuery,
+  EventRow,
+  TransactionHistoryRow,
+} from '@circles-sdk/data';
+import TxHistory from '@/components/txHistory/TxHistory';
 
 export default function Group() {
   const { address } = useAccount();
@@ -15,16 +23,21 @@ export default function Group() {
     circles,
     groupInfo: group,
     groupInfoIsFetched,
-    fetchAvatarInfos,
+    getAvatarsInfos,
     getAvatarsProfilesByAddresses,
+    getTransactionHistory,
+    getEvents,
   } = useCircles();
   const [members, setMembers] = useState<ProfileWithAddress[]>([]);
+  const [txHistoryQuery, setTxHistoryQuery] =
+    useState<CirclesQuery<TransactionHistoryRow> | null>(null);
+
+  const [events, setEvents] = useState<CirclesEvent[] | null>(null);
 
   useEffect(() => {
     const fetchGroup = async () => {
       if (!address || !circles) return;
       const trustRelations = await getTrustRelations(address);
-      console.log('trustRelations', trustRelations);
 
       const trustAddresses: Address[] = [];
       const relations: Record<string, string> = {};
@@ -51,15 +64,42 @@ export default function Group() {
   }, [
     address,
     circles,
-    fetchAvatarInfos,
+    getAvatarsInfos,
     findGroupByAddress,
     getAvatarsProfilesByAddresses,
     getTrustRelations,
   ]);
 
+  useEffect(() => {
+    const fetchTxHistory = async () => {
+      if (!group) return;
+      const txHistoryQuery = await getTransactionHistory();
+      setTxHistoryQuery(txHistoryQuery);
+      if (!txHistoryQuery) return;
+      const hasData = await txHistoryQuery.queryNextPage();
+      console.log('hasData', hasData);
+      if (hasData) {
+        console.log(txHistoryQuery.currentPage?.results);
+      }
+    };
+    fetchTxHistory();
+  }, [group, getTransactionHistory]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      if (!group || !circles) return;
+      const _events = await getEvents(0);
+      const filteredEvents = (_events as CirclesEvent[])
+        .filter((event) => circlesEventTypes.includes(event.$event))
+        .reverse();
+      setEvents(filteredEvents);
+    };
+    fetchEvents();
+  }, [group, circles, getEvents]);
+
   if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
 
-  console.log('members', members);
+  console.log('events', events);
 
   return (
     <TabGroup>
@@ -74,6 +114,7 @@ export default function Group() {
       <TabPanels>
         <TabPanel>
           <GroupInfo group={group} />
+          {events && <TxHistory events={events} />}
         </TabPanel>
         <TabPanel>
           <ManageMembers members={members} setMembers={setMembers} />

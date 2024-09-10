@@ -1,6 +1,6 @@
 'use client';
 
-import DropDown from '@/components/DropDown';
+import DropDown from '@/components/layout/DropDown';
 import Image from 'next/image';
 import Link from 'next/link';
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { isAddress } from 'viem';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import useCircles from '@/hooks/useCircles';
-import ProfilePreview from '@/components/ProfilePreview';
+import ProfilePreview from '@/components/members/ProfilePreview';
 import { ProfileWithAddress } from '@/types';
 
 export default function SearchMember({

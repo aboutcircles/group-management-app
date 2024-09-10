@@ -1,13 +1,13 @@
-"use client";
-import Fallback from "@/components/Fallback";
-import RegisterGroup from "@/components/RegisterGroup";
-import { useAccount } from "wagmi";
-import { useSafeProvider } from "@/hooks/useSafeProvider";
-import { useEffect } from "react";
-import useCircles from "@/hooks/useCircles";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import TransactionToast from "@/components/TransactionToast";
+'use client';
+import Fallback from '@/components/layout/Fallback';
+import RegisterGroup from '@/components/group/RegisterGroup';
+import { useAccount } from 'wagmi';
+import { useSafeProvider } from '@/hooks/useSafeProvider';
+import { useEffect } from 'react';
+import useCircles from '@/hooks/useCircles';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import TransactionToast from '@/components/layout/TransactionToast';
 
 export default function Page() {
   const { address } = useAccount();

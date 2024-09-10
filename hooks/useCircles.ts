@@ -10,11 +10,16 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { type Profile } from '@circles-sdk/profiles';
 import { ContractTransactionReceipt } from 'ethers';
-import { CirclesEvent } from '@circles-sdk/data';
+import {
+  CirclesEvent,
+  CirclesQuery,
+  TransactionHistoryRow,
+} from '@circles-sdk/data';
 
 export default function useCircles() {
   const {
     circles,
+    circlesData,
     avatarEvents,
     groupAvatar,
     groupAvatarIsFetched,
@@ -50,7 +55,7 @@ export default function useCircles() {
   );
 
   const findGroupByAddress = useCallback(
-    async (address: string): Promise<Group> => {
+    async (address: string): Promise<Group | null> => {
       const _address = address.toLowerCase();
       const queryKey = ['groupByAddress', _address];
 
@@ -63,12 +68,17 @@ export default function useCircles() {
           const groupsResult = getGroups?.currentPage?.results ?? [];
           return groupsResult[0] as Group;
         } else {
-          return {} as Group;
+          return null;
         }
       };
 
-      const data = await queryClient.fetchQuery({ queryKey, queryFn });
-      return data;
+      try {
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data;
+      } catch (error) {
+        console.error('Failed to get group by address:', error);
+        return null;
+      }
     },
     [circles, queryClient]
   );
@@ -79,27 +89,15 @@ export default function useCircles() {
       const queryKey = ['trustRelations', _address];
 
       const queryFn = async () => {
-        // const trustRelations = circles?.data.getTrustRelations(_address, 10);
-
         const trustRelations = await circles?.data.getAggregatedTrustRelations(
           _address
         );
-
         return trustRelations;
-        // if (await trustRelations?.queryNextPage()) {
-        //   return trustRelations?.currentPage?.results ?? [];
-        // } else {
-        //   return [];
-        // }
       };
 
       try {
         const data = await queryClient.fetchQuery({ queryKey, queryFn });
         return data as TrustRelationRow[];
-        // const data = (
-        //   await queryClient.fetchQuery({ queryKey, queryFn })
-        // ).filter((row) => row.truster.toLowerCase() === _address); // only trusted by group
-        // return data as TrustRelation[];
       } catch (error) {
         console.error('Failed to get trust relations:', error);
         return [];
@@ -194,7 +192,7 @@ export default function useCircles() {
     [circles, queryClient]
   );
 
-  const fetchAvatarInfos = useCallback(
+  const getAvatarsInfos = useCallback(
     async (contactAddresses: Address[]): Promise<AvatarInterface[]> => {
       const queryKey = ['avatarInfos', contactAddresses];
 
@@ -204,14 +202,8 @@ export default function useCircles() {
           const avatars = await circles.data.getAvatarInfos(contactAddresses);
           console.log('avatars', avatars);
           return avatars;
-          // return (
-          //   avatars?.reduce((acc, avatarInfo) => {
-          //     acc[avatarInfo.avatar] = avatarInfo;
-          //     return acc;
-          //   }, {} as Record<string, AvatarInterface>) ?? {}
-          // );
         } catch (error) {
-          console.error('Failed to get avatar infos:', error);
+          console.error("Failed to get avatars' infos:", error);
           return [];
         }
       };
@@ -220,7 +212,7 @@ export default function useCircles() {
         const data = await queryClient.fetchQuery({ queryKey, queryFn });
         return data as AvatarInterface[];
       } catch (error) {
-        console.error('Failed to get avatar infos:', error);
+        console.error("Failed to get avatars' infos:", error);
         return [];
       }
     },
@@ -267,13 +259,11 @@ export default function useCircles() {
         if (!circles || contactAddresses.length === 0) return [];
         try {
           const avatars = await circles.data.getAvatarInfos(contactAddresses);
-          console.log('avatars', avatars);
           const cids = avatars
             .map((avatar) => avatar?.cidV0)
             .filter((cid) => cid !== undefined);
           if (cids.length === 0) return [];
           const profiles = await circles.profiles?.getMany(cids);
-          console.log('profiles', profiles);
           // return profiles;
 
           if (!profiles) return [];
@@ -301,21 +291,114 @@ export default function useCircles() {
     [circles, queryClient]
   );
 
+  // const getTransactionHistory =
+  //   useCallback(async (): Promise<CirclesQuery<TransactionHistoryRow> | null> => {
+  //     const queryKey = ['transactionHistory'];
+
+  //     const queryFn = async () => {
+  //       if (!groupAvatar) return;
+  //       console.log('fetching transaction history for group', groupAvatar);
+  //       const txHistoryQuery = await groupAvatar?.getTransactionHistory(25);
+  //       return txHistoryQuery;
+  //     };
+
+  //     try {
+  //       const txHistoryQuery = await queryClient.fetchQuery({
+  //         queryKey,
+  //         queryFn,
+  //       });
+  //       return txHistoryQuery as CirclesQuery<TransactionHistoryRow>;
+  //     } catch (error) {
+  //       console.error('Failed to get avatar info:', error);
+  //       return null;
+  //     }
+  //   }, [groupAvatar, queryClient]);
+
+  // const getTransactionHistory =
+  //   useCallback(async (): Promise<CirclesQuery<TransactionHistoryRow> | null> => {
+  //     const queryKey = ['transactionHistory'];
+
+  //     const queryFn = async () => {
+  //       if (!groupAvatar) return;
+  //       console.log('fetching transaction history for group', groupAvatar);
+  //       const txHistoryQuery = await groupAvatar?.getTransactionHistory(25);
+  //       const hasData = await txHistoryQuery.queryNextPage();
+  //       if (hasData) {
+  //         console.log(txHistoryQuery.currentPage?.results);
+  //       }
+  //       return txHistoryQuery;
+  //     };
+
+  //     try {
+  //       const txHistoryQuery = await queryClient.fetchQuery({
+  //         queryKey,
+  //         queryFn,
+  //       });
+  //       return txHistoryQuery as CirclesQuery<TransactionHistoryRow>;
+  //     } catch (error) {
+  //       console.error('Failed to get avatar info:', error);
+  //       return null;
+  //     }
+  //   }, [groupAvatar, queryClient]);
+
+  const getTransactionHistory = useCallback(async () => {
+    if (!groupAvatar) return null;
+    console.log('fetching transaction history for group', groupAvatar);
+    const txHistoryQuery = await groupAvatar?.getTransactionHistory(25);
+    const hasData = await txHistoryQuery.queryNextPage();
+    if (hasData) {
+      console.log(txHistoryQuery.currentPage?.results);
+    }
+    return txHistoryQuery;
+  }, [groupAvatar]);
+
+  const getEvents = useCallback(
+    async (blockNumber: number) => {
+      const _blockNumber = blockNumber ?? groupInfo?.blockNumber;
+      const queryKey = ['events', _blockNumber];
+
+      const queryFn = async () => {
+        if (!groupAvatar) return;
+        const events = await circlesData?.getEvents(
+          groupAvatar?.address,
+          blockNumber
+        );
+        console.log('events', events);
+        return events;
+      };
+
+      try {
+        const data = await queryClient.fetchQuery({ queryKey, queryFn });
+        return data;
+      } catch (error) {
+        console.error('Failed to get events:', error);
+        return null;
+      }
+    },
+    [circlesData, groupAvatar, groupInfo?.blockNumber, queryClient]
+  );
+
   return {
     circles,
-    subscribeToAvatarEvents,
-    findGroupByAddress,
-    getTrustRelations,
-    registerGroup,
-    trust,
-    untrust,
-    getAvatarInfo,
-    getAvatarProfileByAddress,
     groupAvatar,
     groupAvatarIsFetched,
     groupInfo,
     groupInfoIsFetched,
-    fetchAvatarInfos,
+
+    registerGroup,
+    trust,
+    untrust,
+
+    subscribeToAvatarEvents,
+    getTransactionHistory,
+    getEvents,
+
+    findGroupByAddress,
+    getTrustRelations,
+
+    getAvatarInfo,
+    getAvatarProfileByAddress,
+    getAvatarsInfos,
     getAvatarsProfilesByAddresses,
   };
 }

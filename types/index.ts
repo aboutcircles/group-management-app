@@ -14,3 +14,17 @@ export enum RelationType {
   Trusts = 'trusts',
   MutuallyTrusts = 'mutuallyTrusts',
 }
+
+export const circlesEventTypes = [
+  'CrcV2_Trust',
+  'CrcV2_TransferSingle',
+  'CrcV2_ApprovalForAll',
+  'CrcV2_TransferBatch',
+  'CrcV2_GroupMintSingle',
+  'CrcV2_GroupMintBatch',
+];
+
+export type MintPolicy = {
+  id: number;
+  name: string;
+};

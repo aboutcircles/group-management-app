@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import Footer from '@/components/Footer';
-import Navbar from '@/components/NavBar';
+import Footer from '@/components/layout/Footer';
+import Navbar from '@/components/layout/NavBar';
 import { ToastContainer } from 'react-toastify';
 
 const inter = Inter({ subsets: ['latin'] });
