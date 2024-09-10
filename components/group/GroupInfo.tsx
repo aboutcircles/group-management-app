@@ -3,13 +3,19 @@ import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import ImgUpload from './ImgUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { Group } from '@/types';
+import {cidV0ToUint8Array} from "@circles-sdk/utils";
+import useCircles from '@/hooks/useCircles';
+
 
 export default function GroupInfo({ group }: { group: Group }) {
   const [formData, setFormData] = useState({
     name: group.name,
-    symbol: group.symbol,
     description: group.description,
+    previewImageUrl: group.previewImageUrl,
+    imageUrl: group.imageUrl,
   });
+
+  const { circles} = useCircles();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -26,16 +32,77 @@ export default function GroupInfo({ group }: { group: Group }) {
   //   isValidSymbol(formData.symbol) || formData.symbol.length === 0;
 
   const handleFileSelected = (file: File | null) => {
-    console.log(file);
-    // TODO: set image
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const cropWidth = 256; // Set your desired crop width
+          const cropHeight = 256; // Set your desired crop height
+
+          if (ctx) {
+            canvas.width = cropWidth;
+            canvas.height = cropHeight;
+
+            ctx.drawImage(img, 0, 0, cropWidth, cropHeight);
+
+            const imageDataUrl = canvas.toDataURL("image/jpeg", 0.3);
+
+            if (imageDataUrl.length > 150 * 1024) {
+              console.warn("Image size exceeds 150 KB after compression");
+            }
+
+            setFormData((prevData) => ({
+              ...prevData,
+              previewImageUrl: imageDataUrl,
+            }));
+          }
+        };
+      };
+      reader.readAsDataURL(file);
+    }
   };
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (!validName || !validSymbol) return;
+  
+    try {
+      const profile = {
+        name: formData.name,
+        description: formData.description,
+        previewImageUrl: formData.previewImageUrl,
+      };
+  
+      
+      if (!circles?.profiles) {
+        throw new Error('Circles SDK profiles context is not available.');
+      }
+      const cid = await circles.profiles.create(profile);
+  
+      if (!cid) {
+        throw new Error('Failed to create profile: CID is undefined');
+      }
+      const digest = cidV0ToUint8Array(cid);
 
-    // setStep('executed');
-    // TODO: Create group
+      if (!circles.nameRegistry) {
+        throw new Error('Circles SDK nameRegistry context is not available.');
+      }
+      const tx = await circles.nameRegistry.updateMetadataDigest(digest);
+  
+      if (!tx) {
+        throw new Error('Failed to create the transaction for updating metadata digest.');
+      }
+  
+      const receipt = await tx.wait();
+      console.log('Profile updated successfully:', receipt);
+  
+    } catch (error) {
+      console.error('Error while updating profile:', error);
+    }
   };
 
   return (
@@ -52,13 +119,23 @@ export default function GroupInfo({ group }: { group: Group }) {
           />
         </Field>
         <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
-          <h2 className='w-full font-bold text-2xl px-3'>{group.name}</h2>
+          <Field className='w-full'>
+            <Textarea
+            name='name'
+            value={formData.name}
+            placeholder='Group Name'
+            className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+            onChange={handleChange}
+        />
+      </Field>
+
           <Field className='w-full flex-1'>
             <Textarea
               name='description'
               value={formData.description}
               placeholder='Group Description...'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+
+              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
             />
           </Field>
@@ -74,6 +151,11 @@ export default function GroupInfo({ group }: { group: Group }) {
           )}
         </div>
       </div>
+      <button
+    type='submit'
+    className='bg-secondary rounded-full text-sm px-2 py-1 border-2 border-transparent text-white hover:border-white transition duration-300 ease-in-out'
+    > Save Changes
+  </button>
 
       {/* <Field className='w-full'>
         <Label className='text-sm/6 font-medium text-black'>
