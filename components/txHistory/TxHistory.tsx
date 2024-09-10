@@ -1,13 +1,5 @@
-import { useEffect } from 'react';
-import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
-import ImgUpload from './ImgUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { Group } from '@/types';
-import {
-  CirclesEvent,
-  CirclesQuery,
-  TransactionHistoryRow,
-} from '@circles-sdk/data';
+import { CirclesEvent } from '@circles-sdk/data';
 
 export default function TxHistory({ events }: { events: CirclesEvent[] }) {
   // useEffect(() => {

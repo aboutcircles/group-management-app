@@ -1,9 +1,9 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import GroupInfo from '@/components/GroupInfo';
+import GroupInfo from '@/components/group/GroupInfo';
 import useCircles from '@/hooks/useCircles';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import ManageMembers from '@/components/ManageMembers';
+import ManageMembers from '@/components/members/ManageMembers';
 import { circlesEventTypes, ProfileWithAddress } from '@/types';
 import { Address } from 'viem';
 import {
@@ -13,7 +13,7 @@ import {
   EventRow,
   TransactionHistoryRow,
 } from '@circles-sdk/data';
-import TxHistory from '@/components/TxHistory';
+import TxHistory from '@/components/txHistory/TxHistory';
 
 export default function Group() {
   const { address } = useAccount();

@@ -1,6 +1,6 @@
 'use client';
 
-import Fallback from '@/components/Fallback';
+import Fallback from '@/components/layout/Fallback';
 import useCircles from '@/hooks/useCircles';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

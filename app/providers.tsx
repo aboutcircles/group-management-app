@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
 import { WagmiProvider } from 'wagmi';
 import { config } from '@/wagmi';
-import Connect from '@/components/Connect';
+import Connect from '@/components/layout/Connect';
 import { CirclesSDKProvider } from '@/contexts/circlesSdk';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 

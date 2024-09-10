@@ -1,5 +1,5 @@
 import { ProfileWithAddress } from '@/types';
-import ProfilePreview from '@/components/ProfilePreview';
+import ProfilePreview from '@/components/members/ProfilePreview';
 
 interface MemberListProps {
   members: ProfileWithAddress[];

@@ -1,6 +1,6 @@
 import { ProfileWithAddress } from '@/types';
-import SearchMember from '@/components/SearchMember';
-import MemberList from '@/components/MemberList';
+import SearchMember from '@/components/members/SearchMember';
+import MemberList from '@/components/members/MemberList';
 import useCircles from '@/hooks/useCircles';
 import { RelationType } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
