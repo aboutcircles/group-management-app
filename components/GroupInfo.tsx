@@ -11,8 +11,6 @@ export default function GroupInfo({ group }: { group: Group }) {
     description: group.description,
   });
 
-  console.log('group', group);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
