@@ -6,6 +6,7 @@ import { Group } from '@/types';
 import {cidV0ToUint8Array} from "@circles-sdk/utils";
 import useCircles from '@/hooks/useCircles';
 
+
 export default function GroupInfo({ group }: { group: Group }) {
   const [formData, setFormData] = useState({
     name: group.name,
@@ -104,7 +105,6 @@ export default function GroupInfo({ group }: { group: Group }) {
     }
   };
 
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -128,11 +128,13 @@ export default function GroupInfo({ group }: { group: Group }) {
             onChange={handleChange}
         />
       </Field>
+
           <Field className='w-full flex-1'>
             <Textarea
               name='description'
               value={formData.description}
               placeholder='Group Description...'
+
               className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
             />
@@ -154,7 +156,6 @@ export default function GroupInfo({ group }: { group: Group }) {
     className='bg-secondary rounded-full text-sm px-2 py-1 border-2 border-transparent text-white hover:border-white transition duration-300 ease-in-out'
     > Save Changes
   </button>
-
 
       {/* <Field className='w-full'>
         <Label className='text-sm/6 font-medium text-black'>
