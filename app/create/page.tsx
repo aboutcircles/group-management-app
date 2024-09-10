@@ -8,26 +8,28 @@ import useCircles from '@/hooks/useCircles';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import TransactionToast from '@/components/layout/TransactionToast';
+import { useGroupStore } from '@/stores/groupStore';
 
 export default function Page() {
   const { address } = useAccount();
   // const provider = useSafeProvider();
   const router = useRouter();
-  const { groupAvatar, subscribeToAvatarEvents } = useCircles();
+  const groupAvatar = useGroupStore((state) => state.groupAvatar);
+  // const { groupAvatar, subscribeToAvatarEvents } = useCircles();
 
-  useEffect(() => {
-    const unsubscribe = subscribeToAvatarEvents((event) => {
-      if (event && event.transactionHash) {
-        toast(<TransactionToast transactionHash={event.transactionHash} />);
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribe = subscribeToAvatarEvents((event) => {
+  //     if (event && event.transactionHash) {
+  //       toast(<TransactionToast transactionHash={event.transactionHash} />);
+  //     }
+  //   });
 
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
-  }, [subscribeToAvatarEvents]);
+  //   return () => {
+  //     if (unsubscribe) {
+  //       unsubscribe();
+  //     }
+  //   };
+  // }, [subscribeToAvatarEvents]);
 
   // TODO: push to group only if RegisterGroup step is equal to start
   // useEffect(() => {

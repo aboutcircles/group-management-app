@@ -3,12 +3,15 @@ import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
 import ImgUpload from './ImgUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { Group } from '@/types';
+import { useGroupStore } from '@/stores/groupStore';
 
-export default function GroupInfo({ group }: { group: Group }) {
+export default function GroupInfo() {
+  const groupInfo = useGroupStore((state) => state.groupInfo);
+
   const [formData, setFormData] = useState({
-    name: group.name,
-    symbol: group.symbol,
-    description: group.description,
+    name: groupInfo?.name,
+    symbol: groupInfo?.symbol,
+    description: groupInfo?.description,
   });
 
   const handleChange = (
@@ -48,11 +51,11 @@ export default function GroupInfo({ group }: { group: Group }) {
         <Field className=''>
           <ImgUpload
             onFileSelected={handleFileSelected}
-            imgUrl={group.previewImageUrl}
+            imgUrl={groupInfo?.previewImageUrl}
           />
         </Field>
         <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
-          <h2 className='w-full font-bold text-2xl px-3'>{group.name}</h2>
+          <h2 className='w-full font-bold text-2xl px-3'>{groupInfo?.name}</h2>
           <Field className='w-full flex-1'>
             <Textarea
               name='description'
@@ -64,12 +67,12 @@ export default function GroupInfo({ group }: { group: Group }) {
           </Field>
           {/* <p className='text-xs text-gray mx-3'>{group.members} members</p> */}
           <div className='flex'>
-            <p className='font-bold mx-3'>{group.symbol}</p>
+            <p className='font-bold mx-3'>{groupInfo?.symbol}</p>
             {/* <p className=''>{group.balance}</p> */}
           </div>
-          {group.mint && (
+          {groupInfo?.mint && (
             <p className='text-xs text-gray mx-3'>
-              Mint policy: {truncateAddress(group.mint)}
+              Mint policy: {truncateAddress(groupInfo.mint)}
             </p>
           )}
         </div>

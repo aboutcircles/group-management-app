@@ -32,7 +32,8 @@
     "react-toastify": "^10.0.5",
     "safe-apps-sdk\n\n": "link:@safe-global/safe-apps-sdk\n\n",
     "viem": "^2.19.4",
-    "wagmi": "^2.12.5"
+    "wagmi": "^2.12.5",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.52.2",

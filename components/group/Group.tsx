@@ -8,98 +8,47 @@ import { circlesEventTypes, ProfileWithAddress } from '@/types';
 import { Address } from 'viem';
 import {
   CirclesEvent,
-  CirclesEventType,
   CirclesQuery,
-  EventRow,
   TransactionHistoryRow,
 } from '@circles-sdk/data';
 import TxHistory from '@/components/txHistory/TxHistory';
 
 export default function Group() {
-  const { address } = useAccount();
-  const {
-    findGroupByAddress,
-    getTrustRelations,
-    circles,
-    groupInfo: group,
-    groupInfoIsFetched,
-    getAvatarsInfos,
-    getAvatarsProfilesByAddresses,
-    getTransactionHistory,
-    getEvents,
-  } = useCircles();
-  const [members, setMembers] = useState<ProfileWithAddress[]>([]);
-  const [txHistoryQuery, setTxHistoryQuery] =
-    useState<CirclesQuery<TransactionHistoryRow> | null>(null);
+  // const [txHistoryQuery, setTxHistoryQuery] =
+  //   useState<CirclesQuery<TransactionHistoryRow> | null>(null);
 
-  const [events, setEvents] = useState<CirclesEvent[] | null>(null);
+  // const [events, setEvents] = useState<CirclesEvent[] | null>(null);
 
-  useEffect(() => {
-    const fetchGroup = async () => {
-      if (!address || !circles) return;
-      const trustRelations = await getTrustRelations(address);
+  // useEffect(() => {
+  //   const fetchTxHistory = async () => {
+  //     if (!group) return;
+  //     const txHistoryQuery = await getTransactionHistory();
+  //     setTxHistoryQuery(txHistoryQuery);
+  //     if (!txHistoryQuery) return;
+  //     const hasData = await txHistoryQuery.queryNextPage();
+  //     console.log('hasData', hasData);
+  //     if (hasData) {
+  //       console.log(txHistoryQuery.currentPage?.results);
+  //     }
+  //   };
+  //   fetchTxHistory();
+  // }, [group, getTransactionHistory]);
 
-      const trustAddresses: Address[] = [];
-      const relations: Record<string, string> = {};
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     if (!group || !circles) return;
+  //     const _events = await getEvents(0);
+  //     const filteredEvents = (_events as CirclesEvent[])
+  //       .filter((event) => circlesEventTypes.includes(event.$event))
+  //       .reverse();
+  //     setEvents(filteredEvents);
+  //   };
+  //   fetchEvents();
+  // }, [group, circles, getEvents]);
 
-      trustRelations.forEach((item) => {
-        trustAddresses.push(item.objectAvatar as Address);
-        relations[item.objectAvatar] = item.relation;
-      });
+  // if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
 
-      const avatarProfiles = await getAvatarsProfilesByAddresses(
-        trustAddresses as Address[]
-      );
-
-      const avatarProfilesWithRelations = avatarProfiles.map((profile) => {
-        return {
-          ...profile,
-          relation: relations[profile.address],
-        };
-      });
-
-      setMembers(avatarProfilesWithRelations);
-    };
-    fetchGroup();
-  }, [
-    address,
-    circles,
-    getAvatarsInfos,
-    findGroupByAddress,
-    getAvatarsProfilesByAddresses,
-    getTrustRelations,
-  ]);
-
-  useEffect(() => {
-    const fetchTxHistory = async () => {
-      if (!group) return;
-      const txHistoryQuery = await getTransactionHistory();
-      setTxHistoryQuery(txHistoryQuery);
-      if (!txHistoryQuery) return;
-      const hasData = await txHistoryQuery.queryNextPage();
-      console.log('hasData', hasData);
-      if (hasData) {
-        console.log(txHistoryQuery.currentPage?.results);
-      }
-    };
-    fetchTxHistory();
-  }, [group, getTransactionHistory]);
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      if (!group || !circles) return;
-      const _events = await getEvents(0);
-      const filteredEvents = (_events as CirclesEvent[])
-        .filter((event) => circlesEventTypes.includes(event.$event))
-        .reverse();
-      setEvents(filteredEvents);
-    };
-    fetchEvents();
-  }, [group, circles, getEvents]);
-
-  if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
-
-  console.log('events', events);
+  // console.log('events', events);
 
   return (
     <TabGroup>
@@ -113,11 +62,11 @@ export default function Group() {
       </TabList>
       <TabPanels>
         <TabPanel>
-          <GroupInfo group={group} />
-          {events && <TxHistory events={events} />}
+          <GroupInfo />
+          {/* <TxHistory /> */}
         </TabPanel>
         <TabPanel>
-          <ManageMembers members={members} setMembers={setMembers} />
+          <ManageMembers />
         </TabPanel>
       </TabPanels>
     </TabGroup>

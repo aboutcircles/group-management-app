@@ -2,26 +2,28 @@
 import Group from '@/components/group/Group';
 import TransactionToast from '@/components/layout/TransactionToast';
 import useCircles from '@/hooks/useCircles';
+import { useGroupStore } from '@/stores/groupStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 export default function Page() {
-  const { groupAvatar, subscribeToAvatarEvents } = useCircles();
+  const groupAvatar = useGroupStore((state) => state.groupAvatar);
+  // const { groupAvatar, subscribeToAvatarEvents } = useCircles();
 
-  useEffect(() => {
-    const unsubscribe = subscribeToAvatarEvents((event) => {
-      if (event && event.transactionHash) {
-        toast(<TransactionToast transactionHash={event.transactionHash} />);
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribe = subscribeToAvatarEvents((event) => {
+  //     if (event && event.transactionHash) {
+  //       toast(<TransactionToast transactionHash={event.transactionHash} />);
+  //     }
+  //   });
 
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
-  }, [subscribeToAvatarEvents]);
+  //   return () => {
+  //     if (unsubscribe) {
+  //       unsubscribe();
+  //     }
+  //   };
+  // }, [subscribeToAvatarEvents]);
 
   const router = useRouter();
 

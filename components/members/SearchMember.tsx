@@ -2,24 +2,19 @@ import { Button, Field, Input, Label } from '@headlessui/react';
 import { useState } from 'react';
 import { isAddress } from 'viem';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import useCircles from '@/hooks/useCircles';
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { ProfileWithAddress } from '@/types';
+import { useMembersStore } from '@/stores/membersStore';
+import useProfiles from '@/hooks/useProfiles';
 
-export default function SearchMember({
-  members,
-  handleTrust,
-  handleUntrust,
-}: {
-  members: ProfileWithAddress[];
-  handleTrust: (profile: ProfileWithAddress) => Promise<boolean>;
-  handleUntrust: (profile: ProfileWithAddress) => Promise<boolean>;
-}) {
+export default function SearchMember() {
   const [address, setAddress] = useState<string>('');
   const [validAddress, setValidAddress] = useState<boolean>(true);
-  const { getAvatarProfileByAddress } = useCircles();
+  const { getAvatarProfileByAddress } = useProfiles();
   const [profile, setProfile] = useState<ProfileWithAddress | null>(null);
   const [profileNotFound, setProfileNotFound] = useState<boolean>(false);
+
+  const members = useMembersStore((state) => state.members);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
@@ -36,7 +31,7 @@ export default function SearchMember({
     }
     setValidAddress(true);
 
-    const existingMember = members.find(
+    const existingMember = members?.find(
       (member) => member.address.toLowerCase() === address.toLowerCase()
     );
 
@@ -57,32 +52,6 @@ export default function SearchMember({
       setAddress('');
     }
   };
-
-  const handleTrustInSearch = async (profile: ProfileWithAddress) => {
-    const result = await handleTrust(profile);
-    if (result) {
-      setProfile(null);
-    }
-  };
-
-  const handleUntrustInSearch = async (profile: ProfileWithAddress) => {
-    const result = await handleUntrust(profile);
-    if (result) {
-      setProfile(null);
-    }
-  };
-  // const handleTrustInSearch = async (
-  //   profile: ProfileWithAddress,
-  //   action: 'trust' | 'untrust'
-  // ) => {
-  //   const result =
-  //     action === 'trust'
-  //       ? await handleTrust(profile)
-  //       : await handleUntrust(profile);
-  //   if (result) {
-  //     setProfile(null);
-  //   }
-  // };
 
   return (
     <div className='w-full max-w-screen-sm'>
@@ -120,12 +89,7 @@ export default function SearchMember({
       </form>
       {profile && (
         <div className='w-full flex items-center justify-between p-4 pt-0'>
-          <ProfilePreview
-            profile={profile}
-            handleTrust={handleTrustInSearch}
-            handleUntrust={handleUntrustInSearch}
-            full
-          />
+          <ProfilePreview profile={profile} setProfile={setProfile} full />
         </div>
       )}
     </div>

@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import { ProfileWithAddress, RelationType } from '@/types';
 import {
-  // ArrowUpRightIcon,
-  // ArrowDownRightIcon,
   ArrowsRightLeftIcon,
   ArrowUpTrayIcon,
   ArrowDownTrayIcon,
@@ -10,18 +8,34 @@ import {
 import { Tooltip } from '@/components/common/Tooltip';
 import { Button } from '@headlessui/react';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useMembersStore } from '@/stores/membersStore';
 
 export default function ProfilePreview({
   profile,
-  handleTrust,
-  handleUntrust,
+  setProfile = () => {},
   full = false,
 }: {
   profile: ProfileWithAddress;
-  handleTrust: (profile: ProfileWithAddress) => void;
-  handleUntrust: (profile: ProfileWithAddress) => void;
+  setProfile?: (profile: ProfileWithAddress | null) => void;
   full?: boolean;
 }) {
+  const trustMember = useMembersStore((state) => state.trustMember);
+  const untrustMember = useMembersStore((state) => state.untrustMember);
+
+  const handleTrustInSearch = async (profile: ProfileWithAddress) => {
+    const result = await trustMember(profile);
+    if (result) {
+      setProfile(null);
+    }
+  };
+
+  const handleUntrustInSearch = async (profile: ProfileWithAddress) => {
+    const result = await untrustMember(profile);
+    if (result) {
+      setProfile(null);
+    }
+  };
+
   return (
     <div className='flex items-center w-full'>
       <div className='h-5 w-5 mr-2 text-zinc-400'>
@@ -64,7 +78,7 @@ export default function ProfilePreview({
       profile.relation === RelationType.Trusts ? (
         <Button
           className='flex items-center bg-black rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-          onClick={() => handleUntrust(profile)}
+          onClick={() => handleUntrustInSearch(profile)}
         >
           {full && <span className='mr-1'>Untrust</span>}
           <XMarkIcon className='h-4 w-4' />
@@ -72,7 +86,7 @@ export default function ProfilePreview({
       ) : (
         <Button
           className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-          onClick={() => handleTrust(profile)}
+          onClick={() => handleTrustInSearch(profile)}
         >
           {full && <span className='mr-1'>Trust</span>}
           <PlusIcon className='h-4 w-4' />
