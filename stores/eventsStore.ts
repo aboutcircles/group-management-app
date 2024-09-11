@@ -24,7 +24,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
         groupInfo?.group.toLowerCase() as Address,
         groupInfo?.blockNumber as number
       );
-      set({ events, isFetched: true });
+      set({ events: events?.reverse() || [], isFetched: true });
     } catch (error) {
       console.error('Failed to get events:', error);
     }
