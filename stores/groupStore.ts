@@ -4,7 +4,9 @@ import { AvatarInterface, Observable } from '@circles-sdk/sdk';
 import { create } from 'zustand';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { Address } from 'viem';
-import { GroupProfile } from '@circles-sdk/profiles';
+import { GroupProfile, Profile } from '@circles-sdk/profiles';
+import { ContractTransactionReceipt } from 'ethers';
+import { cidV0ToUint8Array } from '@circles-sdk/utils';
 
 interface GroupStore {
   groupAvatar?: AvatarInterface;
@@ -20,6 +22,10 @@ interface GroupStore {
     mintPolicy: Address,
     groupData: GroupProfile
   ) => Promise<AvatarInterface | null>;
+
+  updateGroup: (
+    newProfile: Profile
+  ) => Promise<ContractTransactionReceipt | null>;
 }
 
 export const useGroupStore = create<GroupStore>((set, get) => ({
@@ -70,8 +76,10 @@ export const useGroupStore = create<GroupStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
   setGroupAvatar: async (avatar: AvatarInterface) =>
     set({ groupAvatar: avatar }),
+
   setGroupInfo: async (group: Group) => set({ groupInfo: group }),
 
   createGroup: async (mintPolicy: Address, groupData: GroupProfile) => {
@@ -94,7 +102,6 @@ export const useGroupStore = create<GroupStore>((set, get) => ({
       );
       console.log('newGroup', newGroupAvatar);
       if (newGroupAvatar) {
-        // set({ groupAvatar: newGroupAvatar });
         await get().initGroup(newGroupAvatar.address as Address);
         return newGroupAvatar;
       } else {
@@ -102,6 +109,38 @@ export const useGroupStore = create<GroupStore>((set, get) => ({
       }
     } catch (error) {
       console.error('Failed to register group:', error);
+      return null;
+    }
+  },
+
+  updateGroup: async (newProfile: Profile) => {
+    const circles = useCirclesSdkStore.getState().circles;
+    if (!circles) return null;
+
+    try {
+      const cid = await circles.profiles?.create(newProfile);
+
+      if (!cid) {
+        throw new Error('Failed to create profile: CID is undefined');
+      }
+      const digest = cidV0ToUint8Array(cid);
+
+      if (!circles.nameRegistry) {
+        throw new Error('Circles SDK nameRegistry context is not available.');
+      }
+      const tx = await circles.nameRegistry.updateMetadataDigest(digest);
+
+      if (!tx) {
+        throw new Error(
+          'Failed to create the transaction for updating metadata digest.'
+        );
+      }
+
+      const receipt = await tx.wait();
+      console.log('Profile updated successfully:', receipt);
+      return receipt;
+    } catch (error) {
+      console.error('Error while updating profile:', error);
       return null;
     }
   },
