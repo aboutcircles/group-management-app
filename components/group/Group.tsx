@@ -1,55 +1,9 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import GroupInfo from '@/components/group/GroupInfo';
-import useCircles from '@/hooks/useCircles';
-import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import ManageMembers from '@/components/members/ManageMembers';
-import { circlesEventTypes, ProfileWithAddress } from '@/types';
-import { Address } from 'viem';
-import {
-  CirclesEvent,
-  CirclesQuery,
-  TransactionHistoryRow,
-} from '@circles-sdk/data';
 import TxHistory from '@/components/txHistory/TxHistory';
 
 export default function Group() {
-  // const [txHistoryQuery, setTxHistoryQuery] =
-  //   useState<CirclesQuery<TransactionHistoryRow> | null>(null);
-
-  // const [events, setEvents] = useState<CirclesEvent[] | null>(null);
-
-  // useEffect(() => {
-  //   const fetchTxHistory = async () => {
-  //     if (!group) return;
-  //     const txHistoryQuery = await getTransactionHistory();
-  //     setTxHistoryQuery(txHistoryQuery);
-  //     if (!txHistoryQuery) return;
-  //     const hasData = await txHistoryQuery.queryNextPage();
-  //     console.log('hasData', hasData);
-  //     if (hasData) {
-  //       console.log(txHistoryQuery.currentPage?.results);
-  //     }
-  //   };
-  //   fetchTxHistory();
-  // }, [group, getTransactionHistory]);
-
-  // useEffect(() => {
-  //   const fetchEvents = async () => {
-  //     if (!group || !circles) return;
-  //     const _events = await getEvents(0);
-  //     const filteredEvents = (_events as CirclesEvent[])
-  //       .filter((event) => circlesEventTypes.includes(event.$event))
-  //       .reverse();
-  //     setEvents(filteredEvents);
-  //   };
-  //   fetchEvents();
-  // }, [group, circles, getEvents]);
-
-  // if (!group || !circles || !groupInfoIsFetched) return <div>Loading...</div>;
-
-  // console.log('events', events);
-
   return (
     <TabGroup>
       <TabList>
@@ -63,7 +17,7 @@ export default function Group() {
       <TabPanels>
         <TabPanel>
           <GroupInfo />
-          {/* <TxHistory /> */}
+          <TxHistory />
         </TabPanel>
         <TabPanel>
           <ManageMembers />

@@ -17,10 +17,10 @@ export default function useProfiles() {
         try {
           const avatarInfo = await circles.getAvatar(_address);
           const cid = avatarInfo?.avatarInfo?.cidV0;
-          console.log('cid', cid);
+          // console.log('cid', cid);
           if (!cid) return null;
           const avatarProfile = await circles.profiles?.get(cid);
-          console.log('avatarProfile', avatarProfile);
+          // console.log('avatarProfile', avatarProfile);
           return avatarProfile;
         } catch (error) {
           console.error('Failed to get avatar profile:', error);

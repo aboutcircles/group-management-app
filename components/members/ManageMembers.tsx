@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useMembersStore } from '@/stores/membersStore';
 
 export default function ManageMembers() {
-  const members = useMembersStore((state) => state.members);
   const isFetched = useMembersStore((state) => state.isFetched);
   const fetchMembers = useMembersStore((state) => state.fetchMembers);
 
@@ -20,11 +19,7 @@ export default function ManageMembers() {
       <h2 className='mt-5 pl-6 text-sm/6 font-medium text-black px-2 self-start'>
         Members
       </h2>
-      {members && members.length > 0 ? (
-        <MemberList />
-      ) : (
-        <p className='text-sm/6 text-zinc/50 px-2'>No members yet</p>
-      )}
+      <MemberList />
     </div>
   );
 }
