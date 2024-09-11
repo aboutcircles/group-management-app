@@ -4,6 +4,7 @@ import { AvatarInterface, Observable } from '@circles-sdk/sdk';
 import { create } from 'zustand';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { Address } from 'viem';
+import { GroupProfile } from '@circles-sdk/profiles';
 
 interface GroupStore {
   groupAvatar?: AvatarInterface;
@@ -14,9 +15,14 @@ interface GroupStore {
   initGroup: (address: Address) => Promise<void>;
   setGroupAvatar: (avatar: AvatarInterface) => Promise<void>;
   setGroupInfo: (group: Group) => Promise<void>;
+
+  createGroup: (
+    mintPolicy: Address,
+    groupData: GroupProfile
+  ) => Promise<AvatarInterface | null>;
 }
 
-export const useGroupStore = create<GroupStore>((set) => ({
+export const useGroupStore = create<GroupStore>((set, get) => ({
   groupAvatar: undefined,
   avatarEvents: undefined,
   groupInfo: undefined,
@@ -67,4 +73,36 @@ export const useGroupStore = create<GroupStore>((set) => ({
   setGroupAvatar: async (avatar: AvatarInterface) =>
     set({ groupAvatar: avatar }),
   setGroupInfo: async (group: Group) => set({ groupInfo: group }),
+
+  createGroup: async (mintPolicy: Address, groupData: GroupProfile) => {
+    const profile: GroupProfile = {
+      name: groupData.name,
+      description: groupData.description,
+      previewImageUrl: groupData.previewImageUrl,
+      imageUrl: groupData.imageUrl,
+      symbol: groupData.symbol,
+    };
+
+    const circles = useCirclesSdkStore.getState().circles;
+    if (!circles || !mintPolicy) return null;
+
+    try {
+      console.log('creating group...');
+      const newGroupAvatar = await circles?.registerGroupV2(
+        mintPolicy,
+        profile
+      );
+      console.log('newGroup', newGroupAvatar);
+      if (newGroupAvatar) {
+        // set({ groupAvatar: newGroupAvatar });
+        await get().initGroup(newGroupAvatar.address as Address);
+        return newGroupAvatar;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Failed to register group:', error);
+      return null;
+    }
+  },
 }));

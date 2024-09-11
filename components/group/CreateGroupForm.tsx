@@ -6,11 +6,11 @@ import { Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy from '@/components/group/MintPolicy';
 import ImgUpload from '@/components/group/ImgUpload';
-import { useRouter } from 'next/navigation';
-import useCircles from '@/hooks/useCircles';
 import { GroupProfile } from '@circles-sdk/profiles';
 import Loader from '@/components/group/Loader';
 import { mintPolicies } from '@/const';
+import { useGroupStore } from '@/stores/groupStore';
+import { Address } from 'viem';
 
 type Step = 'start' | 'form' | 'executed' | 'error'; // TODO DRY
 
@@ -29,9 +29,8 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   });
 
   const [mintPolicy, setMintPolicy] = useState(mintPolicies[0]);
-  const router = useRouter();
 
-  const { registerGroup } = useCircles();
+  const createGroup = useGroupStore((state) => state.createGroup);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -56,8 +55,8 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          const cropWidth = 256; // Set your desired crop width
-          const cropHeight = 256; // Set your desired crop height
+          const cropWidth = 256;
+          const cropHeight = 256;
 
           if (ctx) {
             canvas.width = cropWidth;
@@ -86,7 +85,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     e.preventDefault();
     if (!validName || !validSymbol) return;
     setIsLoading(true);
-    const newGroup = await registerGroup(mintPolicy.name, formData);
+    const newGroup = await createGroup(mintPolicy.name as Address, formData);
     if (newGroup) {
       console.log('newGroup from form', newGroup);
       setStep('executed');
