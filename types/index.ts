@@ -33,4 +33,5 @@ export type FormattedEvent = CirclesEvent & {
   date: string;
   time: string;
   member?: Address;
+  eventInfo?: any;
 };
