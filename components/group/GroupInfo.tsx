@@ -94,19 +94,22 @@ export default function GroupInfo() {
       className='w-full h-full p-4 flex flex-col items-center justify-center gap-y-4'
     >
       <div className='flex w-full gap-x-2'>
-        <Field className=''>
+        <Field className='flex flex-col justify-center'>
           <ImgUpload
             onFileSelected={handleFileSelected}
             imgUrl={groupInfo?.previewImageUrl}
           />
         </Field>
-        <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
+        <div className='flex flex-1 flex-col gap-y-2 pl-4'>
           <Field className='w-full'>
+            <p className='text-xs text-gray mx-3 break-all'>
+              {groupInfo?.group}
+            </p>
             <Textarea
               name='name'
               value={formData.name}
               placeholder='Group Name'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+              className='block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
               rows={1}
             />

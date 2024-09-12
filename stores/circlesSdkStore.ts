@@ -7,11 +7,20 @@ import { CIRCLES_RPC, chainConfigGnosis } from '@/const';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk';
 import { SafeAppProvider } from '@safe-global/safe-apps-provider';
 
-interface CirclesSdkStore {
+interface CirclesSdkStoreState {
   circles?: Sdk;
   circlesData?: CirclesData;
-  initSdk: () => Promise<void>;
 }
+
+interface CirclesSdkStoreActions {
+  initSdk: () => Promise<void>;
+  resetSdk: () => Promise<void>;
+}
+
+const initialState: CirclesSdkStoreState = {
+  circles: undefined,
+  circlesData: undefined,
+};
 
 const getSafeProvider = async () => {
   const sdk = new SafeAppsSDK();
@@ -25,7 +34,9 @@ const getSafeProvider = async () => {
   }
 };
 
-export const useCirclesSdkStore = create<CirclesSdkStore>((set, get) => ({
+export const useCirclesSdkStore = create<
+  CirclesSdkStoreState & CirclesSdkStoreActions
+>((set, get) => ({
   circles: undefined,
   circlesData: undefined,
 
@@ -48,5 +59,9 @@ export const useCirclesSdkStore = create<CirclesSdkStore>((set, get) => ({
     } catch (error) {
       console.error('Failed to initialize Circles SDK:', error);
     }
+  },
+
+  resetSdk: async () => {
+    set(initialState);
   },
 }));

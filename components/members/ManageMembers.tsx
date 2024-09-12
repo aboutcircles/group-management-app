@@ -16,9 +16,9 @@ export default function ManageMembers() {
   return (
     <div className='w-full min-h-[224px] flex flex-col items-center'>
       <SearchMember />
-      <h2 className='mt-5 pl-6 text-sm/6 font-medium text-black px-2 self-start'>
+      {/* <h2 className='mt-5 pl-6 text-sm/6 font-medium text-black px-2 self-start'>
         Members
-      </h2>
+      </h2> */}
       <MemberList />
     </div>
   );

@@ -61,7 +61,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
   };
 
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center myclass'>
       <div
         {...getRootProps()}
         className={`w-28 h-28 bg-black/5 my-2 text-black/30 rounded-full cursor-pointer text-center flex items-center justify-center text-xs shadow-sm hover:animate-pulse ${

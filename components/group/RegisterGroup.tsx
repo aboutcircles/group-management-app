@@ -4,15 +4,18 @@ import {
   CheckIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
 import CreateGroupForm from '@/components/group/CreateGroupForm';
 import Link from 'next/link';
+import { Step } from '@/types';
+import { Dispatch, SetStateAction } from 'react';
 
-type Step = 'start' | 'form' | 'executed' | 'error';
-
-export default function RegisterGroup() {
-  const [step, setStep] = useState<Step>('start');
-
+export default function RegisterGroup({
+  step,
+  setStep,
+}: {
+  step: Step;
+  setStep: Dispatch<SetStateAction<Step>>;
+}) {
   return (
     <div className='w-full h-full flex flex-col items-center justify-center gap-y-8 md:gap-y-4 p-4 md:p-8'>
       {step === 'start' ? (

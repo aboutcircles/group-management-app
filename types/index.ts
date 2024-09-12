@@ -35,3 +35,5 @@ export type FormattedEvent = CirclesEvent & {
   member?: Address;
   eventInfo?: any;
 };
+
+export type Step = 'start' | 'form' | 'executed' | 'error';

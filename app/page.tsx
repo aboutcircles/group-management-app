@@ -1,7 +1,6 @@
 'use client';
 
 import Fallback from '@/components/layout/Fallback';
-import useCircles from '@/hooks/useCircles';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { useGroupStore } from '@/stores/groupStore';
 import { useRouter } from 'next/navigation';
@@ -18,6 +17,11 @@ export default function Page() {
 
   useEffect(() => {
     if (!address || !circles || isLoading) return;
+    if (
+      groupAvatar &&
+      address.toLowerCase() !== groupAvatar?.address.toLowerCase()
+    )
+      return;
     if (!groupAvatar) {
       router.push('/create');
     } else {

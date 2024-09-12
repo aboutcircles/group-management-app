@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import { ProfileWithAddress, RelationType } from '@/types';
 import {
+  ArrowUpRightIcon,
+  ArrowDownLeftIcon,
   ArrowsRightLeftIcon,
-  ArrowUpTrayIcon,
-  ArrowDownTrayIcon,
+  // ArrowUpTrayIcon,
+  // ArrowDownTrayIcon,
 } from '@heroicons/react/20/solid';
 import { Tooltip } from '@/components/common/Tooltip';
 import { Button } from '@headlessui/react';
@@ -41,12 +43,12 @@ export default function ProfilePreview({
       <div className='h-5 w-5 mr-2 text-zinc-400'>
         {profile.relation === RelationType.Trusts && (
           <Tooltip content='You trust this profile'>
-            <ArrowUpTrayIcon className='h-5 w-5' />
+            <ArrowUpRightIcon className='h-5 w-5' />
           </Tooltip>
         )}
         {profile.relation === RelationType.TrustedBy && (
           <Tooltip content='This profile trusts you'>
-            <ArrowDownTrayIcon className='h-5 w-5' />
+            <ArrowDownLeftIcon className='h-5 w-5' />
           </Tooltip>
         )}
         {profile.relation === RelationType.MutuallyTrusts && (

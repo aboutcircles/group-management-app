@@ -6,14 +6,14 @@ import TxHistory from '@/components/txHistory/TxHistory';
 export default function Group() {
   return (
     <TabGroup>
-      <TabList>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4'>
+      <TabList className='flex justify-stretch'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all'>
           Group info
         </Tab>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary/95 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary/95 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all'>
           Members
         </Tab>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary/90 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary/90 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all'>
           Transactions
         </Tab>
       </TabList>
