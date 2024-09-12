@@ -11,8 +11,7 @@ import Loader from '@/components/group/Loader';
 import { mintPolicies } from '@/const';
 import { useGroupStore } from '@/stores/groupStore';
 import { Address } from 'viem';
-
-type Step = 'start' | 'form' | 'executed' | 'error'; // TODO DRY
+import { Step } from '@/types';
 
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;

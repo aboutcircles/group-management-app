@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Loading() {
   return (
-    <div className='min-h-[100px] flex items-center justify-center'>
+    <div className='min-h-[200px] flex items-center justify-center'>
       <Image
         src={Circles}
         alt='Loading'
