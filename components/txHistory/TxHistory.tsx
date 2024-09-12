@@ -30,9 +30,6 @@ export default function TxHistory() {
 
   return (
     <div className='mt-8'>
-      <h1 className='text-2xl font-bold text-center text-accent'>
-        Transaction History
-      </h1>
       <div className='grid grid-cols-5 gap-1 items-center'>
         {formattedEvents.map((groupedEvents) => (
           <React.Fragment key={groupedEvents[0].date}>

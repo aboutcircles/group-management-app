@@ -25,6 +25,8 @@ export const useMembersStore = create<MembersStore>((set) => ({
         groupInfo?.group.toLowerCase() as Address
       );
 
+      console.log('trustRelations', trustRelations);
+
       const trustAddresses: Address[] = [];
       const relations: Record<string, string> = {};
 
@@ -58,6 +60,8 @@ export const useMembersStore = create<MembersStore>((set) => ({
           };
         }
       );
+
+      console.log('avatarProfilesWithRelations', avatarProfilesWithRelations);
 
       set({
         members: avatarProfilesWithRelations as ProfileWithAddress[],
