@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGroupStore } from '@/stores/groupStore';
 import { Step } from '@/types';
+import Loading from '@/components/layout/Loading';
 
 export default function Page() {
   const { address } = useAccount();
@@ -33,9 +34,7 @@ export default function Page() {
     }
   }, [router, groupAvatar, step, address, isLoading]);
 
-  return <div>Loading create page 1...</div>;
-
-  if (!isPageReady) return <div>Loading create page 1...</div>;
+  if (!isPageReady) return <Loading />;
 
   return (
     <>

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { Address } from 'viem';
 import { useAccount } from 'wagmi';
 import EventType from '@/components/txHistory/EventType';
+import Loading from '@/components/layout/Loading';
 
 export default function TxHistory() {
   const { address } = useAccount();
@@ -27,6 +28,8 @@ export default function TxHistory() {
   );
 
   console.log('events', formattedEvents);
+
+  if (!isFetched) return <Loading />;
 
   return (
     <div className='mt-8'>

@@ -1,6 +1,7 @@
 'use client';
 
 import Fallback from '@/components/layout/Fallback';
+import Loading from '@/components/layout/Loading';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { useGroupStore } from '@/stores/groupStore';
 import { useRouter } from 'next/navigation';
@@ -28,6 +29,8 @@ export default function Page() {
       router.push('/group');
     }
   }, [address, router, groupAvatar, circles, isLoading]);
+
+  if (isLoading) return <Loading />;
 
   return <>{!address && <Fallback />}</>;
 }

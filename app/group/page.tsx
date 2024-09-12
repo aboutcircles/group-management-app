@@ -1,5 +1,6 @@
 'use client';
 import Group from '@/components/group/Group';
+import Loading from '@/components/layout/Loading';
 import { useGroupStore } from '@/stores/groupStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -19,7 +20,7 @@ export default function Page() {
   }, [router, groupAvatar]);
 
   if (address?.toLowerCase() !== groupInfo?.group.toLowerCase()) {
-    return <div>Loading group page...</div>;
+    return <Loading />;
   }
 
   return <Group />;
