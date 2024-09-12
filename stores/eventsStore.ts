@@ -18,9 +18,9 @@ export const useEventsStore = create<EventsStore>((set) => ({
   lastEvent: undefined,
 
   fetchEvents: async () => {
-    console.log('fetchEvents');
     const groupInfo = useGroupStore.getState().groupInfo;
     const circlesData = useCirclesSdkStore.getState().circlesData;
+    console.log('fetchEvents', groupInfo, circlesData);
 
     try {
       const events = await circlesData?.getEvents(
@@ -34,28 +34,23 @@ export const useEventsStore = create<EventsStore>((set) => ({
   },
 
   subscribeToEvents: async () => {
-    console.log('subscribeToEvents');
     const circlesData = useCirclesSdkStore.getState().circlesData;
     const groupInfo = useGroupStore.getState().groupInfo;
-
-    if (!circlesData || !groupInfo?.group) {
-      console.error('CirclesData or group information is missing', circlesData, groupInfo);
-      return;
-    }
+    console.log('subscribeToEvents', groupInfo, circlesData);
 
     try {
-      const eventSubscription = await circlesData.subscribeToEvents(
-        groupInfo?.group as Address
+      const eventSubscription = await circlesData?.subscribeToEvents(
+        groupInfo?.group.toLowerCase() as Address
       );
       console.log(eventSubscription);
 
-      eventSubscription.subscribe((event: CirclesEvent) => {
+      eventSubscription?.subscribe((event: CirclesEvent) => {
+        console.log('Event received:', event);
         set((state) => ({
           events: [...(state.events || []), event],
           lastEvent: event,
         }));
 
-        console.log('Event received:', event);
       });
     } catch (error) {
       console.error('Failed to subscribe to events:', error);
