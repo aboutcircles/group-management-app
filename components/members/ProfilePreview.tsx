@@ -4,12 +4,11 @@ import {
   ArrowUpRightIcon,
   ArrowDownLeftIcon,
   ArrowsRightLeftIcon,
-  // ArrowUpTrayIcon,
-  // ArrowDownTrayIcon,
-} from '@heroicons/react/20/solid';
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/Tooltip';
 import { Button } from '@headlessui/react';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useMembersStore } from '@/stores/membersStore';
 
 export default function ProfilePreview({
@@ -71,8 +70,8 @@ export default function ProfilePreview({
         </div>
       )}
       <div className='flex flex-col flex-1'>
-        <div className='ml-2 font-bold'>{profile.name}</div>
-        <div className='ml-2 text-xs text-zinc-500 break-all'>
+        <div className='mx-2 font-bold'>{profile.name}</div>
+        <div className='mx-2 text-xs text-zinc-500 break-all'>
           {profile.address}
         </div>
       </div>
@@ -83,7 +82,7 @@ export default function ProfilePreview({
           onClick={() => handleUntrustInSearch(profile)}
         >
           {full && <span className='mr-1'>Untrust</span>}
-          <XMarkIcon className='h-4 w-4' />
+          <XMarkIcon className='h-5 w-5' />
         </Button>
       ) : (
         <Button
@@ -91,7 +90,7 @@ export default function ProfilePreview({
           onClick={() => handleTrustInSearch(profile)}
         >
           {full && <span className='mr-1'>Trust</span>}
-          <PlusIcon className='h-4 w-4' />
+          <PlusIcon className='h-5 w-5' />
         </Button>
       )}
     </div>

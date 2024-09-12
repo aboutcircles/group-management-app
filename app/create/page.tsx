@@ -33,6 +33,8 @@ export default function Page() {
     }
   }, [router, groupAvatar, step, address, isLoading]);
 
+  return <div>Loading create page 1...</div>;
+
   if (!isPageReady) return <div>Loading create page 1...</div>;
 
   return (

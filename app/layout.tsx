@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import Footer from '@/components/layout/Footer';
 import Navbar from '@/components/layout/NavBar';
 import { ToastContainer } from 'react-toastify';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = DM_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Circles Management Group',
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body className={font.className}>
         <Providers>
           <ToastContainer autoClose={false} draggable={false} />
           <main className='flex min-h-screen flex-col items-center justify-center bg-background'>

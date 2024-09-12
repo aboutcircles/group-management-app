@@ -7,7 +7,7 @@ export default function Group() {
   return (
     <TabGroup>
       <TabList className='flex justify-stretch'>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-words'>
           Group info
         </Tab>
         <Tab className='outline-none w-1/3 font-bold bg-secondary/95 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all'>

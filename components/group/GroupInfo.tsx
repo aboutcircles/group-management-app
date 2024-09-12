@@ -120,7 +120,7 @@ export default function GroupInfo() {
               name='description'
               value={formData.description}
               placeholder='Group Description...'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
             />
           </Field>
@@ -141,7 +141,7 @@ export default function GroupInfo() {
         disabled={!isChanged}
       >
         Save Changes
-        <CheckIcon className='h-4 w-4 ml-1' />
+        <CheckIcon className='h-5 w-5 ml-1' />
       </button>
     </form>
   );

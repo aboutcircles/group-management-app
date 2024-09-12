@@ -18,15 +18,15 @@ export const formatEvents = (
 
     const eventInfo = {} as any;
     if (event.$event === 'CrcV2_GroupMintSingle') {
-      eventInfo.a = 'Group token minted';
-      eventInfo.b = `+${formatEther(event.value)} ${symbol}`;
+      eventInfo.data = `+${formatEther(event.value)} ${symbol}`;
+      eventInfo.type = 'mint';
     }
     if (event.$event === 'CrcV2_Trust') {
-      eventInfo.a =
+      eventInfo.data =
         event.trustee === groupAddress.toLowerCase()
           ? event.truster
           : event.trustee;
-      eventInfo.b = getTrustType(event, groupAddress);
+      eventInfo.type = getTrustType(event, groupAddress);
     }
 
     const dateObj = new Date((event.timestamp as number) * 1000);

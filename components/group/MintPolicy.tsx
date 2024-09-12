@@ -4,7 +4,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/react';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { Dispatch, SetStateAction } from 'react';
 import { type MintPolicy } from '@/types';
 import { mintPolicies } from '@/const';

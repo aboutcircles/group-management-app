@@ -11,7 +11,7 @@ const MemberList = () => {
         members?.map((member) => (
           <li
             key={member.address}
-            className='flex items-center justify-between p-4 py-2 hover:bg-accent/20 hover:cursor-default'
+            className='flex items-center justify-between p-4 py-4 hover:bg-accent/20 hover:cursor-default'
           >
             <ProfilePreview profile={member} />
           </li>

@@ -1,11 +1,20 @@
-"use client";
+'use client';
 
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { ChevronUpIcon } from "@heroicons/react/20/solid";
-import Link from "next/link";
-import { DocumentIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react';
+import { Fragment } from 'react';
+import { ChevronUpIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import {
+  DocumentIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 export default function DropDown() {
   return (
@@ -26,9 +35,7 @@ export default function DropDown() {
                 <Link
                   target='_blank'
                   className='text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm data-[focus]:bg-stone-100'
-                  href={
-                    ''
-                  }
+                  href={''}
                 >
                   <QuestionMarkCircleIcon className='h-5 w-5 mr-2' />
                   FAQ
