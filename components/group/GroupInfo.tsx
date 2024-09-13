@@ -5,11 +5,13 @@ import { truncateAddress } from '@/utils/truncateAddress';
 import { useGroupStore } from '@/stores/groupStore';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { Group } from '@/types';
+import Loader from './Loader';
 
 export default function GroupInfo() {
   const groupInfo = useGroupStore((state) => state.groupInfo);
   const updateGroup = useGroupStore((state) => state.updateGroup);
   const [isChanged, setIsChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: groupInfo?.name || '',
@@ -74,6 +76,7 @@ export default function GroupInfo() {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const profile = {
         name: formData.name,
         description: formData.description,
@@ -83,6 +86,7 @@ export default function GroupInfo() {
       const receipt = await updateGroup(profile);
       console.log('Profile updated successfully:', receipt);
       setIsChanged(false);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error while updating profile:', error);
     }
@@ -140,8 +144,19 @@ export default function GroupInfo() {
         className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4'
         disabled={!isChanged}
       >
-        Save Changes
-        <CheckIcon className='h-5 w-5 ml-1' />
+        {isLoading ? (
+          <>
+            <div className='mr-2'>
+              <Loader />
+            </div>
+            Processing
+          </>
+        ) : (
+          <>
+            Save Changes
+            <CheckIcon className='h-5 w-5 ml-1' />
+          </>
+        )}
       </button>
     </form>
   );
