@@ -8,16 +8,19 @@ type EventsStore = {
   events?: CirclesEvent[];
   fetchEvents: () => Promise<void>;
   isFetched: boolean;
+  lastEvent?: CirclesEvent;
+  subscribeToEvents: () => Promise<void>;
 };
 
 export const useEventsStore = create<EventsStore>((set) => ({
   events: [],
   isFetched: false,
+  lastEvent: undefined,
 
   fetchEvents: async () => {
-    console.log('fetchEvents');
     const groupInfo = useGroupStore.getState().groupInfo;
     const circlesData = useCirclesSdkStore.getState().circlesData;
+    console.log('fetchEvents', groupInfo, circlesData);
 
     try {
       const events = await circlesData?.getEvents(
@@ -27,6 +30,30 @@ export const useEventsStore = create<EventsStore>((set) => ({
       set({ events: events?.reverse() || [], isFetched: true });
     } catch (error) {
       console.error('Failed to get events:', error);
+    }
+  },
+
+  subscribeToEvents: async () => {
+    const circlesData = useCirclesSdkStore.getState().circlesData;
+    const groupInfo = useGroupStore.getState().groupInfo;
+    console.log('subscribeToEvents', groupInfo, circlesData);
+
+    try {
+      const eventSubscription = await circlesData?.subscribeToEvents(
+        groupInfo?.group.toLowerCase() as Address
+      );
+      console.log(eventSubscription);
+
+      eventSubscription?.subscribe((event: CirclesEvent) => {
+        console.log('Event received:', event);
+        set((state) => ({
+          events: [...(state.events || []), event],
+          lastEvent: event,
+        }));
+
+      });
+    } catch (error) {
+      console.error('Failed to subscribe to events:', error);
     }
   },
 }));
