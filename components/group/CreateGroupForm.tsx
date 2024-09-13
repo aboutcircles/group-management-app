@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy from '@/components/group/MintPolicy';
-import ImgUpload from '@/components/group/ImgUpload';
+import FileUpload from '@/components/group/FileUpload';
 import { GroupProfile } from '@circles-sdk/profiles';
 import Loader from '@/components/group/Loader';
 import { mintPolicies } from '@/const';
@@ -135,7 +135,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         </div>
         <Field className='w-full md:w-1/3 flex flex-col items-center'>
           <Label className='font-medium'>Group Image</Label>
-          <ImgUpload onFileSelected={handleFileSelected} />
+          <FileUpload onFileSelected={handleFileSelected} fileType='image' />
         </Field>
       </div>
       <div className='flex flex-col md:flex-row items-center w-full'>

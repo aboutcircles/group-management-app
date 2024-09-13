@@ -85,8 +85,11 @@ export default function ProfilePreview({
         </div>
       </div>
       <Button
-        className={`flex items-center  rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
-          isLoading ? 'bg-accent' : 'bg-black'
+        className={`flex items-center rounded-full bg-accent px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
+          profile.relation === RelationType.MutuallyTrusts ||
+          profile.relation === RelationType.Trusts
+            ? 'bg-black'
+            : ''
         }`}
         onClick={() =>
           profile.relation === RelationType.MutuallyTrusts ||
@@ -110,6 +113,7 @@ export default function ProfilePreview({
           </>
         ) : (
           <>
+            {/* When we can have Trust button not full? */}
             {full && <span className='mr-1'>Trust</span>}
             <PlusIcon className='h-5 w-5' />
           </>

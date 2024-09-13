@@ -57,7 +57,7 @@ export default function SearchMember() {
     <div className='w-full max-w-screen-sm'>
       <form
         onSubmit={handleSearch}
-        className='w-full h-full flex flex-col items-center justify-center gap-y-4 p-4 pb-0'
+        className='w-full flex flex-col gap-y-4 items-center'
       >
         <Field className='w-full'>
           <Label className='text-sm/6 font-medium text-black px-2'>
@@ -87,6 +87,7 @@ export default function SearchMember() {
           </p>
         </Field>
       </form>
+      {/* TODO: find a way to center this ProfilePreview */}
       {profile && (
         <div className='w-full flex items-center justify-between p-4 pt-0'>
           <ProfilePreview profile={profile} setProfile={setProfile} full />
