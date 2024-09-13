@@ -6,7 +6,12 @@ import { useEffect, useState } from 'react';
 import { useMembersStore } from '@/stores/membersStore';
 import Loading from '@/components/layout/Loading';
 import { DocumentPlusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/react';
 
 export default function ManageMembers() {
   let [isOpen, setIsOpen] = useState(false);
@@ -21,14 +26,16 @@ export default function ManageMembers() {
 
   return (
     <div className='w-full min-h-[224px] flex flex-col items-center'>
-      <div className='flex w-full justify-center items-center'>
+      <div className='flex w-full h-36 justify-center'>
         <SearchMember />
-        <button
-          className='bg-accent rounded-full mt-3 p-1 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
-          onClick={() => setIsOpen(true)}
-        >
-          <PlusIcon width={20} height={20} className='stroke-white' />
-        </button>
+        <div className='mt-12'>
+          <button
+            className='bg-accent rounded-full p-1 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
+            onClick={() => setIsOpen(true)}
+          >
+            <PlusIcon width={20} height={20} className='stroke-white' />
+          </button>
+        </div>
       </div>
       {isFetched ? <MemberList /> : <Loading />}
       <Dialog
