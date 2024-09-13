@@ -87,6 +87,7 @@ export default function SearchMember() {
           </p>
         </Field>
       </form>
+      {/* TODO: find a way to center this ProfilePreview */}
       {profile && (
         <div className='w-full flex items-center justify-between p-4 pt-0'>
           <ProfilePreview profile={profile} setProfile={setProfile} full />
