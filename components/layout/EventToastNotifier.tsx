@@ -5,6 +5,7 @@ import { useEventsStore } from '@/stores/eventsStore';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { useGroupStore } from '@/stores/groupStore';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EventToastNotifier = () => {
   const lastEvent = useEventsStore((state) => state.lastEvent);
