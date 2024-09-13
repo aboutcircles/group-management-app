@@ -1,7 +1,6 @@
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { useMembersStore } from '@/stores/membersStore';
 import { ProfileWithAddress } from '@/types';
-import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 interface MemberListProps {
   members: ProfileWithAddress[] | undefined;
