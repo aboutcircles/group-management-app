@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { ProfileWithAddress, RelationType } from '@/types';
 import {
@@ -10,6 +12,8 @@ import {
 import { Tooltip } from '@/components/common/Tooltip';
 import { Button } from '@headlessui/react';
 import { useMembersStore } from '@/stores/membersStore';
+import { useState } from 'react';
+import Loader from '../group/Loader';
 
 export default function ProfilePreview({
   profile,
@@ -20,21 +24,26 @@ export default function ProfilePreview({
   setProfile?: (profile: ProfileWithAddress | null) => void;
   full?: boolean;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const trustMember = useMembersStore((state) => state.trustMember);
   const untrustMember = useMembersStore((state) => state.untrustMember);
 
   const handleTrustInSearch = async (profile: ProfileWithAddress) => {
+    setIsLoading(true);
     const result = await trustMember(profile);
     if (result) {
       setProfile(null);
     }
+    setIsLoading(false);
   };
 
   const handleUntrustInSearch = async (profile: ProfileWithAddress) => {
+    setIsLoading(true);
     const result = await untrustMember(profile);
     if (result) {
       setProfile(null);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -75,24 +84,37 @@ export default function ProfilePreview({
           {profile.address}
         </div>
       </div>
-      {profile.relation === RelationType.MutuallyTrusts ||
-      profile.relation === RelationType.Trusts ? (
-        <Button
-          className='flex items-center bg-black rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-          onClick={() => handleUntrustInSearch(profile)}
-        >
-          {full && <span className='mr-1'>Untrust</span>}
-          <XMarkIcon className='h-5 w-5' />
-        </Button>
-      ) : (
-        <Button
-          className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out'
-          onClick={() => handleTrustInSearch(profile)}
-        >
-          {full && <span className='mr-1'>Trust</span>}
-          <PlusIcon className='h-5 w-5' />
-        </Button>
-      )}
+      <Button
+        className={`flex items-center  rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
+          isLoading ? 'bg-accent' : 'bg-black'
+        }`}
+        onClick={() =>
+          profile.relation === RelationType.MutuallyTrusts ||
+          profile.relation === RelationType.Trusts
+            ? handleUntrustInSearch(profile)
+            : handleTrustInSearch(profile)
+        }
+      >
+        {isLoading ? (
+          <>
+            <div className='mr-2'>
+              <Loader />
+            </div>
+            Processing
+          </>
+        ) : profile.relation === RelationType.MutuallyTrusts ||
+          profile.relation === RelationType.Trusts ? (
+          <>
+            {full && <span className='mr-1'>Untrust</span>}
+            <XMarkIcon className='h-5 w-5' />
+          </>
+        ) : (
+          <>
+            {full && <span className='mr-1'>Trust</span>}
+            <PlusIcon className='h-5 w-5' />
+          </>
+        )}
+      </Button>
     </div>
   );
 }
