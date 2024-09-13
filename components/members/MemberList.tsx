@@ -1,9 +1,13 @@
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { useMembersStore } from '@/stores/membersStore';
+import { ProfileWithAddress } from '@/types';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
-const MemberList = () => {
-  const members = useMembersStore((state) => state.members);
+interface MemberListProps {
+  members: ProfileWithAddress[] | undefined;
+}
+
+const MemberList = ({ members }: MemberListProps) => {
   return (
     <div className='w-full mt-5'>
       <div className='flex items-center p-2 font-bold'>
