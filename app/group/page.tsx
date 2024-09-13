@@ -1,11 +1,8 @@
 'use client';
 import Group from '@/components/group/Group';
-import TransactionToast from '@/components/layout/TransactionToast';
-import useCircles from '@/hooks/useCircles';
 import { useGroupStore } from '@/stores/groupStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 
 export default function Page() {
   const groupAvatar = useGroupStore((state) => state.groupAvatar);

@@ -26,7 +26,6 @@ export default function RootLayout({
           <ToastContainer
             autoClose={false}
             draggable={false}
-            position="bottom-right"
           />
           <main className="flex min-h-screen flex-col items-center justify-center bg-background">
             <EventToastNotifier />
