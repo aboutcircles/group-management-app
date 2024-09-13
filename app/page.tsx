@@ -30,7 +30,9 @@ export default function Page() {
     }
   }, [address, router, groupAvatar, circles, isLoading]);
 
-  if (isLoading) return <Loading />;
+  console.log(isLoading);
+
+  // if (isLoading) return <Loading />;
 
   return <>{!address && <Fallback />}</>;
 }
