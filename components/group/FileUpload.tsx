@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import {
   ArrowPathRoundedSquareIcon,
+  DocumentTextIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
 import React, { useState, useEffect, useRef } from 'react';
@@ -8,25 +9,29 @@ import { useDropzone } from 'react-dropzone';
 
 type AvatarUploadProps = {
   onFileSelected: (file: File | null) => void;
-  imgUrl?: string;
+  fileType: 'image' | 'csv';
 };
 
-const AvatarUpload: React.FC<AvatarUploadProps> = ({
+const FileUpload: React.FC<AvatarUploadProps> = ({
   onFileSelected,
-  imgUrl,
+  fileType,
 }) => {
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(imgUrl || null);
+  const [preview, setPreview] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
 
   const { getRootProps, getInputProps, open } = useDropzone({
-    accept: {
-      'image/*': ['.jpeg', '.png'],
-    },
+    accept:
+      fileType === 'image'
+        ? { 'image/*': ['.jpeg', '.png'] }
+        : { 'text/csv': ['.csv'] },
     onDrop: (acceptedFiles) => {
       const selectedFile = acceptedFiles[0];
-      setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile));
+
+      if (fileType === 'image') {
+        setPreview(URL.createObjectURL(selectedFile));
+      } else {
+        setPreview('csv');
+      }
       onFileSelected(selectedFile);
       setIsDragging(false);
     },
@@ -66,10 +71,15 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
         {...getRootProps()}
         className={`w-28 h-28 bg-black/5 my-2 text-black/30 rounded-full cursor-pointer text-center flex items-center justify-center text-xs shadow-inner hover:animate-pulse ${
           isDragging ? 'border-accent' : 'border-zinc'
-        } ${preview ? 'border-2 border-solid' : 'border border-dashed'}`}
+        } ${preview ? 'border-2 border-solid border-secondary/50' : 'border border-dashed'}`}
       >
         <input {...getInputProps()} />
-        {preview ? (
+        {preview === 'csv' ? (
+          <div className='flex flex-col items-center gap-y-2'>
+            <DocumentTextIcon className='w-7 h-7 text-secondary/50' />
+            <p className='text-sm text-secondary/50'>CSV file selected</p>
+          </div>
+        ) : preview ? (
           <div className='w-full h-full p-1 rounded-full'>
             <img
               src={preview}
@@ -99,4 +109,4 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
   );
 };
 
-export default AvatarUpload;
+export default FileUpload;

@@ -1,14 +1,13 @@
 'use client';
 
 import {
-  ArrowRightIcon,
   PlusIcon,
   UserPlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useState } from 'react';
-import ImgUpload from '../group/ImgUpload';
+import FileUpload from '../group/FileUpload';
 import Loader from '../group/Loader';
 
 const BulkTrust = () => {
@@ -41,7 +40,12 @@ const BulkTrust = () => {
               </button>
             </div>
             <p className='text-lg font-bold'>Bulk Trust</p>
-            <ImgUpload />
+            <FileUpload
+              onFileSelected={function (file: File | null): void {
+                throw new Error('Function not implemented.');
+              }}
+              fileType='csv'
+            />
             <div className='w-full'>
               Upload your{' '}
               <span className='font-bold whitespace-nowrap'>.csv</span> file

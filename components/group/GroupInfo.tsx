@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Field, Textarea } from '@headlessui/react';
-import ImgUpload from './ImgUpload';
+import ImgUpload from './FileUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useGroupStore } from '@/stores/groupStore';
 import { CheckIcon } from '@heroicons/react/24/outline';
