@@ -57,7 +57,7 @@ export default function SearchMember() {
     <div className='w-full max-w-screen-sm'>
       <form
         onSubmit={handleSearch}
-        className='w-full flex flex-col gap-y-4 items-center p-4'
+        className='w-full flex flex-col gap-y-4 items-center'
       >
         <Field className='w-full'>
           <Label className='text-sm/6 font-medium text-black px-2'>

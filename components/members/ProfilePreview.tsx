@@ -85,7 +85,7 @@ export default function ProfilePreview({
         </div>
       </div>
       <Button
-        className={`flex items-center  rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
+        className={`flex items-center rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
           isLoading ? 'bg-accent' : 'bg-black'
         }`}
         onClick={() =>
