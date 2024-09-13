@@ -78,7 +78,7 @@ export default function SearchMember() {
               disabled={!address}
               className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:text-gray-300 transition duration-300 ease-in-out'
             >
-              <MagnifyingGlassIcon className='h-4 w-4' />
+              <MagnifyingGlassIcon className='h-5 w-5' />
             </Button>
           </div>
           <p className='text-xs text-accent h-4 pl-1'>

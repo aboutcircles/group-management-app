@@ -1,26 +1,16 @@
 'use client';
 import Group from '@/components/group/Group';
+
+import Loading from '@/components/layout/Loading';
 import { useGroupStore } from '@/stores/groupStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
 
 export default function Page() {
   const groupAvatar = useGroupStore((state) => state.groupAvatar);
-  // const { groupAvatar, subscribeToAvatarEvents } = useCircles();
-
-  // useEffect(() => {
-  //   const unsubscribe = subscribeToAvatarEvents((event) => {
-  //     if (event && event.transactionHash) {
-  //       toast(<TransactionToast transactionHash={event.transactionHash} />);
-  //     }
-  //   });
-
-  //   return () => {
-  //     if (unsubscribe) {
-  //       unsubscribe();
-  //     }
-  //   };
-  // }, [subscribeToAvatarEvents]);
+  const groupInfo = useGroupStore((state) => state.groupInfo);
+  const { address } = useAccount();
 
   const router = useRouter();
 
@@ -29,6 +19,10 @@ export default function Page() {
       router.push('/create');
     }
   }, [router, groupAvatar]);
+
+  if (address?.toLowerCase() !== groupInfo?.group.toLowerCase()) {
+    return <Loading />;
+  }
 
   return <Group />;
 }

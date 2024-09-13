@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { Description, Field, Input, Label, Textarea } from '@headlessui/react';
+import { Field, Textarea } from '@headlessui/react';
 import ImgUpload from './ImgUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
-import { Group } from '@/types';
-import { cidV0ToUint8Array } from '@circles-sdk/utils';
-import useCircles from '@/hooks/useCircles';
-
 import { useGroupStore } from '@/stores/groupStore';
-import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
+import { CheckIcon } from '@heroicons/react/24/outline';
+import { Group } from '@/types';
 
 export default function GroupInfo() {
   const groupInfo = useGroupStore((state) => state.groupInfo);
+  const updateGroup = useGroupStore((state) => state.updateGroup);
+  const [isChanged, setIsChanged] = useState(false);
 
   const [formData, setFormData] = useState({
     name: groupInfo?.name || '',
@@ -19,22 +18,19 @@ export default function GroupInfo() {
     imageUrl: groupInfo?.imageUrl || '',
   });
 
-  // const { circles } = useCircles();
-  const circles = useCirclesSdkStore((state) => state.circles);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
+    const _isChanged = value !== groupInfo?.[name as keyof Group];
+    setIsChanged(_isChanged);
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
-  // const validName = isValidName(formData.name) || formData.name.length === 0;
-  // const validSymbol =
-  //   isValidSymbol(formData.symbol) || formData.symbol.length === 0;
 
   const handleFileSelected = (file: File | null) => {
     if (file) {
@@ -45,8 +41,8 @@ export default function GroupInfo() {
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          const cropWidth = 256; // Set your desired crop width
-          const cropHeight = 256; // Set your desired crop height
+          const cropWidth = 256;
+          const cropHeight = 256;
 
           if (ctx) {
             canvas.width = cropWidth;
@@ -64,6 +60,9 @@ export default function GroupInfo() {
               ...prevData,
               previewImageUrl: imageDataUrl,
             }));
+
+            const _isChanged = imageDataUrl !== groupInfo?.previewImageUrl;
+            setIsChanged(_isChanged);
           }
         };
       };
@@ -81,29 +80,9 @@ export default function GroupInfo() {
         previewImageUrl: formData.previewImageUrl,
       };
 
-      if (!circles?.profiles) {
-        throw new Error('Circles SDK profiles context is not available.');
-      }
-      const cid = await circles.profiles.create(profile);
-
-      if (!cid) {
-        throw new Error('Failed to create profile: CID is undefined');
-      }
-      const digest = cidV0ToUint8Array(cid);
-
-      if (!circles.nameRegistry) {
-        throw new Error('Circles SDK nameRegistry context is not available.');
-      }
-      const tx = await circles.nameRegistry.updateMetadataDigest(digest);
-
-      if (!tx) {
-        throw new Error(
-          'Failed to create the transaction for updating metadata digest.'
-        );
-      }
-
-      const receipt = await tx.wait();
+      const receipt = await updateGroup(profile);
       console.log('Profile updated successfully:', receipt);
+      setIsChanged(false);
     } catch (error) {
       console.error('Error while updating profile:', error);
     }
@@ -114,22 +93,25 @@ export default function GroupInfo() {
       onSubmit={handleSubmit}
       className='w-full h-full p-4 flex flex-col items-center justify-center gap-y-4'
     >
-      {/* <h1 className='text-2xl text-center font-bold'>CREATE GROUP</h1> */}
       <div className='flex w-full gap-x-2'>
-        <Field className=''>
+        <Field className='flex flex-col justify-center'>
           <ImgUpload
             onFileSelected={handleFileSelected}
             imgUrl={groupInfo?.previewImageUrl}
           />
         </Field>
-        <div className='flex flex-1 flex-col gap-y-2 w-full pl-4'>
+        <div className='flex flex-1 flex-col gap-y-2 pl-4'>
           <Field className='w-full'>
+            <p className='text-xs text-gray mx-3 break-all'>
+              {groupInfo?.group}
+            </p>
             <Textarea
               name='name'
               value={formData.name}
               placeholder='Group Name'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+              className='block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
+              rows={1}
             />
           </Field>
 
@@ -138,11 +120,10 @@ export default function GroupInfo() {
               name='description'
               value={formData.description}
               placeholder='Group Description...'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
             />
           </Field>
-          {/* <p className='text-xs text-gray mx-3'>{group.members} members</p> */}
           <div className='flex'>
             <p className='font-bold mx-3'>{groupInfo?.symbol}</p>
             {/* <p className=''>{group.balance}</p> */}
@@ -156,25 +137,12 @@ export default function GroupInfo() {
       </div>
       <button
         type='submit'
-        className='bg-secondary rounded-full text-sm px-2 py-1 border-2 border-transparent text-white hover:border-white transition duration-300 ease-in-out'
+        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4'
+        disabled={!isChanged}
       >
-        {' '}
         Save Changes
+        <CheckIcon className='h-5 w-5 ml-1' />
       </button>
-
-      {/* <Field className='w-full'>
-        <Label className='text-sm/6 font-medium text-black'>
-          Base Mint Policy
-        </Label>
-        <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
-      </Field> */}
-      {/* <button
-        type='submit'
-        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white transition duration-300 ease-in-out mt-4'
-      >
-        Create
-        <ArrowRightIcon className='h-4 w-4 ml-1' />
-      </button> */}
     </form>
   );
 }

@@ -1,5 +1,5 @@
 import { Address } from 'viem';
-import { type GroupRow } from '@circles-sdk/data';
+import { CirclesEvent, type GroupRow } from '@circles-sdk/data';
 import type { Profile } from '@circles-sdk/profiles';
 
 export type Group = GroupRow & Profile;
@@ -28,3 +28,12 @@ export type MintPolicy = {
   id: number;
   name: string;
 };
+
+export type FormattedEvent = CirclesEvent & {
+  date: string;
+  time: string;
+  member?: Address;
+  eventInfo?: any;
+};
+
+export type Step = 'start' | 'form' | 'executed' | 'error';
