@@ -1,18 +1,41 @@
 'use client';
 
-import {
-  PlusIcon,
-  UserPlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { PlusIcon, UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useState } from 'react';
 import FileUpload from '../group/FileUpload';
 import Loader from '../group/Loader';
+import { Address } from 'viem';
+import Papa from 'papaparse';
+import { ProfileWithAddress } from '@/types';
 
 const BulkTrust = () => {
   let [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+
+  const handleFileSelected = (file: File | null) => {
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const parsedData = results.data as ProfileWithAddress[];
+          const extractedAddresses = parsedData.map(
+            (row: ProfileWithAddress) => ({
+              address: row.address,
+            })
+          );
+
+          setAddresses(extractedAddresses.map((item) => item.address));
+          console.log('Extracted Addresses:', extractedAddresses);
+        },
+        error: (error) => {
+          console.error('Error parsing CSV:', error);
+        },
+      });
+    }
+  };
 
   return (
     <div>
@@ -41,9 +64,7 @@ const BulkTrust = () => {
             </div>
             <p className='text-lg font-bold'>Bulk Trust</p>
             <FileUpload
-              onFileSelected={function (file: File | null): void {
-                throw new Error('Function not implemented.');
-              }}
+              onFileSelected={handleFileSelected}
               fileType='csv'
             />
             <div className='w-full'>
