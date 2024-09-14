@@ -10,13 +10,15 @@ import { useDropzone } from 'react-dropzone';
 type AvatarUploadProps = {
   onFileSelected: (file: File | null) => void;
   fileType: 'image' | 'csv';
+  imgUrl?: string;
 };
 
 const FileUpload: React.FC<AvatarUploadProps> = ({
   onFileSelected,
   fileType,
+  imgUrl,
 }) => {
-  const [preview, setPreview] = useState<string>('');
+  const [preview, setPreview] = useState<string | null>(imgUrl || null);
   const [isDragging, setIsDragging] = useState(false);
 
   const { getRootProps, getInputProps, open } = useDropzone({

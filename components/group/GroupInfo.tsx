@@ -101,6 +101,7 @@ export default function GroupInfo() {
         <Field className='flex flex-col justify-center'>
           <ImgUpload
             onFileSelected={handleFileSelected}
+            fileType='image'
             imgUrl={groupInfo?.previewImageUrl}
           />
         </Field>
