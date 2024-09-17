@@ -8,12 +8,16 @@ import Loader from '../group/Loader';
 import { Address } from 'viem';
 import Papa from 'papaparse';
 import { ProfileWithAddress } from '@/types';
+import { useMulticallStore } from '@/stores/multicallStore';
 
 interface BulkTrustProp {
   members: ProfileWithAddress[] | undefined;
 }
 
 const BulkTrust = ({ members }: BulkTrustProp) => {
+  const trustMultipleMembers = useMulticallStore(
+    (state) => state.trustMultipleMembers
+  );
   let [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -40,6 +44,15 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
         },
       });
     }
+  };
+
+  const handleTrustAddresses = async () => {
+    console.log('bulk trust');
+    setIsLoading(true);
+
+    await trustMultipleMembers(addresses);
+
+    setIsLoading(false);
   };
 
   return (
@@ -79,6 +92,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
               type='submit'
               className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2'
               disabled={addresses.length === 0}
+              onClick={handleTrustAddresses}
             >
               {isLoading ? (
                 <>
