@@ -9,7 +9,11 @@ import { Address } from 'viem';
 import Papa from 'papaparse';
 import { ProfileWithAddress } from '@/types';
 
-const BulkTrust = () => {
+interface BulkTrustProp {
+  members: ProfileWithAddress[] | undefined;
+}
+
+const BulkTrust = ({ members }: BulkTrustProp) => {
   let [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -21,13 +25,14 @@ const BulkTrust = () => {
         skipEmptyLines: true,
         complete: (results) => {
           const parsedData = results.data as ProfileWithAddress[];
-          const extractedAddresses = parsedData.map(
-            (row: ProfileWithAddress) => ({
-              address: row.address,
-            })
-          );
 
-          setAddresses(extractedAddresses.map((item) => item.address));
+          const memberAddresses =
+            members?.map((member) => member.address) || [];
+          const extractedAddresses = parsedData
+            .map((row: ProfileWithAddress) => row.address)
+            .filter((address) => !memberAddresses.includes(address));
+
+          setAddresses(extractedAddresses);
           console.log('Extracted Addresses:', extractedAddresses);
         },
         error: (error) => {
@@ -63,10 +68,7 @@ const BulkTrust = () => {
               </button>
             </div>
             <p className='text-lg font-bold'>Bulk Trust</p>
-            <FileUpload
-              onFileSelected={handleFileSelected}
-              fileType='csv'
-            />
+            <FileUpload onFileSelected={handleFileSelected} fileType='csv' />
             <div className='w-full'>
               Upload your{' '}
               <span className='font-bold whitespace-nowrap'>.csv</span> file
@@ -75,7 +77,8 @@ const BulkTrust = () => {
 
             <button
               type='submit'
-              className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2'
+              className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2'
+              disabled={addresses.length === 0}
             >
               {isLoading ? (
                 <>

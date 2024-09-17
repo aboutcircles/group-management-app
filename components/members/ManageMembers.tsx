@@ -50,7 +50,7 @@ export default function ManageMembers() {
       <div className='flex w-full h-36 justify-center gap-x-2.5 p-4'>
         <SearchMember />
         <div className='mt-8'>
-          <BulkTrust />
+          <BulkTrust members={members} />
         </div>
         {members && (
           <div className='mt-8'>
