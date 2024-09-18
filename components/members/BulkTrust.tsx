@@ -1,6 +1,6 @@
 'use client';
 
-import { PlusIcon, UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, PlusIcon, UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useState } from 'react';
 import FileUpload from '../group/FileUpload';
@@ -21,6 +21,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   let [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const handleFileSelected = (file: File | null) => {
     if (file) {
@@ -53,6 +54,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
     await trustMultipleMembers(addresses);
 
     setIsLoading(false);
+    setIsConfirmed(true);
   };
 
   return (
@@ -90,9 +92,15 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
 
             <button
               type='submit'
-              className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2'
+              className={`flex items-center rounded-full text-lg px-3 py-1 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2 ${
+                isConfirmed
+                  ? 'bg-secondary/80 hover:bg-secondary/90'
+                  : 'bg-gradient-to-r from-accent/90 to-accent/80 hover:bg-accent/90'
+              }`}
               disabled={addresses.length === 0}
-              onClick={handleTrustAddresses}
+              onClick={
+                isConfirmed ? () => setIsOpen(false) : handleTrustAddresses
+              }
             >
               {isLoading ? (
                 <>
@@ -100,6 +108,11 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                     <Loader />
                   </div>
                   Processing
+                </>
+              ) : isConfirmed ? (
+                <>
+                  <CheckIcon className='h-4 w-4 mr-1' />
+                  Confirmed
                 </>
               ) : (
                 <>

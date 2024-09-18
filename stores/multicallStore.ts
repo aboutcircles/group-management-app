@@ -45,13 +45,13 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
                 set({ isMulticallLoading: false });
                 return false;
             }
-            
+
             const groupAvatarContract = new ethers.Contract(groupAvatarAddress, v2HubABI, provider);
-            
+
             const txs: BaseTransaction[] = [];
 
             addresses.map((address) => {
-                const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address.toLowerCase(), 0]);
+                const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address.toLowerCase(), BigInt("79228162514264337593543950335")]); // expiryDate to define
                 txs.push({
                     to: groupAvatarAddress,
                     value: '0',
