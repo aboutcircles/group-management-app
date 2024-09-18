@@ -4,6 +4,7 @@ import { Address, multicall3Abi } from 'viem';
 import { ethers } from 'ethers';
 import v2HubABI from '@/abi/HubContract';
 import multicallABI from '@/abi/Multicall';
+import { BaseTransaction } from '@safe-global/safe-apps-sdk';
 
 type MulticallStoreState = {
     isMulticallLoading: boolean;
@@ -21,9 +22,15 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
 
     trustMultipleMembers: async (addresses: Address[]) => {
         const circles = useCirclesSdkStore.getState().circles;
+        const safeSdk = useCirclesSdkStore.getState().safeSDK;
 
         if (!circles) {
             set({ error: 'Circles SDK is not initialized' });
+            return false;
+        }
+
+        if (!safeSdk) {
+            set({ error: 'Safe SDK is not initialized' });
             return false;
         }
 
@@ -38,26 +45,23 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
                 set({ isMulticallLoading: false });
                 return false;
             }
+            
+            const groupAvatarContract = new ethers.Contract(groupAvatarAddress, v2HubABI, provider);
+            
+            const txs: BaseTransaction[] = [];
 
-            const multicallContractAddress = '0xcA11bde05977b3631167028862bE2a173976CA11';
-
-
-            const multicallContract = new ethers.Contract(multicallContractAddress, multicallABI, provider);
-
-            const groupAvatarContract = new ethers.Contract(circles.circlesConfig.v2HubAddress, v2HubABI, provider);
-
-            const trustCalls = addresses.map((address) => {
+            addresses.map((address) => {
                 const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address.toLowerCase(), 0]);
-                return {
-                    target: groupAvatarAddress,
-                    callData,
-                };
+                txs.push({
+                    to: groupAvatarAddress,
+                    value: '0',
+                    data: callData
+                })
             });
 
-            const tx = await multicallContract.aggregate(trustCalls);
-            await tx.wait();
+            const sendTxResponse = await safeSdk.txs.send({ txs });
 
-            console.log('Multicall transaction completed:', tx);
+            console.log('Multicall transaction completed:', txs);
 
             return true;
         } catch (error) {

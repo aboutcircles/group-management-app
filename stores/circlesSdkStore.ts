@@ -10,6 +10,7 @@ import { SafeAppProvider } from '@safe-global/safe-apps-provider';
 interface CirclesSdkStoreState {
   circles?: Sdk;
   circlesData?: CirclesData;
+  safeSDK?: SafeAppsSDK;
 }
 
 interface CirclesSdkStoreActions {
@@ -20,11 +21,10 @@ interface CirclesSdkStoreActions {
 const initialState: CirclesSdkStoreState = {
   circles: undefined,
   circlesData: undefined,
+  safeSDK: undefined,
 };
 
-const getSafeProvider = async () => {
-  const sdk = new SafeAppsSDK();
-
+const getSafeProvider = async (sdk: SafeAppsSDK) => {
   const safeInfo = await sdk.safe.getInfo();
   if (safeInfo) {
     const safeProvider = new SafeAppProvider(safeInfo, sdk);
@@ -39,9 +39,11 @@ export const useCirclesSdkStore = create<
 >((set, get) => ({
   circles: undefined,
   circlesData: undefined,
+  safeSDK: undefined,
 
   initSdk: async () => {
-    const safeProvider = await getSafeProvider();
+    const sdk = new SafeAppsSDK();
+    const safeProvider = await getSafeProvider(sdk);
     if (!safeProvider) return;
     const SafeEthersProvider = new ethers.BrowserProvider(safeProvider);
     const adapter = new BrowserProviderContractRunner();
@@ -55,6 +57,7 @@ export const useCirclesSdkStore = create<
       set({
         circles: circlesSdk,
         circlesData: data,
+        safeSDK: sdk,
       });
     } catch (error) {
       console.error('Failed to initialize Circles SDK:', error);
