@@ -8,7 +8,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { Dialog, DialogPanel, Tab, TabGroup, TabList } from '@headlessui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileUpload from '../group/FileUpload';
 import Loader from '../group/Loader';
 import { Address } from 'viem';
@@ -26,9 +26,22 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   );
   let [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [rawAddresses, setRawAddresses] = useState<Address[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    const memberAddresses = members?.map((member) => member.address) || [];
+
+    const filteredAddresses = rawAddresses.filter((address) =>
+      selectedIndex === 0
+        ? !memberAddresses.includes(address) // Trust: exclude existing members
+        : memberAddresses.includes(address)  // Untrust: only include existing members
+    );
+
+    setAddresses(filteredAddresses);
+  }, [selectedIndex, rawAddresses, members]);
 
   const handleFileSelected = (file: File | null) => {
     if (file) {
@@ -37,14 +50,9 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
         skipEmptyLines: true,
         complete: (results) => {
           const parsedData = results.data as ProfileWithAddress[];
+          const extractedAddresses = parsedData.map((row: ProfileWithAddress) => row.address);
 
-          const memberAddresses =
-            members?.map((member) => member.address) || [];
-          const extractedAddresses = parsedData
-            .map((row: ProfileWithAddress) => row.address)
-            .filter(selectedIndex == 0 ? (address) => !memberAddresses.includes(address) : (address) => memberAddresses.includes(address));
-
-          setAddresses(extractedAddresses);
+          setRawAddresses(extractedAddresses);
           console.log('Extracted Addresses:', extractedAddresses);
         },
         error: (error) => {
