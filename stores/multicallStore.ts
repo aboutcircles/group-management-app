@@ -1,9 +1,8 @@
 import { create } from 'zustand';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
-import { Address, multicall3Abi } from 'viem';
+import { Address } from 'viem';
 import { ethers } from 'ethers';
 import v2HubABI from '@/abi/HubContract';
-import multicallABI from '@/abi/Multicall';
 import { BaseTransaction } from '@safe-global/safe-apps-sdk';
 
 type MulticallStoreState = {
@@ -12,7 +11,7 @@ type MulticallStoreState = {
 };
 
 type MulticallStoreActions = {
-    trustMultipleMembers: (addresses: Address[]) => Promise<boolean>;
+    trustMultipleMembers: (addresses: Address[], trust: boolean) => Promise<boolean>;
     resetMulticallState: () => void;
 };
 
@@ -20,9 +19,10 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
     isMulticallLoading: false,
     error: undefined,
 
-    trustMultipleMembers: async (addresses: Address[]) => {
+    trustMultipleMembers: async (addresses: Address[], trust: boolean) => {
         const circles = useCirclesSdkStore.getState().circles;
         const safeSdk = useCirclesSdkStore.getState().safeSDK;
+        const timeExpiry = trust ? BigInt("79228162514264337593543950335") : BigInt("0");
 
         if (!circles) {
             set({ error: 'Circles SDK is not initialized' });
@@ -51,7 +51,7 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
             const txs: BaseTransaction[] = [];
 
             addresses.map((address) => {
-                const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address.toLowerCase(), BigInt("79228162514264337593543950335")]); // expiryDate to define
+                const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address.toLowerCase(), timeExpiry]); // expiryDate to define
                 txs.push({
                     to: groupAvatarAddress,
                     value: '0',
@@ -72,6 +72,7 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
             set({ isMulticallLoading: false });
         }
     },
+
 
     resetMulticallState: () => {
         set({

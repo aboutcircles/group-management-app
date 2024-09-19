@@ -1,7 +1,13 @@
 'use client';
 
-import { CheckIcon, PlusIcon, UserPlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Dialog, DialogPanel } from '@headlessui/react';
+import {
+  CheckIcon,
+  PlusIcon,
+  UserPlusIcon,
+  UserMinusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
+import { Dialog, DialogPanel, Tab, TabGroup, TabList } from '@headlessui/react';
 import { useState } from 'react';
 import FileUpload from '../group/FileUpload';
 import Loader from '../group/Loader';
@@ -22,6 +28,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   const [isLoading, setIsLoading] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleFileSelected = (file: File | null) => {
     if (file) {
@@ -35,7 +42,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
             members?.map((member) => member.address) || [];
           const extractedAddresses = parsedData
             .map((row: ProfileWithAddress) => row.address)
-            .filter((address) => !memberAddresses.includes(address));
+            .filter(selectedIndex == 0 ? (address) => !memberAddresses.includes(address) : (address) => memberAddresses.includes(address));
 
           setAddresses(extractedAddresses);
           console.log('Extracted Addresses:', extractedAddresses);
@@ -48,10 +55,9 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   };
 
   const handleTrustAddresses = async () => {
-    console.log('bulk trust');
     setIsLoading(true);
 
-    await trustMultipleMembers(addresses);
+    await trustMultipleMembers(addresses, selectedIndex === 0);
 
     setIsLoading(false);
     setIsConfirmed(true);
@@ -73,7 +79,27 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
       >
         <div className='fixed inset-0 flex bg-black/50 backdrop-blur-sm w-screen items-center justify-center p-4'>
           <DialogPanel className='flex flex-col items-center max-w-lg rounded-lg bg-background text-black p-4'>
-            <div className='flex justify-end w-full'>
+            <div className='flex justify-between w-full'>
+              <TabGroup
+                selectedIndex={selectedIndex}
+                onChange={setSelectedIndex}
+              >
+                <TabList className='rounded-full bg-black/50 p-1 shadow-inner'>
+                  <Tab
+                    key={'trust'}
+                    className='rounded-full px-2 text-sm/6 font-semibold focus:outline-none text-white data-[selected]:bg-accent data-[hover]:bg-black/5 data-[selected]:data-[hover]:bg-accent/90'
+                  >
+                    Trust
+                  </Tab>
+                  <Tab
+                    key={'untrust'}
+                    className='rounded-full  px-3 text-sm/6 font-semibold focus:outline-none text-white data-[selected]:bg-accent data-[hover]:bg-black/5 data-[selected]:data-[hover]:bg-accent/90'
+                  >
+                    Untrust
+                  </Tab>
+                </TabList>
+              </TabGroup>
+
               <button className='rounded-full p-1.5 hover:bg-black/10 transition duration-300 ease-in-out'>
                 <XMarkIcon
                   width={20}
@@ -82,7 +108,9 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 />
               </button>
             </div>
-            <p className='text-lg font-bold'>Bulk Trust</p>
+            <p className='text-lg font-bold'>
+              {selectedIndex === 0 ? 'Bulk Trust' : 'Bulk Untrust'}
+            </p>
             <FileUpload onFileSelected={handleFileSelected} fileType='csv' />
             <div className='w-full'>
               Upload your{' '}
@@ -116,8 +144,8 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 </>
               ) : (
                 <>
-                  <UserPlusIcon className='h-4 w-4 mr-1' />
-                  Trust and Invite
+                  
+                  {selectedIndex === 0 ? (<><UserPlusIcon className='h-4 w-4 mr-1' />Trust and Invite</>) : (<><UserMinusIcon className='h-4 w-4 mr-1' />Untrust</>)}
                 </>
               )}
             </button>
