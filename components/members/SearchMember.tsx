@@ -1,5 +1,7 @@
+'use client';
+
 import { Button, Field, Input, Label } from '@headlessui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isAddress } from 'viem';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ProfilePreview from '@/components/members/ProfilePreview';
@@ -16,49 +18,52 @@ export default function SearchMember() {
 
   const members = useMembersStore((state) => state.members);
 
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (!isAddress(address)) {
+        setValidAddress(false);
+        return;
+      }
+      setValidAddress(true);
+
+      const existingMember = members?.find(
+        (member) => member.address.toLowerCase() === address.toLowerCase()
+      );
+
+      if (existingMember) {
+        setProfile(existingMember);
+        return;
+      }
+
+      // if not in the member list:
+      const profileInfo = await getAvatarProfileByAddress(address);
+
+      if (!profileInfo) {
+        setProfileNotFound(true);
+        setProfile(null);
+      } else {
+        setProfile({ ...profileInfo, address } as ProfileWithAddress);
+        setAddress('');
+      }
+    };
+
+    setProfile(null);
+    if (address !== '') {
+      fetchAddress();
+    }
+  }, [address]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
     setAddress(event.target.value);
     if (profileNotFound) {
       setProfileNotFound(false);
     }
   };
 
-  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!isAddress(address)) {
-      setValidAddress(false);
-      return;
-    }
-    setValidAddress(true);
-
-    const existingMember = members?.find(
-      (member) => member.address.toLowerCase() === address.toLowerCase()
-    );
-
-    if (existingMember) {
-      setProfile(existingMember);
-      setAddress('');
-      return;
-    }
-
-    // if not in the member list:
-    const profileInfo = await getAvatarProfileByAddress(address);
-
-    if (!profileInfo) {
-      setProfileNotFound(true);
-      setProfile(null);
-    } else {
-      setProfile({ ...profileInfo, address } as ProfileWithAddress);
-      setAddress('');
-    }
-  };
-
   return (
     <div className='w-full max-w-screen-sm'>
-      <form
-        onSubmit={handleSearch}
-        className='w-full flex flex-col gap-y-4 items-center'
-      >
+      <form className='w-full flex flex-col gap-y-4 items-center'>
         <Field className='w-full'>
           <Label className='text-sm/6 font-medium text-black px-2'>
             Add/remove member by address
