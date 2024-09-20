@@ -20,6 +20,7 @@ export default function SearchMember() {
 
   useEffect(() => {
     const fetchAddress = async () => {
+      console.group('address', address);
       if (!isAddress(address)) {
         setValidAddress(false);
         return;
@@ -43,7 +44,6 @@ export default function SearchMember() {
         setProfile(null);
       } else {
         setProfile({ ...profileInfo, address } as ProfileWithAddress);
-        setAddress('');
       }
     };
 
