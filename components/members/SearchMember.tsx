@@ -8,6 +8,7 @@ import ProfilePreview from '@/components/members/ProfilePreview';
 import { ProfileWithAddress } from '@/types';
 import { useMembersStore } from '@/stores/membersStore';
 import useProfiles from '@/hooks/useProfiles';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function SearchMember() {
   const [address, setAddress] = useState<string>('');
@@ -18,8 +19,8 @@ export default function SearchMember() {
 
   const members = useMembersStore((state) => state.members);
 
-  useEffect(() => {
-    const fetchAddress = async () => {
+  const debouncedFetchAddress = useDebouncedCallback(
+    async (address: string) => {
       console.group('address', address);
       if (!isAddress(address)) {
         setValidAddress(false);
@@ -36,7 +37,6 @@ export default function SearchMember() {
         return;
       }
 
-      // if not in the member list:
       const profileInfo = await getAvatarProfileByAddress(address);
 
       if (!profileInfo) {
@@ -45,11 +45,14 @@ export default function SearchMember() {
       } else {
         setProfile({ ...profileInfo, address } as ProfileWithAddress);
       }
-    };
+    },
+    500
+  );
 
+  useEffect(() => {
     setProfile(null);
     if (address !== '') {
-      fetchAddress();
+      debouncedFetchAddress(address);
     }
   }, [address]);
 
