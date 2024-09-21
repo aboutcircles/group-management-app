@@ -51,7 +51,7 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
             const txs: BaseTransaction[] = [];
 
             addresses.map((address) => {
-                const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address.toLowerCase(), timeExpiry]); // expiryDate to define
+                const callData = groupAvatarContract.interface.encodeFunctionData('trust', [address, timeExpiry]); // expiryDate to define
                 txs.push({
                     to: groupAvatarAddress,
                     value: '0',

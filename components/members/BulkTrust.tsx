@@ -34,10 +34,11 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   useEffect(() => {
     const memberAddresses = members?.map((member) => member.address) || [];
 
-    const filteredAddresses = rawAddresses.filter((address) =>
-      selectedIndex === 0
-        ? !memberAddresses.includes(address) // Trust: exclude existing members
-        : memberAddresses.includes(address)  // Untrust: only include existing members
+    const filteredAddresses = rawAddresses.filter(
+      (address) =>
+        selectedIndex === 0
+          ? !memberAddresses.includes(address.toLowerCase() as Address) // Trust: exclude existing members
+          : memberAddresses.includes(address.toLowerCase() as Address) // Untrust: only include existing members
     );
 
     setAddresses(filteredAddresses);
@@ -50,7 +51,9 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
         skipEmptyLines: true,
         complete: (results) => {
           const parsedData = results.data as ProfileWithAddress[];
-          const extractedAddresses = parsedData.map((row: ProfileWithAddress) => row.address);
+          const extractedAddresses = parsedData.map(
+            (row: ProfileWithAddress) => row.address
+          );
 
           setRawAddresses(extractedAddresses);
           console.log('Extracted Addresses:', extractedAddresses);
@@ -152,8 +155,17 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 </>
               ) : (
                 <>
-                  
-                  {selectedIndex === 0 ? (<><UserPlusIcon className='h-4 w-4 mr-1' />Trust and Invite</>) : (<><UserMinusIcon className='h-4 w-4 mr-1' />Untrust</>)}
+                  {selectedIndex === 0 ? (
+                    <>
+                      <UserPlusIcon className='h-4 w-4 mr-1' />
+                      Trust and Invite
+                    </>
+                  ) : (
+                    <>
+                      <UserMinusIcon className='h-4 w-4 mr-1' />
+                      Untrust
+                    </>
+                  )}
                 </>
               )}
             </button>

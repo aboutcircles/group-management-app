@@ -72,7 +72,7 @@ export const useMembersStore = create<MembersStore>((set) => ({
 
   trustMember: async (profile: ProfileWithAddress) => {
     const groupAvatar = useGroupStore.getState().groupAvatar;
-    const result = await groupAvatar?.trust(profile.address.toLowerCase());
+    const result = await groupAvatar?.trust(profile.address);
 
     if (result) {
       // update relation:
@@ -98,7 +98,7 @@ export const useMembersStore = create<MembersStore>((set) => ({
   },
   untrustMember: async (profile: ProfileWithAddress) => {
     const groupAvatar = useGroupStore.getState().groupAvatar;
-    const result = await groupAvatar?.untrust(profile.address.toLowerCase());
+    const result = await groupAvatar?.untrust(profile.address);
 
     if (result) {
       // delete profile if no relation left
