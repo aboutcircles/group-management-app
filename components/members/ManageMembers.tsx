@@ -26,12 +26,7 @@ export default function ManageMembers() {
     }
 
     const csvData = members.map((member) => ({
-      name: member.name,
-      description: member.description || '',
-      previewImageUrl: member.previewImageUrl || '',
-      imageUrl: member.imageUrl || '',
       address: member.address,
-      relation: member.relation || '',
     }));
 
     const csv = Papa.unparse(csvData);
