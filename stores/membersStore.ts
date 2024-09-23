@@ -16,7 +16,6 @@ export const useMembersStore = create<MembersStore>((set) => ({
   members: [],
   isFetched: false,
   fetchMembers: async () => {
-    console.log('fetchMembers');
     const groupInfo = useGroupStore.getState().groupInfo;
     const circles = useCirclesSdkStore.getState().circles;
 
@@ -25,14 +24,14 @@ export const useMembersStore = create<MembersStore>((set) => ({
         groupInfo?.group.toLowerCase() as Address
       );
 
-      console.log('trustRelations', trustRelations);
-
       const trustAddresses: Address[] = [];
       const relations: Record<string, string> = {};
 
       trustRelations?.forEach((item) => {
-        trustAddresses.push(item.objectAvatar as Address);
-        relations[item.objectAvatar] = item.relation;
+        if (item.relation !== RelationType.TrustedBy) {
+          trustAddresses.push(item.objectAvatar as Address);
+          relations[item.objectAvatar] = item.relation;
+        }
       });
 
       if (trustAddresses.length === 0) {
@@ -61,7 +60,7 @@ export const useMembersStore = create<MembersStore>((set) => ({
         }
       );
 
-      console.log('avatarProfilesWithRelations', avatarProfilesWithRelations);
+      // console.log('avatarProfilesWithRelations', avatarProfilesWithRelations);
 
       set({
         members: avatarProfilesWithRelations as ProfileWithAddress[],
