@@ -79,15 +79,24 @@ export default function ProfilePreview({
         </div>
       )}
       <div className='flex flex-col flex-1'>
-        <div className='mx-2 font-bold'>
-          {profile.name ? profile.name : profile.address}
+        <div className='mx-2'>
+          <span
+            className={`font-bold ${
+              profile.name ? 'break-words' : 'break-all'
+            }`}
+          >
+            {profile.name ? profile.name : profile.address}
+          </span>
+          <span className='text-xs text-accent ml-2'>
+            {profile.symbol && 'group'}
+          </span>
         </div>
         <div className='mx-2 text-xs text-zinc-500 break-all'>
           {profile.name ? profile.address : 'v1 profile'}
         </div>
       </div>
       <Button
-        className={`flex items-center rounded-full bg-accent px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
+        className={`flex items-center rounded-full bg-accent px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out shadow-md ${
           profile.relation === RelationType.MutuallyTrusts ||
           profile.relation === RelationType.Trusts
             ? 'bg-black'

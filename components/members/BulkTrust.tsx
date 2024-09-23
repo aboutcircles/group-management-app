@@ -81,7 +81,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
         onClick={() => setIsOpen(true)}
       >
         <PlusIcon width={14} height={14} className='stroke-white' />
-        import
+        Import
       </button>
       <Dialog
         open={isOpen}
