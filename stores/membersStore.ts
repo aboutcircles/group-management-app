@@ -71,46 +71,18 @@ export const useMembersStore = create<MembersStore>((set) => ({
 
   trustMember: async (profile: ProfileWithAddress) => {
     const groupAvatar = useGroupStore.getState().groupAvatar;
-    const result = await groupAvatar?.trust(profile.address);
 
-    if (result) {
-      // update relation:
-      // TrustedBy -> MutuallyTrusts,
-      // if no relation existed -> Trusts
-      const newRelation =
-        profile.relation === RelationType.TrustedBy
-          ? RelationType.MutuallyTrusts
-          : RelationType.Trusts;
-      const updatedProfile = { ...profile, relation: newRelation };
-
-      set((state) => ({
-        members: [
-          updatedProfile,
-          ...(state.members || []).filter(
-            (member) => member.address !== profile.address
-          ),
-        ],
-      }));
-      return true;
-    }
-    return false;
-  },
-  untrustMember: async (profile: ProfileWithAddress) => {
-    const groupAvatar = useGroupStore.getState().groupAvatar;
-    const result = await groupAvatar?.untrust(profile.address);
-
-    if (result) {
-      // delete profile if no relation left
-      if (profile.relation === RelationType.Trusts) {
-        set((state) => ({
-          members: (state.members || []).filter(
-            (member) => member.address !== profile.address
-          ),
-        }));
-      }
-      // update relation MutuallyTrusts -> TrustedBy
-      if (profile.relation === RelationType.MutuallyTrusts) {
-        const updatedProfile = { ...profile, relation: RelationType.TrustedBy };
+    try {
+      const result = await groupAvatar?.trust(profile.address);
+      if (result) {
+        // update relation:
+        // TrustedBy -> MutuallyTrusts,
+        // if no relation existed -> Trusts
+        const newRelation =
+          profile.relation === RelationType.TrustedBy
+            ? RelationType.MutuallyTrusts
+            : RelationType.Trusts;
+        const updatedProfile = { ...profile, relation: newRelation };
 
         set((state) => ({
           members: [
@@ -120,9 +92,49 @@ export const useMembersStore = create<MembersStore>((set) => ({
             ),
           ],
         }));
+        return true;
       }
-      return true;
+      return false;
+    } catch (error) {
+      return false;
     }
-    return false;
+  },
+
+  untrustMember: async (profile: ProfileWithAddress) => {
+    const groupAvatar = useGroupStore.getState().groupAvatar;
+    try {
+      const result = await groupAvatar?.untrust(profile.address);
+
+      if (result) {
+        // delete profile if no relation left
+        if (profile.relation === RelationType.Trusts) {
+          set((state) => ({
+            members: (state.members || []).filter(
+              (member) => member.address !== profile.address
+            ),
+          }));
+        }
+        // update relation MutuallyTrusts -> TrustedBy
+        if (profile.relation === RelationType.MutuallyTrusts) {
+          const updatedProfile = {
+            ...profile,
+            relation: RelationType.TrustedBy,
+          };
+
+          set((state) => ({
+            members: [
+              updatedProfile,
+              ...(state.members || []).filter(
+                (member) => member.address !== profile.address
+              ),
+            ],
+          }));
+        }
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
   },
 }));

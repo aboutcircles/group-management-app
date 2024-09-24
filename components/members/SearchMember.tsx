@@ -48,10 +48,9 @@ export default function SearchMember() {
 
     setProfile(null);
     if (address !== '') {
-      console.log('fetchAddress', address);
       fetchAddress();
     }
-  }, [address]);
+  }, [address, getAvatarProfileByAddress, members]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -64,10 +63,11 @@ export default function SearchMember() {
     }
   };
 
-  const handleCancel = () => {
+  const handleCleanup = () => {
     setAddress('');
     setProfile(null);
     setProfileNotFound(false);
+    setValidAddress(true);
   };
 
   return (
@@ -88,10 +88,9 @@ export default function SearchMember() {
               onChange={handleChange}
             />
             <Button
-              // type='submit'
               disabled={!address}
               className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:text-gray-300 transition duration-300 ease-in-out'
-              onClick={handleCancel}
+              onClick={handleCleanup}
             >
               {address ? (
                 <XMarkIcon className='h-5 w-5' />
@@ -109,7 +108,7 @@ export default function SearchMember() {
       {/* TODO: find a way to center this ProfilePreview */}
       {profile && (
         <div className='w-full flex items-center justify-between pt-0'>
-          <ProfilePreview profile={profile} setProfile={setProfile} full />
+          <ProfilePreview profile={profile} cleanup={handleCleanup} full />
         </div>
       )}
     </div>

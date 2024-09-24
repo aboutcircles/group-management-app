@@ -17,11 +17,11 @@ import Loader from '../group/Loader';
 
 export default function ProfilePreview({
   profile,
-  setProfile = () => {},
+  cleanup = () => {},
   full = false,
 }: {
   profile: ProfileWithAddress;
-  setProfile?: (profile: ProfileWithAddress | null) => void;
+  cleanup?: () => void;
   full?: boolean;
 }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ export default function ProfilePreview({
     setIsLoading(true);
     const result = await trustMember(profile);
     if (result) {
-      setProfile(null);
+      cleanup();
     }
     setIsLoading(false);
   };
@@ -41,43 +41,45 @@ export default function ProfilePreview({
     setIsLoading(true);
     const result = await untrustMember(profile);
     if (result) {
-      setProfile(null);
+      cleanup();
     }
     setIsLoading(false);
   };
 
   return (
     <div className='flex items-center w-full'>
-      <div className='h-5 w-5 mr-2 text-zinc-400'>
-        {profile.relation === RelationType.Trusts && (
-          <Tooltip content='You trust this profile'>
-            <ArrowUpRightIcon className='h-5 w-5' />
-          </Tooltip>
-        )}
-        {profile.relation === RelationType.TrustedBy && (
-          <Tooltip content='This profile trusts you'>
-            <ArrowDownLeftIcon className='h-5 w-5' />
-          </Tooltip>
-        )}
-        {profile.relation === RelationType.MutuallyTrusts && (
-          <Tooltip content='Mutually trust each other'>
-            <ArrowsRightLeftIcon className='h-5 w-5' />
-          </Tooltip>
+      <div className='flex flex-col-reverse sm:flex-row gap-2 items-center'>
+        <div className='h-5 w-5 text-zinc-400'>
+          {profile.relation === RelationType.Trusts && (
+            <Tooltip content='You trust this profile'>
+              <ArrowUpRightIcon className='h-5 w-5' />
+            </Tooltip>
+          )}
+          {profile.relation === RelationType.TrustedBy && (
+            <Tooltip content='This profile trusts you'>
+              <ArrowDownLeftIcon className='h-5 w-5' />
+            </Tooltip>
+          )}
+          {profile.relation === RelationType.MutuallyTrusts && (
+            <Tooltip content='Mutually trust each other'>
+              <ArrowsRightLeftIcon className='h-5 w-5' />
+            </Tooltip>
+          )}
+        </div>
+        {profile.previewImageUrl ? (
+          <Image
+            src={profile.previewImageUrl}
+            alt={profile.name}
+            width={30}
+            height={30}
+            className='rounded-full'
+          />
+        ) : (
+          <div className='w-[30px] h-[30px] min-w-[30px] min-h-[30px] bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold'>
+            {profile.name ? profile.name.charAt(0).toUpperCase() : ''}
+          </div>
         )}
       </div>
-      {profile.previewImageUrl ? (
-        <Image
-          src={profile.previewImageUrl}
-          alt={profile.name}
-          width={30}
-          height={30}
-          className='rounded-full'
-        />
-      ) : (
-        <div className='w-[30px] h-[30px] min-w-[30px] min-h-[30px] bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold'>
-          {profile.name ? profile.name.charAt(0).toUpperCase() : ''}
-        </div>
-      )}
       <div className='flex flex-col flex-1'>
         <div className='mx-2'>
           <span
