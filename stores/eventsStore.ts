@@ -20,7 +20,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
   fetchEvents: async () => {
     const groupInfo = useGroupStore.getState().groupInfo;
     const circlesData = useCirclesSdkStore.getState().circlesData;
-    console.log('fetchEvents', groupInfo, circlesData);
+    // console.log('fetchEvents', groupInfo, circlesData);
 
     try {
       const events = await circlesData?.getEvents(
@@ -37,16 +37,16 @@ export const useEventsStore = create<EventsStore>((set) => ({
   subscribeToEvents: async () => {
     const circlesData = useCirclesSdkStore.getState().circlesData;
     const groupInfo = useGroupStore.getState().groupInfo;
-    console.log('subscribeToEvents', groupInfo, circlesData);
+    // console.log('subscribeToEvents', groupInfo, circlesData);
 
     try {
       const eventSubscription = await circlesData?.subscribeToEvents(
         groupInfo?.group.toLowerCase() as Address
       );
-      console.log(eventSubscription);
+      // console.log(eventSubscription);
 
       eventSubscription?.subscribe((event: CirclesEvent) => {
-        console.log('Event received:', event);
+        // console.log('Event received:', event);
         set((state) => ({
           events: [event, ...(state.events || [])],
           lastEvent: event,

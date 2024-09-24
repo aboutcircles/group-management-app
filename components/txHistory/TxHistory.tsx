@@ -4,12 +4,10 @@ import { formatEvents } from '@/utils/formatEvents';
 import React from 'react';
 import { useEffect } from 'react';
 import { Address } from 'viem';
-import { useAccount } from 'wagmi';
 import EventType from '@/components/txHistory/EventType';
 import Loading from '@/components/layout/Loading';
 
 export default function TxHistory() {
-  const { address } = useAccount();
   const events = useEventsStore((state) => state.events);
   const isFetched = useEventsStore((state) => state.isFetched);
   const fetchEvents = useEventsStore((state) => state.fetchEvents);
@@ -27,7 +25,7 @@ export default function TxHistory() {
     groupInfo?.symbol as string
   );
 
-  console.log('events', formattedEvents);
+  // console.log('events', formattedEvents);
 
   if (!isFetched) return <Loading />;
 
