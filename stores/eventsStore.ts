@@ -27,7 +27,8 @@ export const useEventsStore = create<EventsStore>((set) => ({
         groupInfo?.group.toLowerCase() as Address,
         groupInfo?.blockNumber as number
       );
-      set({ events: events?.reverse() || [], isFetched: true });
+      // set({ events: events?.reverse() || [], isFetched: true });
+      set({ events: events || [], isFetched: true });
     } catch (error) {
       console.error('Failed to get events:', error);
     }
@@ -47,10 +48,9 @@ export const useEventsStore = create<EventsStore>((set) => ({
       eventSubscription?.subscribe((event: CirclesEvent) => {
         console.log('Event received:', event);
         set((state) => ({
-          events: [...(state.events || []), event],
+          events: [event, ...(state.events || [])],
           lastEvent: event,
         }));
-
       });
     } catch (error) {
       console.error('Failed to subscribe to events:', error);
