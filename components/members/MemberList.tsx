@@ -47,10 +47,6 @@ const MemberList = ({ members }: MemberListProps) => {
     }
   };
 
-  const handlePageClick = (page: number) => {
-    setCurrentPage(page);
-  };
-
   return (
     <div className='w-full mt-2'>
       {members && members.length === 0 ? (
@@ -110,7 +106,6 @@ const MemberList = ({ members }: MemberListProps) => {
             ))}
           </ul>
 
-          {/* Pagination Controls */}
           <div className='flex justify-end items-center mt-2 p-2'>
             <Pagination
               isCompact
