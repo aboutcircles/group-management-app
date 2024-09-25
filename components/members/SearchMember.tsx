@@ -1,9 +1,9 @@
 'use client';
 
-import { Button, Field, Input, Label } from '@headlessui/react';
+import { Button, Field, Input } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { isAddress } from 'viem';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { ProfileWithAddress } from '@/types';
 import { useMembersStore } from '@/stores/membersStore';
@@ -43,7 +43,7 @@ export default function SearchMember() {
         setProfileNotFound(true);
         setProfile(null);
       } else {
-        setProfile({ ...profileInfo, address } as ProfileWithAddress);
+        setProfile(profileInfo);
       }
     },
     500
@@ -54,24 +54,34 @@ export default function SearchMember() {
     if (address !== '') {
       debouncedFetchAddress(address);
     }
-  }, [address]);
+  }, [address, getAvatarProfileByAddress, members]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setAddress(event.target.value);
     if (profileNotFound) {
       setProfileNotFound(false);
     }
   };
 
+  const handleCleanup = () => {
+    setAddress('');
+    setProfile(null);
+    setProfileNotFound(false);
+    setValidAddress(true);
+  };
+
   return (
     <div className='w-full max-w-screen-sm'>
-      <form className='w-full flex flex-col gap-y-4 items-center'>
+      <form
+        onSubmit={handleSubmit}
+        className='w-full flex flex-col gap-y-4 items-center'
+      >
         <Field className='w-full'>
-          <Label className='text-sm/6 font-medium text-black px-2'>
-            Add/remove member by address
-          </Label>
-          <div className='relative mt-1'>
+          <div className='relative'>
             <Input
               required
               type='text'
@@ -82,11 +92,15 @@ export default function SearchMember() {
               onChange={handleChange}
             />
             <Button
-              type='submit'
               disabled={!address}
               className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:text-gray-300 transition duration-300 ease-in-out'
+              onClick={handleCleanup}
             >
-              <MagnifyingGlassIcon className='h-5 w-5' />
+              {address ? (
+                <XMarkIcon className='h-5 w-5' />
+              ) : (
+                <MagnifyingGlassIcon className='h-5 w-5' />
+              )}
             </Button>
           </div>
           <p className='text-xs text-accent h-4 pl-1'>
@@ -97,8 +111,8 @@ export default function SearchMember() {
       </form>
       {/* TODO: find a way to center this ProfilePreview */}
       {profile && (
-        <div className='w-full flex items-center justify-between p-4 pt-0'>
-          <ProfilePreview profile={profile} setProfile={setProfile} full />
+        <div className='w-full flex items-center justify-between pt-0'>
+          <ProfilePreview profile={profile} cleanup={handleCleanup} full />
         </div>
       )}
     </div>

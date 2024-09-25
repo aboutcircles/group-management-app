@@ -37,7 +37,7 @@ export default function TxHistory() {
     groupInfo?.symbol as string
   );
 
-  console.log('events', formattedEvents);
+  // console.log('events', formattedEvents);
 
   if (!isFetched) return <Loading />;
 

@@ -142,7 +142,7 @@ export default function GroupInfo() {
       </div>
       <button
         type='submit'
-        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4'
+        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4 shadow-md'
         disabled={!isChanged}
       >
         {isLoading ? (

@@ -53,11 +53,13 @@ const MemberList = ({ members }: MemberListProps) => {
         <p className='text-gray text-center px-2'>No members yet</p>
       ) : (
         <>
-          <div className='flex items-center flex-wrap'>
-            <p className='font-bold p-2 flex-1'>Member List</p>
+          <div className='flex items-center flex-wrap gap-2 p-2'>
+            <p className='font-bold p-2 flex-1 text-center sm:text-left'>
+              Member List
+            </p>
             {flaggedMembers.length > 0 && (
               <div className='flex flex-wrap gap-2 justify-around w-full sm:w-auto px-2'>
-                <button
+                {/* <button
                   className='flex gap-x-1 items-center bg-accent disabled:hover:bg-accent/50 disabled:bg-accent/50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
                   onClick={() => handleTrustMultiple(true)}
                   disabled={isLoading}
@@ -69,7 +71,7 @@ const MemberList = ({ members }: MemberListProps) => {
                   )}
                   Trust {flaggedMembers.length}{' '}
                   {flaggedMembers.length === 1 ? 'member' : 'members'}
-                </button>
+                </button> */}
 
                 <button
                   className='flex gap-x-1 items-center bg-black disabled:hover:bg-black disabled:opacity-50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'

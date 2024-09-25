@@ -7,7 +7,12 @@ export type Group = GroupRow & Profile;
 export type ProfileWithAddress = Profile & {
   address: Address;
   relation?: string;
+  symbol?: string;
 };
+
+// export type FullProfile = Profile & Group & {
+//   address: Address;
+// };
 
 export enum RelationType {
   TrustedBy = 'trustedBy',

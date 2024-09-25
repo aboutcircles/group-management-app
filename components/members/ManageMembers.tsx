@@ -7,7 +7,8 @@ import { useMembersStore } from '@/stores/membersStore';
 import Loading from '@/components/layout/Loading';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import Papa from 'papaparse';
-import BulkTrust from './BulkTrust';
+import BulkTrust from '@/components/members/BulkTrust';
+import { Tooltip } from '../common/Tooltip';
 
 export default function ManageMembers() {
   const isFetched = useMembersStore((state) => state.isFetched);
@@ -42,21 +43,26 @@ export default function ManageMembers() {
 
   return (
     <div className='w-full min-h-[224px] flex flex-col items-center'>
-      <div className='flex w-full h-36 justify-center gap-x-2.5 p-4 pb-0'>
-        <SearchMember />
-        <div className='mt-8'>
-          <BulkTrust members={members} />
+      <div className='text-sm font-bold text-black my-4 px-4 text-center sm:text-left w-full'>
+        Add/remove member by address
+      </div>
+      <div className='flex w-full justify-center gap-x-2.5 px-4 flex-wrap-reverse gap-2'>
+        <div className='flex-1 w-full'>
+          <SearchMember />
         </div>
-        {members && (
-          <div className='mt-8'>
-            <button
-              className='flex gap-x-1 items-center rounded-full text-sm p-1.5 hover:shadow-md hover:bg-primary/10 transition duration-300 ease-in-out'
-              onClick={handleExportCSV}
-            >
-              <ArrowUpTrayIcon width={18} height={18} />
-            </button>
-          </div>
-        )}
+        <div className='flex items-center h-9 gap-x-2.5 w-full sm:w-auto justify-center self-end'>
+          <BulkTrust members={members} />
+          {members && (
+            <Tooltip content='Export members to CSV' position='left'>
+              <button
+                className='flex gap-x-1 items-center rounded-full text-sm p-1.5 hover:shadow-md hover:bg-primary/10 transition duration-300 ease-in-out'
+                onClick={handleExportCSV}
+              >
+                <ArrowUpTrayIcon width={18} height={18} />
+              </button>
+            </Tooltip>
+          )}
+        </div>
       </div>
       {isFetched ? <MemberList members={members} /> : <Loading />}
     </div>

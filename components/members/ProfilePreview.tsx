@@ -17,11 +17,11 @@ import Loader from '../group/Loader';
 
 export default function ProfilePreview({
   profile,
-  setProfile = () => {},
+  cleanup = () => {},
   full = false,
 }: {
   profile: ProfileWithAddress;
-  setProfile?: (profile: ProfileWithAddress | null) => void;
+  cleanup?: () => void;
   full?: boolean;
 }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ export default function ProfilePreview({
     setIsLoading(true);
     const result = await trustMember(profile);
     if (result) {
-      setProfile(null);
+      cleanup();
     }
     setIsLoading(false);
   };
@@ -41,53 +41,64 @@ export default function ProfilePreview({
     setIsLoading(true);
     const result = await untrustMember(profile);
     if (result) {
-      setProfile(null);
+      cleanup();
     }
     setIsLoading(false);
   };
 
   return (
     <div className='flex items-center w-full'>
-      <div className='h-5 w-5 mr-2 text-zinc-400'>
-        {profile.relation === RelationType.Trusts && (
-          <Tooltip content='You trust this profile'>
-            <ArrowUpRightIcon className='h-5 w-5' />
-          </Tooltip>
-        )}
-        {profile.relation === RelationType.TrustedBy && (
-          <Tooltip content='This profile trusts you'>
-            <ArrowDownLeftIcon className='h-5 w-5' />
-          </Tooltip>
-        )}
-        {profile.relation === RelationType.MutuallyTrusts && (
-          <Tooltip content='Mutually trust each other'>
-            <ArrowsRightLeftIcon className='h-5 w-5' />
-          </Tooltip>
+      <div className='flex flex-col-reverse sm:flex-row gap-2 items-center'>
+        <div className='h-5 w-5 text-zinc-400'>
+          {profile.relation === RelationType.Trusts && (
+            <Tooltip content='You trust this profile'>
+              <ArrowUpRightIcon className='h-5 w-5' />
+            </Tooltip>
+          )}
+          {profile.relation === RelationType.TrustedBy && (
+            <Tooltip content='This profile trusts you'>
+              <ArrowDownLeftIcon className='h-5 w-5' />
+            </Tooltip>
+          )}
+          {profile.relation === RelationType.MutuallyTrusts && (
+            <Tooltip content='Mutually trust each other'>
+              <ArrowsRightLeftIcon className='h-5 w-5' />
+            </Tooltip>
+          )}
+        </div>
+        {profile.previewImageUrl ? (
+          <Image
+            src={profile.previewImageUrl}
+            alt={profile.name}
+            width={30}
+            height={30}
+            className='rounded-full'
+          />
+        ) : (
+          <div className='w-[30px] h-[30px] min-w-[30px] min-h-[30px] bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold'>
+            {profile.name ? profile.name.charAt(0).toUpperCase() : ''}
+          </div>
         )}
       </div>
-      {profile.previewImageUrl ? (
-        <Image
-          src={profile.previewImageUrl}
-          alt={profile.name}
-          width={30}
-          height={30}
-          className='rounded-full'
-        />
-      ) : (
-        <div className='w-[30px] h-[30px] min-w-[30px] min-h-[30px] bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold'>
-          {profile.name ? profile.name.charAt(0).toUpperCase() : ''}
-        </div>
-      )}
       <div className='flex flex-col flex-1'>
-        <div className='mx-2 font-bold'>
-          {profile.name ? profile.name : profile.address}
+        <div className='mx-2'>
+          <span
+            className={`font-bold ${
+              profile.name ? 'break-words' : 'break-all'
+            }`}
+          >
+            {profile.name ? profile.name : profile.address}
+          </span>
+          <span className='text-xs text-accent ml-2'>
+            {profile.symbol && 'group'}
+          </span>
         </div>
         <div className='mx-2 text-xs text-zinc-500 break-all'>
           {profile.name ? profile.address : 'v1 profile'}
         </div>
       </div>
       <Button
-        className={`flex items-center rounded-full bg-accent px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out ${
+        className={`flex items-center rounded-full bg-accent px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out shadow-md ${
           profile.relation === RelationType.MutuallyTrusts ||
           profile.relation === RelationType.Trusts
             ? 'bg-black'
