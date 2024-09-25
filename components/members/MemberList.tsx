@@ -1,7 +1,12 @@
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { useMulticallStore } from '@/stores/multicallStore';
 import { ProfileWithAddress } from '@/types';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Address } from 'viem';
 import Loader from '../group/Loader';
@@ -14,6 +19,12 @@ const MemberList = ({ members }: MemberListProps) => {
   const [flaggedMembers, setFlaggedMembers] = useState<Address[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isTrusting, setIsTrusting] = useState<boolean | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const membersPerPage = 30;
+  const totalPages = Math.ceil((members?.length || 0) / membersPerPage);
+  const startIndex = (currentPage - 1) * membersPerPage;
+  const endIndex = startIndex + membersPerPage;
+  const currentMembers = members?.slice(startIndex, endIndex);
 
   const trustMultipleMembers = useMulticallStore(
     (state) => state.trustMultipleMembers
@@ -40,8 +51,12 @@ const MemberList = ({ members }: MemberListProps) => {
     }
   };
 
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className='w-full mt-5'>
+    <div className='w-full mt-2'>
       {members && members.length === 0 ? (
         <p className='text-gray text-center px-2'>No members yet</p>
       ) : (
@@ -80,8 +95,8 @@ const MemberList = ({ members }: MemberListProps) => {
               </div>
             )}
           </div>
-          <ul className='w-full'>
-            {members?.map((member) => (
+          <ul className='w-full overflow-y-scroll h-48'>
+            {currentMembers?.map((member) => (
               <li
                 key={member.address}
                 className='flex items-center justify-between p-4 py-4 hover:bg-accent/20 hover:cursor-default transition duration-300 ease-in-out'
@@ -98,6 +113,41 @@ const MemberList = ({ members }: MemberListProps) => {
               </li>
             ))}
           </ul>
+
+          {/* Pagination Controls */}
+          
+          {/* <div className='flex justify-end items-center mt-4 space-x-2'>
+            <button
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              className='p-2 bg-gray-200 rounded border hover:bg-gray-300 transition disabled:opacity-50'
+            >
+              <ChevronLeftIcon width={10} height={10} />
+            </button>
+
+            {getVisiblePages().map((page, index) => (
+              <button
+                key={index}
+                onClick={() =>
+                  typeof page === 'number' && handlePageClick(page)
+                }
+                disabled={page === '...'}
+                className={`px-2 py-1 text-[8px] bg-gray-200 rounded border hover:bg-gray-300 transition ${
+                  page === currentPage ? 'border-accent text-accent' : ''
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className='p-2 bg-gray-200 rounded border hover:bg-gray-300 transition disabled:opacity-50'
+            >
+              <ChevronRightIcon width={10} height={10} />
+            </button>
+          </div> */}
         </>
       )}
     </div>

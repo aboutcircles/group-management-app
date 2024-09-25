@@ -10,10 +10,6 @@ export const config = createConfig({
   chains: [gnosis, gnosisChiado],
   multiInjectedProviderDiscovery: false,
   connectors: [
-    coinbaseWallet({ appName: 'Circles Group Management' }),
-    walletConnect({
-      projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
-    }),
     safe(),
   ],
   ssr: true,

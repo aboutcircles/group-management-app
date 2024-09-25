@@ -42,7 +42,7 @@ export default function ManageMembers() {
 
   return (
     <div className='w-full min-h-[224px] flex flex-col items-center'>
-      <div className='flex w-full h-36 justify-center gap-x-2.5 p-4'>
+      <div className='flex w-full h-36 justify-center gap-x-2.5 p-4 pb-0'>
         <SearchMember />
         <div className='mt-8'>
           <BulkTrust members={members} />
