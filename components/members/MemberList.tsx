@@ -1,15 +1,11 @@
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { useMulticallStore } from '@/stores/multicallStore';
 import { ProfileWithAddress } from '@/types';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Address } from 'viem';
 import Loader from '../group/Loader';
+import { Pagination } from '@nextui-org/react';
 
 interface MemberListProps {
   members: ProfileWithAddress[] | undefined;
@@ -115,39 +111,18 @@ const MemberList = ({ members }: MemberListProps) => {
           </ul>
 
           {/* Pagination Controls */}
-          
-          {/* <div className='flex justify-end items-center mt-4 space-x-2'>
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className='p-2 bg-gray-200 rounded border hover:bg-gray-300 transition disabled:opacity-50'
-            >
-              <ChevronLeftIcon width={10} height={10} />
-            </button>
-
-            {getVisiblePages().map((page, index) => (
-              <button
-                key={index}
-                onClick={() =>
-                  typeof page === 'number' && handlePageClick(page)
-                }
-                disabled={page === '...'}
-                className={`px-2 py-1 text-[8px] bg-gray-200 rounded border hover:bg-gray-300 transition ${
-                  page === currentPage ? 'border-accent text-accent' : ''
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className='p-2 bg-gray-200 rounded border hover:bg-gray-300 transition disabled:opacity-50'
-            >
-              <ChevronRightIcon width={10} height={10} />
-            </button>
-          </div> */}
+          <div className='flex justify-end items-center mt-2 p-2'>
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              size='sm'
+              color='primary'
+              page={currentPage}
+              total={totalPages}
+              onChange={(page_) => setCurrentPage(page_)}
+            />
+          </div>
         </>
       )}
     </div>
