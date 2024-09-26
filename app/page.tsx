@@ -17,6 +17,7 @@ export default function Page() {
   const isLoading = useGroupStore((state) => state.isLoading);
 
   useEffect(() => {
+    console.log(isLoading);
     if (!address || !circles || isLoading) return;
     if (
       groupAvatar &&
@@ -30,7 +31,6 @@ export default function Page() {
     }
   }, [address, router, groupAvatar, circles, isLoading]);
 
-  // if (isLoading) return <Loading />;
-
+  if (isLoading && address) return <Loading />;
   return <>{!address && <Fallback />}</>;
 }
