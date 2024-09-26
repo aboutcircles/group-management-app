@@ -10,6 +10,10 @@ type MembersStore = {
   untrustMember: (profile: ProfileWithAddress) => Promise<boolean>;
   isFetched: boolean;
   fetchMembers: () => Promise<void>;
+  trustMultipleMembers: (
+    addresses: Address[],
+    trust: boolean
+  ) => Promise<boolean>;
 };
 
 export const useMembersStore = create<MembersStore>((set) => ({
@@ -106,30 +110,27 @@ export const useMembersStore = create<MembersStore>((set) => ({
       const result = await groupAvatar?.untrust(profile.address);
 
       if (result) {
-        // delete profile if no relation left
-        if (profile.relation === RelationType.Trusts) {
-          set((state) => ({
-            members: (state.members || []).filter(
-              (member) => member.address !== profile.address
-            ),
-          }));
-        }
-        // update relation MutuallyTrusts -> TrustedBy
-        if (profile.relation === RelationType.MutuallyTrusts) {
-          const updatedProfile = {
-            ...profile,
-            relation: RelationType.TrustedBy,
-          };
+        set((state) => ({
+          members: (state.members || []).filter(
+            (member) => member.address !== profile.address
+          ),
+        }));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  },
 
-          set((state) => ({
-            members: [
-              updatedProfile,
-              ...(state.members || []).filter(
-                (member) => member.address !== profile.address
-              ),
-            ],
-          }));
-        }
+  trustMultipleMembers: async (addresses: Address[], trust: boolean) => {
+    const groupAvatar = useGroupStore.getState().groupAvatar;
+    try {
+      const result = trust
+        ? await groupAvatar?.trust(addresses)
+        : await groupAvatar?.untrust(addresses);
+
+      if (result) {
         return true;
       }
       return false;

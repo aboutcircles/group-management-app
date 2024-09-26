@@ -66,7 +66,7 @@ export default function ManageMembers() {
           </div>
         </div>
       </div>
-      <div className='w-full h-3/4 flex'>
+      <div className='w-full h-3/4 flex justify-center items-center'>
         {isFetched ? <MemberList members={members} /> : <Loading />}
       </div>
     </div>

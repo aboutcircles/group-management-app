@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Address } from 'viem';
 import Loader from '../group/Loader';
 import { Pagination } from '@nextui-org/react';
+import { useMembersStore } from '@/stores/membersStore';
 
 interface MemberListProps {
   members: ProfileWithAddress[] | undefined;
@@ -13,6 +14,7 @@ interface MemberListProps {
 
 const MemberList = ({ members }: MemberListProps) => {
   const [flaggedMembers, setFlaggedMembers] = useState<Address[]>([]);
+  const [flagAll, setFlagAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isTrusting, setIsTrusting] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +23,10 @@ const MemberList = ({ members }: MemberListProps) => {
   const startIndex = (currentPage - 1) * membersPerPage;
   const endIndex = startIndex + membersPerPage;
   const currentMembers = members?.slice(startIndex, endIndex);
+
+  // const trustMultipleMembers = useMembersStore(
+  //   (state) => state.trustMultipleMembers
+  // );
 
   const trustMultipleMembers = useMulticallStore(
     (state) => state.trustMultipleMembers
@@ -47,6 +53,15 @@ const MemberList = ({ members }: MemberListProps) => {
     }
   };
 
+  const handleFlagAll = (flag: boolean) => {
+    setFlagAll(flag);
+    if (flag) {
+      setFlaggedMembers(members?.map((member) => member.address) || []);
+    } else {
+      setFlaggedMembers([]);
+    }
+  };
+
   return (
     <div className='w-full h-full flex flex-col justify-between'>
       {members && members.length === 0 ? (
@@ -55,25 +70,17 @@ const MemberList = ({ members }: MemberListProps) => {
         <>
           <div className='flex flex-col h-5/6'>
             <div className='flex items-center flex-wrap gap-2 p-2'>
+              <input
+                type='checkbox'
+                checked={flagAll}
+                onChange={() => handleFlagAll(!flagAll)}
+                className='mr-2'
+              />
               <p className='font-bold p-2 flex-1 text-center sm:text-left'>
                 Member List
               </p>
               {flaggedMembers.length > 0 && (
                 <div className='flex flex-wrap gap-2 justify-around w-full sm:w-auto px-2'>
-                  {/* <button
-                  className='flex gap-x-1 items-center bg-accent disabled:hover:bg-accent/50 disabled:bg-accent/50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
-                  onClick={() => handleTrustMultiple(true)}
-                  disabled={isLoading}
-                >
-                  {isLoading && isTrusting ? (
-                    <Loader />
-                  ) : (
-                    <PlusIcon className='h-5 w-5 stroke-white' />
-                  )}
-                  Trust {flaggedMembers.length}{' '}
-                  {flaggedMembers.length === 1 ? 'member' : 'members'}
-                </button> */}
-
                   <button
                     className='flex gap-x-1 items-center bg-black disabled:hover:bg-black disabled:opacity-50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
                     onClick={() => handleTrustMultiple(false)}
