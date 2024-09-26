@@ -11,11 +11,15 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Methods",
-            value: "GET",
+            value: "GET, POST, OPTIONS",
           },
           {
             key: "Access-Control-Allow-Headers",
             value: "X-Requested-With, Content-Type, Authorization",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "clipboard-write=(self)",
           },
         ],
       },
