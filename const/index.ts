@@ -2,7 +2,11 @@ import { MintPolicy } from '@/types';
 import { CirclesConfig } from '@circles-sdk/sdk';
 
 export const mintPolicies: MintPolicy[] = [
-  { id: 1, name: '0x5Ea08c967C69255d82a4d26e36823a720E7D0317' },
+  {
+    id: 1,
+    address: '0x5Ea08c967C69255d82a4d26e36823a720E7D0317',
+    name: 'Standard Mint Policy - 0x5Ea08c967C69255d82a4d26e36823a720E7D0317',
+  },
 ];
 
 // export const CIRCLES_RPC = 'https://rpc.helsinki.aboutcircles.com';

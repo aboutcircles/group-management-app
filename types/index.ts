@@ -34,6 +34,7 @@ export const circlesEventTypes = [
 
 export type MintPolicy = {
   id: number;
+  address: Address;
   name: string;
 };
 

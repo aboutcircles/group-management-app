@@ -1,7 +1,7 @@
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { useMulticallStore } from '@/stores/multicallStore';
 import { ProfileWithAddress } from '@/types';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Address } from 'viem';
 import Loader from '../group/Loader';

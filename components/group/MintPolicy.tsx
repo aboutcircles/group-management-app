@@ -34,7 +34,7 @@ export default function MintPolicy({
       >
         {mintPolicies.map((policy) => (
           <ListboxOption
-            key={policy.name}
+            key={policy.address}
             value={policy}
             className='group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-black/10 overflow-x-clip'
           >
