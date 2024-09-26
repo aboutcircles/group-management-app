@@ -5,7 +5,7 @@ import TxHistory from '@/components/txHistory/TxHistory';
 
 export default function Group() {
   return (
-    <TabGroup className='h-[500px]'>
+    <TabGroup className='h-[500px] w-full'>
       <TabList className='flex justify-stretch h-[10%]'>
         <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-words transition duration-300 ease-in-out'>
           Group info
