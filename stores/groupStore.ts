@@ -5,7 +5,7 @@ import { create } from 'zustand';
 import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { Address } from 'viem';
 import { GroupProfile, Profile } from '@circles-sdk/profiles';
-import { ContractTransactionReceipt } from 'ethers';
+import { ContractTransactionReceipt, ethers } from 'ethers';
 import { cidV0ToUint8Array } from '@circles-sdk/utils';
 
 interface GroupStoreState {
@@ -13,6 +13,7 @@ interface GroupStoreState {
   groupInfo: Group | null;
   avatarEvents: Observable<CirclesEvent> | null;
   isLoading: boolean;
+  totalSupply: bigint;
 }
 
 interface GroupStoreActions {
@@ -30,6 +31,7 @@ interface GroupStoreActions {
   ) => Promise<ContractTransactionReceipt | null>;
 
   resetGroup: () => Promise<void>;
+  fetchTotalSupply: () => Promise<void>;
 }
 
 const initialState: GroupStoreState = {
@@ -37,6 +39,7 @@ const initialState: GroupStoreState = {
   avatarEvents: null,
   groupInfo: null,
   isLoading: true,
+  totalSupply: BigInt(0),
 };
 
 export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
@@ -72,9 +75,13 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
           }
 
           const groupProfile = await circles.profiles?.get(cid);
+
+          const totalSupply = await avatar.getTotalSupply();
+          // console.log('totalSupply', ethers.formatEther(totalSupply));
           set({
             groupAvatar: avatar,
             groupInfo: { ...group, ...groupProfile },
+            totalSupply: totalSupply || BigInt(0),
             isLoading: false,
           });
         }
@@ -156,6 +163,17 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
 
     resetGroup: async () => {
       set(initialState);
+    },
+
+    fetchTotalSupply: async () => {
+      try {
+        const totalSupply = await get().groupAvatar?.getTotalSupply();
+        set({
+          totalSupply: totalSupply || BigInt(0),
+        });
+      } catch (error) {
+        console.error('Error fetching total supply:', error);
+      }
     },
   })
 );

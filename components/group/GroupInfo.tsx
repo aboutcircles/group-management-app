@@ -6,9 +6,11 @@ import { useGroupStore } from '@/stores/groupStore';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { Group } from '@/types';
 import Loader from './Loader';
+import { ethers } from 'ethers';
 
 export default function GroupInfo() {
   const groupInfo = useGroupStore((state) => state.groupInfo);
+  const totalSupply = useGroupStore((state) => state.totalSupply);
   const updateGroup = useGroupStore((state) => state.updateGroup);
   const [isChanged, setIsChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -129,9 +131,14 @@ export default function GroupInfo() {
               onChange={handleChange}
             />
           </Field>
-          <div className='flex'>
-            <p className='font-bold mx-3'>{groupInfo?.symbol}</p>
-            {/* <p className=''>{group.balance}</p> */}
+          <div className=''>
+            <p className='text-xs text-gray mx-3'>Total supply</p>
+            <p className='mx-3'>
+              <span className='font-bold'>{groupInfo?.symbol}</span>
+              <span className='ml-2'>
+                {ethers.formatEther(totalSupply || BigInt(0))}
+              </span>
+            </p>
           </div>
           {groupInfo?.mint && (
             <p className='text-xs text-gray mx-3'>

@@ -2,7 +2,10 @@ import { Address } from 'viem';
 import { CirclesEvent, type GroupRow } from '@circles-sdk/data';
 import type { Profile } from '@circles-sdk/profiles';
 
-export type Group = GroupRow & Profile;
+export type Group = GroupRow &
+  Profile & {
+    totalSupply?: bigint | undefined;
+  };
 
 export type ProfileWithAddress = Profile & {
   address: Address;

@@ -37,6 +37,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
   subscribeToEvents: async () => {
     const circlesData = useCirclesSdkStore.getState().circlesData;
     const groupInfo = useGroupStore.getState().groupInfo;
+    const fetchTotalSupply = useGroupStore.getState().fetchTotalSupply;
     // console.log('subscribeToEvents', groupInfo, circlesData);
 
     try {
@@ -51,6 +52,10 @@ export const useEventsStore = create<EventsStore>((set) => ({
           events: [event, ...(state.events || [])],
           lastEvent: event,
         }));
+
+        if (event.$event === 'CrcV2_GroupMintSingle') {
+          fetchTotalSupply();
+        }
       });
     } catch (error) {
       console.error('Failed to subscribe to events:', error);
