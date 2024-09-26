@@ -31,7 +31,7 @@ export default function RootLayout({
             <EventToastNotifier />
             <div className='w-full md:w-[775px] sm:my-4 bg-primary shadow-sm p-4 min-h-screen sm:min-h-0 sm:h-auto sm:rounded-3xl flex gap-y-4 flex-col justify-around items-center'>
               <Navbar />
-              <div className='w-full relative h-full bg-background text-black rounded-2xl overflow-hidden'>
+              <div className='w-full relative bg-background text-black rounded-2xl overflow-hidden'>
                 {children}
               </div>
               <Footer />

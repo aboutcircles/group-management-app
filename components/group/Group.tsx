@@ -5,26 +5,26 @@ import TxHistory from '@/components/txHistory/TxHistory';
 
 export default function Group() {
   return (
-    <TabGroup>
-      <TabList className='flex justify-stretch'>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-words transition duration-300 ease-in-out'>
+    <TabGroup className='h-[500px]'>
+      <TabList className='flex justify-stretch h-[10%]'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-words transition duration-300 ease-in-out'>
           Group info
         </Tab>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary/95 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all transition duration-300 ease-in-out'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary/95 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-all transition duration-300 ease-in-out'>
           Members
         </Tab>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary/90 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-4 break-all transition duration-300 ease-in-out'>
+        <Tab className='outline-none w-1/3 font-bold bg-secondary/90 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-all transition duration-300 ease-in-out'>
           Transactions
         </Tab>
       </TabList>
-      <TabPanels>
-        <TabPanel>
+      <TabPanels className='h-[90%]'>
+        <TabPanel className='h-full'>
           <GroupInfo />
         </TabPanel>
-        <TabPanel>
+        <TabPanel className='h-full'>
           <ManageMembers />
         </TabPanel>
-        <TabPanel>
+        <TabPanel className='h-full'>
           <TxHistory />
         </TabPanel>
       </TabPanels>

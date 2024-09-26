@@ -95,7 +95,7 @@ export default function GroupInfo() {
   return (
     <form
       onSubmit={handleSubmit}
-      className='w-full h-full p-4 flex flex-col items-center justify-center gap-y-4'
+      className='w-full h-full p-4 flex flex-col items-center justify-between gap-y-4'
     >
       <div className='flex w-full gap-x-2'>
         <Field className='flex flex-col justify-center'>

@@ -48,18 +48,19 @@ const MemberList = ({ members }: MemberListProps) => {
   };
 
   return (
-    <div className='w-full mt-2'>
+    <div className='w-full h-full flex flex-col justify-between'>
       {members && members.length === 0 ? (
         <p className='text-gray text-center px-2'>No members yet</p>
       ) : (
         <>
-          <div className='flex items-center flex-wrap gap-2 p-2'>
-            <p className='font-bold p-2 flex-1 text-center sm:text-left'>
-              Member List
-            </p>
-            {flaggedMembers.length > 0 && (
-              <div className='flex flex-wrap gap-2 justify-around w-full sm:w-auto px-2'>
-                {/* <button
+          <div className='flex flex-col h-5/6'>
+            <div className='flex items-center flex-wrap gap-2 p-2'>
+              <p className='font-bold p-2 flex-1 text-center sm:text-left'>
+                Member List
+              </p>
+              {flaggedMembers.length > 0 && (
+                <div className='flex flex-wrap gap-2 justify-around w-full sm:w-auto px-2'>
+                  {/* <button
                   className='flex gap-x-1 items-center bg-accent disabled:hover:bg-accent/50 disabled:bg-accent/50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
                   onClick={() => handleTrustMultiple(true)}
                   disabled={isLoading}
@@ -73,42 +74,43 @@ const MemberList = ({ members }: MemberListProps) => {
                   {flaggedMembers.length === 1 ? 'member' : 'members'}
                 </button> */}
 
-                <button
-                  className='flex gap-x-1 items-center bg-black disabled:hover:bg-black disabled:opacity-50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
-                  onClick={() => handleTrustMultiple(false)}
-                  disabled={isLoading}
-                >
-                  {isLoading && !isTrusting ? (
-                    <Loader />
-                  ) : (
-                    <XMarkIcon className='h-5 w-5 stroke-white' />
-                  )}
-                  Untrust {flaggedMembers.length}{' '}
-                  {flaggedMembers.length === 1 ? 'member' : 'members'}
-                </button>
-              </div>
-            )}
-          </div>
-          <ul className='w-full overflow-y-scroll h-48'>
-            {currentMembers?.map((member) => (
-              <li
-                key={member.address}
-                className='flex items-center justify-between p-4 py-4 hover:bg-accent/20 hover:cursor-default transition duration-300 ease-in-out'
-              >
-                <div className='flex items-center w-full'>
-                  <input
-                    type='checkbox'
-                    checked={flaggedMembers.includes(member.address)}
-                    onChange={() => onFlagToggle(member.address)}
-                    className='mr-2'
-                  />
-                  <ProfilePreview profile={member} />
+                  <button
+                    className='flex gap-x-1 items-center bg-black disabled:hover:bg-black disabled:opacity-50 rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
+                    onClick={() => handleTrustMultiple(false)}
+                    disabled={isLoading}
+                  >
+                    {isLoading && !isTrusting ? (
+                      <Loader />
+                    ) : (
+                      <XMarkIcon className='h-5 w-5 stroke-white' />
+                    )}
+                    Untrust {flaggedMembers.length}{' '}
+                    {flaggedMembers.length === 1 ? 'member' : 'members'}
+                  </button>
                 </div>
-              </li>
-            ))}
-          </ul>
+              )}
+            </div>
+            <ul className='w-full overflow-y-auto h-full'>
+              {currentMembers?.map((member) => (
+                <li
+                  key={member.address}
+                  className='flex items-center justify-between p-2 hover:bg-accent/20 hover:cursor-default transition duration-300 ease-in-out'
+                >
+                  <div className='flex items-center w-full'>
+                    <input
+                      type='checkbox'
+                      checked={flaggedMembers.includes(member.address)}
+                      onChange={() => onFlagToggle(member.address)}
+                      className='mr-2'
+                    />
+                    <ProfilePreview profile={member} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <div className='flex justify-end items-center mt-2 p-2'>
+          <div className='flex justify-end items-center h-1/6 px-2'>
             <Pagination
               isCompact
               showControls
