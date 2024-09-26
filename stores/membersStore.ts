@@ -10,10 +10,10 @@ type MembersStore = {
   untrustMember: (profile: ProfileWithAddress) => Promise<boolean>;
   isFetched: boolean;
   fetchMembers: () => Promise<void>;
-  trustMultipleMembers: (
-    addresses: Address[],
-    trust: boolean
-  ) => Promise<boolean>;
+  // trustMultipleMembers: (
+  //   addresses: Address[],
+  //   trust: boolean
+  // ) => Promise<boolean>;
 };
 
 export const useMembersStore = create<MembersStore>((set) => ({
@@ -123,19 +123,19 @@ export const useMembersStore = create<MembersStore>((set) => ({
     }
   },
 
-  trustMultipleMembers: async (addresses: Address[], trust: boolean) => {
-    const groupAvatar = useGroupStore.getState().groupAvatar;
-    try {
-      const result = trust
-        ? await groupAvatar?.trust(addresses)
-        : await groupAvatar?.untrust(addresses);
+  // trustMultipleMembers: async (addresses: Address[], trust: boolean) => {
+  //   const groupAvatar = useGroupStore.getState().groupAvatar;
+  //   try {
+  //     const result = trust
+  //       ? await groupAvatar?.trust(addresses)
+  //       : await groupAvatar?.untrust(addresses);
 
-      if (result) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      return false;
-    }
-  },
+  //     if (result) {
+  //       return true;
+  //     }
+  //     return false;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // },
 }));
