@@ -9,20 +9,20 @@ importers:
   .:
     dependencies:
       '@circles-sdk/adapter-ethers':
-        specifier: ^0.11.1
-        version: 0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: ^0.8.0
+        version: 0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@circles-sdk/data':
-        specifier: ^0.11.1
-        version: 0.11.1
+        specifier: ^0.8.0
+        version: 0.8.0
       '@circles-sdk/profiles':
-        specifier: ^0.11.1
-        version: 0.11.1
+        specifier: ^0.8.0
+        version: 0.8.0
       '@circles-sdk/sdk':
-        specifier: ^0.11.1
-        version: 0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: ^0.8.0
+        version: 0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@circles-sdk/utils':
-        specifier: ^0.11.1
-        version: 0.11.1
+        specifier: ^0.8.0
+        version: 0.8.0
       '@headlessui/react':
         specifier: ^2.1.2
         version: 2.1.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -827,29 +827,29 @@ packages:
     resolution: {integrity: sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==}
     engines: {node: '>=6.9.0'}
 
-  '@circles-sdk/abi-v1@0.11.1':
-    resolution: {integrity: sha512-szb020GHQe26hEqxX+9fPUs0c8nZxXO8CEYlaewUYYQ7KS+cRZDoLQ7GVPOnBN8HSLfZbdCbjp3LZIPJ4hx2SA==}
+  '@circles-sdk/abi-v1@0.8.0':
+    resolution: {integrity: sha512-CxsVljCTOnoCLsWgRv2RMwc5D+Aunkwpsakbpl4Lhv9RDs0h6NMkz5tG93csHlxV+4hvAn1DIpj7qAGnTs3SxA==}
 
-  '@circles-sdk/abi-v2@0.11.1':
-    resolution: {integrity: sha512-law17ogoXQqOaORzXDtn6jJNy5+BBp7jwJB1u7BSKQxYTl8FBf+QVVcA0ODlfueeT0mJ28simu6/JuhlDbstIQ==}
+  '@circles-sdk/abi-v2@0.8.0':
+    resolution: {integrity: sha512-A5/Nu8Jm5N6dz1KOfVnJPE7VUinTi8c6P5u9LL2FrJQWCH47U+xnigPeBjdBM6YhrTlzy8igYbauFF39+RfnFw==}
 
-  '@circles-sdk/adapter-ethers@0.11.1':
-    resolution: {integrity: sha512-hPUa+NiEcga7NKM69HuA0K04goXE0qt3UF8/MXxFZlBX6kOVwDbh0HuRTYbFd+JKi/KNPJ3utiXpzatVyRiteA==}
+  '@circles-sdk/adapter-ethers@0.8.0':
+    resolution: {integrity: sha512-RGt8B8BC64v0jTwB4YnCy81brOAtKLqG8uRuF7g/NAVLSbUrSBT+c6yxYgYahGgL1jwFu5zR157kpinnDmUb3Q==}
 
-  '@circles-sdk/adapter@0.11.1':
-    resolution: {integrity: sha512-NkseyzhqxAJ7ZcJs0RYkgB5pdtuzQgcl2hu27eEeFXhNAZFz711GmNw6UDhAHkVJaWIyOLSllUMHLf3Tp17b1w==}
+  '@circles-sdk/adapter@0.8.0':
+    resolution: {integrity: sha512-/l7qE0nXXHtdnPAHN81Onq857TBwbvjU2BFJV0DdAtaTSiVzq6Lxd2TGd404AIeftf5Voh3WlmFyfjzl9QajbA==}
 
-  '@circles-sdk/data@0.11.1':
-    resolution: {integrity: sha512-14wD763VJknv0861Ayr4f61zUgfNI4PvCN9Yn6B6k2WkiufXFKzeR2ryi4w8Sji8mzzV2PBkoRTEgFp9i9KGuA==}
+  '@circles-sdk/data@0.8.0':
+    resolution: {integrity: sha512-+7rxHPTx5y4NiJfuWvpREvP70z5RXH/Ed6xP5wv8SruxjIUjR37MxSTm9B9DeTZuUTCj2Qut7Q3R9wWgwy8xaQ==}
 
-  '@circles-sdk/profiles@0.11.1':
-    resolution: {integrity: sha512-tziF20Ipm7I0HL/r+xz/igYvaSNXK1OvirSgeNGWvvpifV00WT6J0bcHm+L9bsEo+uh10SI9sYI73ZOwiZWmpw==}
+  '@circles-sdk/profiles@0.8.0':
+    resolution: {integrity: sha512-fOsBGNwxv1fiVjdJAfEVWLMsg+nCZIznEpjEvTyr1H1Dlm0Arn9dL2QgLNYAeHgiJIN+KT3jvGuXNYCB02P7dQ==}
 
-  '@circles-sdk/sdk@0.11.1':
-    resolution: {integrity: sha512-RqicXIbZZMrPWEL6iOE3tmjgpZvHHZ2evpqHn64zOyrLiTLrVFFo2aO3Vb/vvioPW7n/OgCkLWcqlXB+gmn5VA==}
+  '@circles-sdk/sdk@0.8.0':
+    resolution: {integrity: sha512-k5zXSjX+h+CCodsBQHwooHW1cUMtyyrAQnP0t37d2Kg14Aih04S29t/Mx8dYb9r3LEDk8N/QasEhHFlRTuXFhw==}
 
-  '@circles-sdk/utils@0.11.1':
-    resolution: {integrity: sha512-UEQFcgmotGT+mj79IQpWMKPoiZFZn5T6xDifKTY6tJoclTMb8VTIdfk1jeLffh/SxoaVOAaABONrNfOQS5GtMA==}
+  '@circles-sdk/utils@0.8.0':
+    resolution: {integrity: sha512-oYkiOX9I8PbsSyG/PTR9Kg/dTKKWSaPBPAWsgxD2K2sAfSWeApuWtN9zdCbSH2QpQANNzXTRG8txstRri4DjgQ==}
 
   '@coinbase/wallet-sdk@3.9.3':
     resolution: {integrity: sha512-N/A2DRIf0Y3PHc1XAMvbBUu4zisna6qAdqABMZwBMNEfWrXpAwx16pZGkYCLGE+Rvv1edbcB2LYDRnACNcmCiw==}
@@ -7149,52 +7149,52 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@circles-sdk/abi-v1@0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@circles-sdk/abi-v1@0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
       ethers: 6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@circles-sdk/abi-v2@0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@circles-sdk/abi-v2@0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
       ethers: 6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@circles-sdk/adapter-ethers@0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@circles-sdk/adapter-ethers@0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
-      '@circles-sdk/adapter': 0.11.1
+      '@circles-sdk/adapter': 0.8.0
       ethers: 6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@circles-sdk/adapter@0.11.1': {}
+  '@circles-sdk/adapter@0.8.0': {}
 
-  '@circles-sdk/data@0.11.1':
+  '@circles-sdk/data@0.8.0':
     dependencies:
-      '@circles-sdk/utils': 0.11.1
+      '@circles-sdk/utils': 0.8.0
 
-  '@circles-sdk/profiles@0.11.1':
+  '@circles-sdk/profiles@0.8.0':
     dependencies:
-      '@circles-sdk/utils': 0.11.1
+      '@circles-sdk/utils': 0.8.0
 
-  '@circles-sdk/sdk@0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@circles-sdk/sdk@0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
-      '@circles-sdk/abi-v1': 0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@circles-sdk/abi-v2': 0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@circles-sdk/adapter-ethers': 0.11.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@circles-sdk/data': 0.11.1
-      '@circles-sdk/profiles': 0.11.1
+      '@circles-sdk/abi-v1': 0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@circles-sdk/abi-v2': 0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@circles-sdk/adapter-ethers': 0.8.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@circles-sdk/data': 0.8.0
+      '@circles-sdk/profiles': 0.8.0
       ethers: 6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       multihashes: 4.0.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@circles-sdk/utils@0.11.1':
+  '@circles-sdk/utils@0.8.0':
     dependencies:
       bignumber.js: 9.1.2
 
@@ -11460,7 +11460,7 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.0(eslint@8.57.1)
       eslint-plugin-react: 7.36.1(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -11491,7 +11491,7 @@ snapshots:
       is-bun-module: 1.2.1
       is-glob: 4.0.3
     optionalDependencies:
-      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-node
@@ -11509,7 +11509,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1):
+  eslint-plugin-import@2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
