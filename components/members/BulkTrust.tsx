@@ -74,6 +74,12 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
     setIsConfirmed(true);
   };
 
+  const closeModal = () => {
+    setIsOpen(false);
+    setIsConfirmed(false);
+    setSelectedIndex(0);
+  };
+
   return (
     <div>
       <button
@@ -85,7 +91,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
       </button>
       <Dialog
         open={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => closeModal()}
         className='relative z-50'
       >
         <div className='fixed inset-0 flex bg-black/50 backdrop-blur-sm w-screen items-center justify-center p-4'>
@@ -112,11 +118,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
               </TabGroup>
 
               <button className='rounded-full p-1.5 hover:bg-black/10 transition duration-300 ease-in-out'>
-                <XMarkIcon
-                  width={20}
-                  height={20}
-                  onClick={() => setIsOpen(false)}
-                />
+                <XMarkIcon width={20} height={20} onClick={() => closeModal()} />
               </button>
             </div>
             <p className='text-lg font-bold'>
@@ -136,10 +138,8 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                   ? 'bg-secondary/80 hover:bg-secondary/90'
                   : 'bg-gradient-to-r from-accent/90 to-accent/80 hover:bg-accent/90'
               }`}
-              disabled={addresses.length === 0}
-              onClick={
-                isConfirmed ? () => setIsOpen(false) : handleTrustAddresses
-              }
+              disabled={addresses.length === 0 && !isConfirmed}
+              onClick={isConfirmed ? () => closeModal() : handleTrustAddresses}
             >
               {isLoading ? (
                 <>
