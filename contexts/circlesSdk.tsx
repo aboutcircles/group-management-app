@@ -35,6 +35,7 @@ interface SDKContextType {
   groupAvatarIsFetched: boolean;
   groupInfo: Group | null | undefined;
   groupInfoIsFetched: boolean;
+  // adapter: BrowserProviderContractRunner | null;
 }
 
 export const CirclesSdkContext = createContext<SDKContextType>({
@@ -46,6 +47,7 @@ export const CirclesSdkContext = createContext<SDKContextType>({
   groupAvatarIsFetched: false,
   groupInfo: null,
   groupInfoIsFetched: false,
+  // adapter: null,
 });
 
 export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -57,7 +59,8 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
   const [circlesData, setCirclesData] = useState<CirclesData | null>(null);
   const { address } = useAccount();
   const chainId = useChainId();
-  const provider = useSafeProvider(); // Get the SafeAppProvider
+  const provider = useSafeProvider(); 
+  // const [adapter, setAdapter] = useState<BrowserProviderContractRunner | null>(null); // Manage adapter state
 
   useEffect(() => {
     async function initializeSdk() {
@@ -69,6 +72,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
       adapter.provider = SafeEthersProvider;
 
       await adapter.init();
+      // setAdapter(adapter);
 
       console.log('initializeSdk with SafeAppProvider');
       try {
@@ -89,6 +93,8 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
 
     initializeSdk();
   }, [address, chainId, provider]); // Depend on provider
+
+  
 
   const {
     data: groupAvatar,
@@ -175,6 +181,7 @@ export const CirclesSDKProvider: React.FC<{ children: React.ReactNode }> = ({
         updateGroupAvatar: refetchGroupAvatar,
         groupInfo,
         groupInfoIsFetched,
+        // adapter,
       }}
     >
       {children}

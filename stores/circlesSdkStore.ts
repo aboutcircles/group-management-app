@@ -11,10 +11,12 @@ interface CirclesSdkStoreState {
   circles?: Sdk;
   circlesData?: CirclesData;
   safeSDK?: SafeAppsSDK;
+  adapter?: BrowserProviderContractRunner;
 }
 
 interface CirclesSdkStoreActions {
   initSdk: () => Promise<void>;
+  setAdapterProvider: (provider: ethers.BrowserProvider) => void;
   resetSdk: () => Promise<void>;
 }
 
@@ -22,6 +24,7 @@ const initialState: CirclesSdkStoreState = {
   circles: undefined,
   circlesData: undefined,
   safeSDK: undefined,
+  adapter: undefined,
 };
 
 const getSafeProvider = async (sdk: SafeAppsSDK) => {
@@ -31,6 +34,7 @@ const getSafeProvider = async (sdk: SafeAppsSDK) => {
     return safeProvider;
   } else {
     console.error('Safe info could not be retrieved');
+    return null;
   }
 };
 
@@ -40,14 +44,18 @@ export const useCirclesSdkStore = create<
   circles: undefined,
   circlesData: undefined,
   safeSDK: undefined,
+  adapter: undefined,
 
   initSdk: async () => {
     const sdk = new SafeAppsSDK();
     const safeProvider = await getSafeProvider(sdk);
     if (!safeProvider) return;
+
     const SafeEthersProvider = new ethers.BrowserProvider(safeProvider);
+
     const adapter = new BrowserProviderContractRunner();
-    adapter.provider = SafeEthersProvider;
+    get().setAdapterProvider(SafeEthersProvider);
+
     await adapter.init();
 
     try {
@@ -61,6 +69,15 @@ export const useCirclesSdkStore = create<
       });
     } catch (error) {
       console.error('Failed to initialize Circles SDK:', error);
+    }
+  },
+
+  setAdapterProvider: (provider: ethers.BrowserProvider) => {
+    const adapter = get().adapter;
+    if (adapter) {
+      adapter.provider = provider;
+    } else {
+      console.error('Adapter is not initialized');
     }
   },
 

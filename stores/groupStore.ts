@@ -76,12 +76,14 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
 
           const groupProfile = await circles.profiles?.get(cid);
 
-          // const totalSupply = await avatar.getTotalSupply();
+          const totalSupply = await avatar.getTotalSupply();
+          // console.log('totalSupply', ethers.formatEther(totalSupply));
+
           set({
             groupAvatar: avatar,
             groupInfo: { ...group, ...groupProfile },
-            // totalSupply: totalSupply || BigInt(0),
-            totalSupply: BigInt(0),
+            totalSupply: totalSupply || BigInt(0),
+            // totalSupply: BigInt(0),
             isLoading: false,
           });
         }
@@ -166,14 +168,14 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
     },
 
     fetchTotalSupply: async () => {
-      // try {
-      //   const totalSupply = await get().groupAvatar?.getTotalSupply();
-      //   set({
-      //     totalSupply: totalSupply || BigInt(0),
-      //   });
-      // } catch (error) {
-      //   console.error('Error fetching total supply:', error);
-      // }
+      try {
+        const totalSupply = await get().groupAvatar?.getTotalSupply();
+        set({
+          totalSupply: totalSupply || BigInt(0),
+        });
+      } catch (error) {
+        console.error('Error fetching total supply:', error);
+      }
       set({ totalSupply: BigInt(0) });
     },
   })
