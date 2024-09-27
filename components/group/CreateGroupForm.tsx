@@ -84,7 +84,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
     e.preventDefault();
     if (!validName || !validSymbol) return;
     setIsLoading(true);
-    const newGroup = await createGroup(mintPolicy.name as Address, formData);
+    const newGroup = await createGroup(mintPolicy.address as Address, formData);
     if (newGroup) {
       console.log('newGroup from form', newGroup);
       setStep('executed');
