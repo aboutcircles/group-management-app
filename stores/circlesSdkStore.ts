@@ -52,26 +52,31 @@ export const useCirclesSdkStore = create<
     if (!safeProvider) return;
 
     const SafeEthersProvider = new ethers.BrowserProvider(safeProvider);
-
     const adapter = new BrowserProviderContractRunner();
-    get().setAdapterProvider(SafeEthersProvider);
+    adapter.provider = SafeEthersProvider; 
 
     await adapter.init();
 
     try {
+      await adapter.init();  // Initialize the adapter after setting the provider
+
+      // Initialize Circles SDK with the adapter
       const circlesSdk = new Sdk(chainConfigGnosis, adapter);
       const circlesRpc = new CirclesRpc(CIRCLES_RPC);
       const data = new CirclesData(circlesRpc);
+
       set({
         circles: circlesSdk,
         circlesData: data,
         safeSDK: sdk,
+        adapter: adapter, // Optionally store the adapter in Zustand state
       });
     } catch (error) {
       console.error('Failed to initialize Circles SDK:', error);
     }
   },
 
+  // Function to set adapter provider
   setAdapterProvider: (provider: ethers.BrowserProvider) => {
     const adapter = get().adapter;
     if (adapter) {
@@ -85,3 +90,4 @@ export const useCirclesSdkStore = create<
     set(initialState);
   },
 }));
+
