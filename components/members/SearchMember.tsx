@@ -75,7 +75,7 @@ export default function SearchMember() {
   };
 
   return (
-    <div className='w-full max-w-screen-sm'>
+    <div className='w-full flex flex-col items-center max-w-screen-sm'>
       <form
         onSubmit={handleSubmit}
         className='w-full flex flex-col gap-y-4 items-center'
@@ -103,7 +103,7 @@ export default function SearchMember() {
               )}
             </Button>
           </div>
-          <p className='text-xs text-accent h-4 pl-1'>
+          <p className='fixed text-xs text-accent h-4 pl-1 z-10'>
             {!validAddress && 'Invalid address'}
             {profileNotFound && 'Profile not found'}
           </p>
@@ -111,7 +111,7 @@ export default function SearchMember() {
       </form>
       {/* TODO: find a way to center this ProfilePreview */}
       {profile && (
-        <div className='w-full flex items-center justify-between pt-0'>
+        <div className='w-full flex items-center justify-between'>
           <ProfilePreview profile={profile} cleanup={handleCleanup} full />
         </div>
       )}
