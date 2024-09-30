@@ -78,3 +78,4 @@ export const useMulticallStore = create<MulticallStoreState & MulticallStoreActi
         });
     },
 }));
+
