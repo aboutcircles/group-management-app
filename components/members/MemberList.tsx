@@ -77,7 +77,7 @@ const MemberList = ({ members }: MemberListProps) => {
                 className='mr-2'
               />
               <p className='font-bold p-2 flex-1 text-center sm:text-left'>
-                Member List
+                Member List ({members?.length})
               </p>
               {flaggedMembers.length > 0 && (
                 <div className='flex flex-wrap gap-2 justify-around w-full sm:w-auto px-2'>
