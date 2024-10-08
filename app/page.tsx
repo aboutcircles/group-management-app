@@ -18,24 +18,8 @@ export default function Page() {
   const groupAvatar = useGroupStore((state) => state.groupAvatar);
   const isLoading = useGroupStore((state) => state.isLoading);
 
-  // useEffect(() => {
-  //   console.log(isLoading);
-  //   if (!address || !circles || isLoading) return;
-  //   if (
-  //     groupAvatar &&
-  //     address.toLowerCase() !== groupAvatar?.address.toLowerCase()
-  //   )
-  //     return;
-  //   if (!groupAvatar) {
-  //     router.push('/create');
-  //   } else {
-  //     router.push('/group');
-  //   }
-  // }, [address, router, groupAvatar, circles, isLoading]);
-
   if (isLoading && address) return <Loading />;
   if (!address) return <Fallback />;
-  // return <>{!address && <Fallback />}</>;
 
   if (!groupAvatar) return <RegisterGroup />;
   return <Group />;

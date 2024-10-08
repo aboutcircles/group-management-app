@@ -63,13 +63,13 @@ const MemberList = ({ members }: MemberListProps) => {
   };
 
   return (
-    <div className='w-full h-full flex flex-col justify-between'>
+    <div className='w-full h-full flex flex-col justify-between my-10'>
       {members && members.length === 0 ? (
         <p className='text-gray text-center px-2'>No members yet</p>
       ) : (
         <>
           <div className='flex flex-col h-5/6'>
-            <div className='flex items-center flex-wrap gap-2 p-2'>
+            {/* <div className='flex items-center flex-wrap gap-2 p-2'>
               <input
                 type='checkbox'
                 checked={flagAll}
@@ -96,7 +96,7 @@ const MemberList = ({ members }: MemberListProps) => {
                   </button>
                 </div>
               )}
-            </div>
+            </div> */}
             <ul className='w-full overflow-y-auto h-full'>
               {currentMembers?.map((member) => (
                 <li

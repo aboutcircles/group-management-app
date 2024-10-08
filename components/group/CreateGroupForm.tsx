@@ -12,6 +12,9 @@ import { mintPolicies } from '@/const';
 import { useGroupStore } from '@/stores/groupStore';
 import { Address } from 'viem';
 import { Step } from '@/types';
+import Button from '@/components/common/Button';
+import { HiCheck } from 'react-icons/hi';
+// import { Button } from 'flowbite-react';
 
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -154,25 +157,14 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         <Label className='font-medium'>Base Mint Policy</Label>
         <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
       </Field>
-      <button
+      <Button
         type='submit'
         disabled={!validName || !validSymbol}
-        className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4'
+        icon={<HiCheck className='w-5 h-5 mr-1' />}
+        loading={isLoading}
       >
-        {isLoading ? (
-          <>
-            <div className='mr-2'>
-              <Loader />
-            </div>
-            Processing
-          </>
-        ) : (
-          <>
-            Create
-            <ArrowRightIcon className='h-4 w-4 ml-1' />
-          </>
-        )}
-      </button>
+        Create
+      </Button>
     </form>
   );
 }

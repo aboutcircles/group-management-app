@@ -39,10 +39,17 @@ const SearchInput = ({
         className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:text-gray-300 transition duration-300 ease-in-out'
         onClick={handleCleanup}
       >
-        {address ? <XMarkIcon className='h-5 w-5' /> : <MagnifyingGlassIcon className='h-5 w-5' />}
+        {address ? (
+          <XMarkIcon className='h-5 w-5' />
+        ) : (
+          <MagnifyingGlassIcon className='h-5 w-5' />
+        )}
       </Button>
     </div>
-    <p className='fixed text-xs text-accent h-4 pl-1 z-10' aria-live="assertive">
+    <p
+      className='fixed text-xs text-accent h-4 pl-1 z-10'
+      aria-live='assertive'
+    >
       {!validAddress && 'Invalid address'}
       {profileNotFound && 'Profile not found'}
     </p>
@@ -67,31 +74,28 @@ export default function SearchMember() {
     return true;
   };
 
-  const debouncedFetchAddress = useDebouncedCallback(
-    async (addr: string) => {
-      console.group('address', addr);
-      if (!validateAddress(addr)) return;
+  const debouncedFetchAddress = useDebouncedCallback(async (addr: string) => {
+    console.group('address', addr);
+    if (!validateAddress(addr)) return;
 
-      const existingMember = members?.find(
-        (member) => member.address.toLowerCase() === addr.toLowerCase()
-      );
+    const existingMember = members?.find(
+      (member) => member.address.toLowerCase() === addr.toLowerCase()
+    );
 
-      if (existingMember) {
-        setProfile(existingMember);
-        return;
-      }
+    if (existingMember) {
+      setProfile(existingMember);
+      return;
+    }
 
-      const profileInfo = await getAvatarProfileByAddress(addr);
+    const profileInfo = await getAvatarProfileByAddress(addr);
 
-      if (!profileInfo) {
-        setProfileNotFound(true);
-        setProfile(null);
-      } else {
-        setProfile(profileInfo);
-      }
-    },
-    300
-  );
+    if (!profileInfo) {
+      setProfileNotFound(true);
+      setProfile(null);
+    } else {
+      setProfile(profileInfo);
+    }
+  }, 300);
 
   useEffect(() => {
     setProfile(null);

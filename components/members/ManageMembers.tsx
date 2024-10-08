@@ -44,7 +44,7 @@ export default function ManageMembers() {
   return (
     <div className='w-full h-full flex flex-col items-center justify-between'>
       <div className='flex flex-col w-full h-1/4'>
-        <div className='text-sm font-bold my-4 px-4 text-center sm:text-left w-full'>
+        <div className='text-sm my-4 px-4 text-center sm:text-left w-full'>
           Add/remove member by address
         </div>
         <div className='flex w-full justify-center gap-x-2.5 px-4 flex-wrap-reverse gap-2'>

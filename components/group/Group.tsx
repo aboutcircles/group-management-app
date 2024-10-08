@@ -1,33 +1,70 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import GroupInfo from '@/components/group/GroupInfo';
 import ManageMembers from '@/components/members/ManageMembers';
 import TxHistory from '@/components/txHistory/TxHistory';
+import { useState } from 'react';
+
+interface TabData {
+  id: string;
+  label: string;
+  content: React.ReactNode;
+}
+
+const tabsData: TabData[] = [
+  {
+    id: 'members',
+    label: 'Members',
+    content: <ManageMembers />,
+  },
+  {
+    id: 'transactions',
+    label: 'Transactions',
+    content: <TxHistory />,
+  },
+];
 
 export default function Group() {
+  const [activeTab, setActiveTab] = useState(tabsData[0].id);
   return (
-    <TabGroup className='h-[500px] w-full'>
-      <TabList className='flex justify-stretch h-[10%]'>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-words transition duration-300 ease-in-out'>
-          Group info
-        </Tab>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary/95 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-all transition duration-300 ease-in-out'>
-          Members
-        </Tab>
-        <Tab className='outline-none w-1/3 font-bold bg-secondary/90 text-white data-[selected]:bg-transparent data-[selected]:text-accent data-[hover]:bg-accent data-[hover]:text-white p-2 break-all transition duration-300 ease-in-out'>
-          Transactions
-        </Tab>
-      </TabList>
-      <TabPanels className='h-[90%]'>
-        <TabPanel className='h-full'>
-          <GroupInfo />
-        </TabPanel>
-        <TabPanel className='h-full'>
-          <ManageMembers />
-        </TabPanel>
-        <TabPanel className='h-full'>
-          <TxHistory />
-        </TabPanel>
-      </TabPanels>
-    </TabGroup>
+    <div className='flex flex-col md:flex-row gap-4'>
+      <div className='basis-[calc(33.333%-2.5px)] border-1 border-gray-200 dark:border-gray-700 rounded-lg py-10 px-5'>
+        <GroupInfo />
+      </div>
+      <div className='basis-[calc(66.667%-2.5px)] border-1 border-gray-200 dark:border-gray-700 rounded-lg py-10 px-5'>
+        <div className=' flex justify-center text-gray-500 border-gray-200 dark:border-gray-700 mb-10'>
+          <ul
+            className='flex -mb-px text-sm font-medium text-center'
+            role='tablist'
+          >
+            {tabsData.map((tab) => (
+              <li key={tab.id} className='' role='presentation'>
+                <button
+                  className={`inline-block p-4 px-5 sm:px-20 border-b-2 rounded-t-lg ${
+                    activeTab === tab.id
+                      ? 'text-primary border-primary'
+                      : 'hover:text-primary hover:border-gray-300 dark:hover:text-gray-300'
+                  }`}
+                  onClick={() => setActiveTab(tab.id)}
+                  role='tab'
+                  aria-controls={tab.id}
+                  aria-selected={activeTab === tab.id}
+                >
+                  {tab.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {tabsData.map((tab) => (
+          <div
+            key={tab.id}
+            className={`text-gray-900 ${activeTab === tab.id ? '' : 'hidden'}`}
+            role='tabpanel'
+            aria-labelledby={`${tab.id}-tab`}
+          >
+            {tab.content}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
