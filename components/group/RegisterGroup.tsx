@@ -7,15 +7,17 @@ import {
 import CreateGroupForm from '@/components/group/CreateGroupForm';
 import Link from 'next/link';
 import { Step } from '@/types';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
-export default function RegisterGroup({
-  step,
-  setStep,
-}: {
-  step: Step;
-  setStep: Dispatch<SetStateAction<Step>>;
+export default function RegisterGroup({}: // step,
+// setStep,
+{
+  // step: Step;
+  // setStep: Dispatch<SetStateAction<Step>>;
 }) {
+  const [step, setStep] = useState<Step>('start');
+  // const [isPageReady, setIsPageReady] = useState(false);
+
   return (
     <div className='w-full h-full flex flex-col items-center justify-center gap-y-8 md:gap-y-4 p-4 md:p-8'>
       {step === 'start' ? (
