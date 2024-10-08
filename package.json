@@ -24,6 +24,8 @@
     "@types/papaparse": "^5.3.14",
     "@wagmi/core": "^2.13.4",
     "ethers": "^6.13.2",
+    "flowbite-react": "^0.10.2",
+    "flowbite-react-icons": "^1.0.8",
     "framer-motion": "^11.7.0",
     "next": "14.2.5",
     "npm": "^10.8.3",
@@ -43,9 +45,10 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "postcss": "^8",
+    "postcss": "^8.4.47",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
