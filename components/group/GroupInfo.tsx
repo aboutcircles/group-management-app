@@ -1,14 +1,14 @@
 import { useState } from 'react';
-// import { Field, Textarea, Input } from '@headlessui/react';
 import ImgUpload from './FileUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useGroupStore } from '@/stores/groupStore';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { Group } from '@/types';
-import Loader from './Loader';
 import { ethers } from 'ethers';
 import { Label, TextInput, Textarea } from 'flowbite-react';
-import Button from '../common/Button';
+import { HiQuestionMarkCircle } from 'react-icons/hi';
+import Button from '@/components/common/Button';
+import { Tooltip } from '@/components/common/Tooltip';
 
 export default function GroupInfo() {
   const groupInfo = useGroupStore((state) => state.groupInfo);
@@ -130,8 +130,12 @@ export default function GroupInfo() {
       </div>
 
       <div className='w-full flex flex-col gap-2'>
-        <Label htmlFor='message' className='dark:text-white text-sm'>
+        <Label
+          htmlFor='message'
+          className='dark:text-white text-sm flex items-center gap-1'
+        >
           Description
+          <Tooltip content='A brief description of your group' />
         </Label>
         <Textarea
           id='description'
@@ -145,8 +149,14 @@ export default function GroupInfo() {
       </div>
 
       <div className='w-full flex flex-col gap-2'>
-        <p className='font-medium text-base text-gray-400'>Total supply</p>
-        <p className='flex text-black'>
+        <Label
+          htmlFor='totalSupply'
+          className='dark:text-white text-sm flex items-center gap-1'
+        >
+          Total supply
+          <Tooltip content='Total supply of tokens in your group' />
+        </Label>
+        <p className='flex text-black' id='totalSupply'>
           <span className='text-2xl font-bold'>{groupInfo?.symbol}</span>
           <span className='ml-2 text-2xl overflow-hidden text-ellipsis'>
             {ethers.formatEther(totalSupply || BigInt(0))}
