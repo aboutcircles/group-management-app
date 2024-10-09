@@ -87,7 +87,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
         type='button'
         // className='flex gap-x-1 items-center bg-accent rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
         handleClick={() => setIsOpen(true)}
-        icon={<PlusIcon className='w-5 h-5 mr-1' />}
+        icon={<PlusIcon className='w-5 h-5' />}
       >
         {/* <PlusIcon width={14} height={14} className='stroke-white' /> */}
         Import
@@ -151,7 +151,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 isConfirmed ? () => closeModal() : handleTrustAddresses
               }
               loading={isLoading}
-              icon={<UserPlusIcon className='h-4 w-4 mr-1' />}
+              icon={<UserPlusIcon className='h-5 w-5' />}
             >
               {isLoading ? (
                 <>
@@ -162,19 +162,19 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 </>
               ) : isConfirmed ? (
                 <>
-                  <CheckIcon className='h-4 w-4 mr-1' />
+                  <CheckIcon className='h-5 w-5' />
                   Confirmed
                 </>
               ) : (
                 <>
                   {selectedIndex === 0 ? (
                     <>
-                      <UserPlusIcon className='h-4 w-4 mr-1' />
+                      <UserPlusIcon className='h-5 w-5' />
                       Trust and Invite
                     </>
                   ) : (
                     <>
-                      <UserMinusIcon className='h-4 w-4 mr-1' />
+                      <UserMinusIcon className='h-5 w-5' />
                       Untrust
                     </>
                   )}

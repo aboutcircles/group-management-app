@@ -146,7 +146,7 @@ export default function GroupInfo() {
 
       <div className='w-full flex flex-col gap-2'>
         <p className='font-medium text-base text-gray-400'>Total supply</p>
-        <p className='flex'>
+        <p className='flex text-black'>
           <span className='text-2xl font-bold'>{groupInfo?.symbol}</span>
           <span className='ml-2 text-2xl overflow-hidden text-ellipsis'>
             {ethers.formatEther(totalSupply || BigInt(0))}
@@ -162,7 +162,7 @@ export default function GroupInfo() {
         type='submit'
         disabled={!isChanged}
         loading={isLoading}
-        icon={<CheckIcon className='h-5 w-5 mr-2' />}
+        icon={<CheckIcon className='h-5 w-5' />}
       >
         Save Changes
       </Button>

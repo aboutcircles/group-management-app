@@ -1,4 +1,5 @@
 import { Button as FlowbiteButton } from 'flowbite-react';
+import Loader from '../group/Loader';
 
 export default function Button({
   type,
@@ -20,10 +21,10 @@ export default function Button({
       type={type}
       className='bg-primary flex items-center justify-center font-medium'
       disabled={disabled}
-      isProcessing={loading}
+      // isProcessing={loading}
       onClick={handleClick}
     >
-      {icon && icon}
+      <span className='mr-2'>{loading ? <Loader /> : icon}</span>
       {children}
     </FlowbiteButton>
   );
