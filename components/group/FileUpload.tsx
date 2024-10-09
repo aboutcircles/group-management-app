@@ -71,9 +71,13 @@ const FileUpload: React.FC<AvatarUploadProps> = ({
     <div className='flex flex-col items-center myclass'>
       <div
         {...getRootProps()}
-        className={`w-28 h-28 bg-black/5 my-2 text-black/30 rounded-full cursor-pointer text-center flex items-center justify-center text-xs shadow-inner hover:animate-pulse ${
+        className={`w-20 h-20 sm:w-48 sm:h-48 bg-black/5 my-2 text-black/30 rounded-full cursor-pointer text-center flex items-center justify-center text-xs shadow-inner hover:animate-pulse ${
           isDragging ? 'border-accent' : 'border-zinc'
-        } ${preview ? 'border-2 border-solid border-secondary/50' : 'border border-dashed'}`}
+        } ${
+          preview
+            ? 'border-2 border-solid border-secondary/50'
+            : 'border border-dashed'
+        }`}
       >
         <input {...getInputProps()} />
         {preview === 'csv' ? (
@@ -101,12 +105,12 @@ const FileUpload: React.FC<AvatarUploadProps> = ({
         )}
       </div>
 
-      {preview ? (
+      {/* {preview ? (
         <ArrowPathRoundedSquareIcon
           className='w-5 h-5 text-zinc cursor-pointer'
           onClick={handleIconClick}
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

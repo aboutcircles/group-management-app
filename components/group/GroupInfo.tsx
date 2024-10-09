@@ -97,9 +97,9 @@ export default function GroupInfo() {
   return (
     <form
       onSubmit={handleSubmit}
-      className='w-full h-full p-4 flex flex-col items-center justify-between gap-y-4'
+      className='w-full h-full flex flex-col items-center justify-between gap-y-4'
     >
-      <div className='flex w-full gap-x-2'>
+      <div className='flex flex-row sm:flex-col w-full gap-2 items-center'>
         <Field className='flex flex-col justify-center'>
           <ImgUpload
             onFileSelected={handleFileSelected}
@@ -107,46 +107,48 @@ export default function GroupInfo() {
             imgUrl={groupInfo?.previewImageUrl}
           />
         </Field>
-        <div className='flex flex-1 flex-col gap-y-2 pl-4'>
+        <div className='flex flex-col'>
+          <p className='w-full text-xs text-gray-500 text-left break-all'>
+            {groupInfo?.group
+              ? truncateAddress(groupInfo.group)
+              : 'No group address'}
+          </p>
           <Field className='w-full'>
-            <p className='text-xs text-gray mx-3 break-all'>
-              {groupInfo?.group}
-            </p>
             <Textarea
               name='name'
               value={formData.name}
               placeholder='Group Name'
-              className='block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+              className='text-left block w-full rounded-lg border-none bg-transparent py-1.5 px-0 text-xl sm:text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
               onChange={handleChange}
               rows={1}
             />
           </Field>
-
-          <Field className='w-full flex-1'>
-            <Textarea
-              name='description'
-              value={formData.description}
-              placeholder='Group Description...'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
-              onChange={handleChange}
-            />
-          </Field>
-          <div className=''>
-            <p className='text-xs text-gray mx-3'>Total supply</p>
-            <p className='mx-3'>
-              <span className='font-bold'>{groupInfo?.symbol}</span>
-              <span className='ml-2'>
-                {ethers.formatEther(totalSupply || BigInt(0))}
-              </span>
-            </p>
-          </div>
-          {groupInfo?.mint && (
-            <p className='text-xs text-gray mx-3'>
-              Mint policy: {truncateAddress(groupInfo.mint)}
-            </p>
-          )}
         </div>
       </div>
+
+      <Field className='w-full flex-1'>
+        <Textarea
+          name='description'
+          value={formData.description}
+          placeholder='Group Description...'
+          className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+          onChange={handleChange}
+        />
+      </Field>
+      <div className=''>
+        <p className='text-xs text-gray mx-3'>Total supply</p>
+        <p className='mx-3'>
+          <span className='font-bold'>{groupInfo?.symbol}</span>
+          <span className='ml-2'>
+            {ethers.formatEther(totalSupply || BigInt(0))}
+          </span>
+        </p>
+      </div>
+      {groupInfo?.mint && (
+        <p className='text-xs text-gray mx-3'>
+          Mint policy: {truncateAddress(groupInfo.mint)}
+        </p>
+      )}
       <button
         type='submit'
         className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4 shadow-md'
