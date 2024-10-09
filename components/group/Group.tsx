@@ -25,12 +25,12 @@ const tabsData: TabData[] = [
 export default function Group() {
   const [activeTab, setActiveTab] = useState(tabsData[0].id);
   return (
-    <div className='flex flex-col md:flex-row gap-4'>
+    <div className='w-full h-[90%] flex flex-col md:flex-row gap-4'>
       <section className='basis-[calc(33.333%-2.5px)] border-1 border-gray-200 dark:border-gray-700 rounded-lg py-5 sm:py-10 px-5'>
         <GroupInfo />
       </section>
       <section className='basis-[calc(66.667%-2.5px)] border-1 border-gray-200 dark:border-gray-700 rounded-lg py-5 sm:py-10 px-5'>
-        <div className=' flex justify-center text-gray-500 border-gray-200 dark:border-gray-700 mb-5 sm:mb-10'>
+        <div className='flex justify-center text-gray-500 border-gray-200 dark:border-gray-700 mb-5 sm:mb-10'>
           <ul
             className='flex -mb-px text-sm font-medium text-center'
             role='tablist'
@@ -57,7 +57,7 @@ export default function Group() {
         {tabsData.map((tab) => (
           <div
             key={tab.id}
-            className={`text-gray-900 ${activeTab === tab.id ? '' : 'hidden'}`}
+            className={`h-full text-gray-900 ${activeTab === tab.id ? '' : 'hidden'}`}
             role='tabpanel'
             aria-labelledby={`${tab.id}-tab`}
           >

@@ -28,15 +28,15 @@ export default function RootLayout({
             draggable={false}
             position='bottom-right'
           />
-          <main className='min-h-screen bg-white'>
-            <div className='max-w-7xl min-h-screen mx-auto py-10 px-5'>
-              <div className='flex gap-2 items-center justify-between sm:justify-normal mb-5 sm:mb-10'>
+          <main className='h-screen bg-white'>
+            <div className='max-w-7xl min-h-screen h-full mx-auto px-5'>
+              <div className='flex gap-2 items-end justify-between sm:justify-normal h-[10%]'>
                 <Image src='/logo.svg' alt='logo' width={120} height={100} />
-                <span className='text-xl sm:text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-10 sm:ml-15'>
+                <span className='text-xl sm:text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-8 sm:ml-15'>
                   Groups Dashboard
                 </span>
               </div>
-              {children}
+              <div className='flex w-full justify-center items-center h-[90%]'>{children}</div>
               <EventToastNotifier />
             </div>
           </main>

@@ -45,9 +45,9 @@ export default function TxHistory() {
 
   return (
     <div className='flex flex-col justify-between h-full'>
-      <div className='flex w-full h-1/4 p-2 font-bold'>Transaction history:</div>
-      <div className='flex flex-col w-full h-3/4'>
-        <div className='grid grid-cols-8 gap-0 items-center overflow-y-scroll h-5/6'>
+      <div className='flex w-full p-2 font-bold'>Transaction history:</div>
+      <div className='flex flex-col w-full'>
+        <div className='grid grid-cols-8 gap-0 items-center overflow-y-auto h-5/6'>
           {formattedEvents.map((groupedEvents) => (
             <React.Fragment key={groupedEvents[0].date}>
               <div className='col-span-8 mt-5 mb-2 mx-4 text-accent font-bold'>
@@ -76,7 +76,7 @@ export default function TxHistory() {
           ))}
         </div>
 
-        <div className='flex justify-end items-center px-2 h-1/6'>
+        {/* <div className='flex justify-end items-center px-2 h-1/6'>
           <Pagination
             isCompact
             showControls
@@ -87,7 +87,7 @@ export default function TxHistory() {
             total={totalPages}
             onChange={(page_) => setCurrentPage(page_)}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
