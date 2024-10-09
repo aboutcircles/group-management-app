@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Field, Textarea } from '@headlessui/react';
+// import { Field, Textarea, Input } from '@headlessui/react';
 import ImgUpload from './FileUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useGroupStore } from '@/stores/groupStore';
@@ -7,6 +7,8 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { Group } from '@/types';
 import Loader from './Loader';
 import { ethers } from 'ethers';
+import { Label, TextInput, Textarea } from 'flowbite-react';
+import Button from '../common/Button';
 
 export default function GroupInfo() {
   const groupInfo = useGroupStore((state) => state.groupInfo);
@@ -95,61 +97,76 @@ export default function GroupInfo() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='w-full h-full flex flex-col items-center justify-between gap-y-4'
-    >
+    <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-5'>
       <div className='flex flex-row sm:flex-col w-full gap-2 items-center'>
-        <Field className='flex flex-col justify-center'>
+        <div className='flex flex-col justify-center'>
           <ImgUpload
             onFileSelected={handleFileSelected}
             fileType='image'
             imgUrl={groupInfo?.previewImageUrl}
           />
-        </Field>
-        <div className='flex flex-col'>
-          <p className='w-full text-xs text-gray-500 text-left break-all'>
+        </div>
+        <div className='flex flex-col w-auto sm:w-full'>
+          <p className='w-full text-xs text-gray-500 text-left break-all mb-2 sm:mb-5'>
             {groupInfo?.group
               ? truncateAddress(groupInfo.group)
               : 'No group address'}
           </p>
-          <Field className='w-full'>
-            <Textarea
-              name='name'
-              value={formData.name}
-              placeholder='Group Name'
-              className='text-left block w-full rounded-lg border-none bg-transparent py-1.5 px-0 text-xl sm:text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
-              onChange={handleChange}
-              rows={1}
-            />
-          </Field>
+          <TextInput
+            name='name'
+            value={formData.name}
+            placeholder='Group Name'
+            className='text-2xl font-bold'
+            onChange={handleChange}
+            theme={{
+              field: {
+                input: {
+                  base: '!bg-white !px-0 !text-2xl !font-bold border-none focus:ring-0 focus:border w-full !py-0',
+                },
+              },
+            }}
+          />
         </div>
       </div>
 
-      <Field className='w-full flex-1'>
+      <div className='w-full flex flex-col gap-2'>
+        <Label htmlFor='message' className='dark:text-white text-sm'>
+          Description
+        </Label>
         <Textarea
+          id='description'
           name='description'
           value={formData.description}
-          placeholder='Group Description...'
-          className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
+          placeholder='Description goes here...'
+          rows={6}
+          className='[&_input]:p-3'
           onChange={handleChange}
         />
-      </Field>
-      <div className=''>
-        <p className='text-xs text-gray mx-3'>Total supply</p>
-        <p className='mx-3'>
-          <span className='font-bold'>{groupInfo?.symbol}</span>
-          <span className='ml-2'>
+      </div>
+
+      <div className='w-full flex flex-col gap-2'>
+        <p className='font-medium text-base text-gray-400'>Total supply</p>
+        <p className='flex'>
+          <span className='text-2xl font-bold'>{groupInfo?.symbol}</span>
+          <span className='ml-2 text-2xl overflow-hidden text-ellipsis'>
             {ethers.formatEther(totalSupply || BigInt(0))}
           </span>
         </p>
       </div>
       {groupInfo?.mint && (
-        <p className='text-xs text-gray mx-3'>
+        <p className='font-medium text-base text-gray-400 w-full'>
           Mint policy: {truncateAddress(groupInfo.mint)}
         </p>
       )}
-      <button
+      <Button
+        type='submit'
+        disabled={!isChanged}
+        loading={isLoading}
+        icon={<CheckIcon className='h-5 w-5 mr-2' />}
+      >
+        Save Changes
+      </Button>
+      {/* <button
         type='submit'
         className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4 shadow-md'
         disabled={!isChanged}
@@ -167,7 +184,7 @@ export default function GroupInfo() {
             <CheckIcon className='h-5 w-5 ml-1' />
           </>
         )}
-      </button>
+      </button> */}
     </form>
   );
 }

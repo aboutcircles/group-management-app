@@ -18,7 +18,7 @@ export default function Button({
   return (
     <FlowbiteButton
       type={type}
-      className='bg-primary flex items-center justify-center m-2 font-medium'
+      className='bg-primary flex items-center justify-center font-medium'
       disabled={disabled}
       isProcessing={loading}
       onClick={handleClick}
