@@ -3,7 +3,7 @@ import { HiQuestionMarkCircle } from 'react-icons/hi';
 
 export const Tooltip = ({
   content,
-  placement = 'top',
+  placement = 'top', // placement: top, right, bottom, left
 }: {
   content: string;
   placement?: TooltipProps['placement'];
