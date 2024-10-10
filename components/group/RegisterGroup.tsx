@@ -30,7 +30,7 @@ export default function RegisterGroup({}: // step,
           </p>
           <Button
             type='button'
-            className='flex items-center justify-center font-medium bg-accent'
+            className='flex items-center justify-center font-medium bg-accent mb-20'
             onClick={() => setStep('form')}
           >
             <span className='mr-2'>
