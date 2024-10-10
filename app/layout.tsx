@@ -8,6 +8,8 @@ import { ToastContainer } from 'react-toastify';
 import EventToastNotifier from '@/components/layout/EventToastNotifier';
 const font = DM_Sans({ subsets: ['latin'] });
 import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
 export const metadata: Metadata = {
   title: 'Circles Management Group',
@@ -28,15 +30,20 @@ export default function RootLayout({
             draggable={false}
             position='bottom-right'
           />
-          <main className='min-h-screen bg-white'>
-            <div className='max-w-7xl min-h-screen mx-auto py-10 px-5'>
-              <div className='flex gap-2 items-center justify-between sm:justify-normal mb-5 sm:mb-10'>
-                <Image src='/logo.svg' alt='logo' width={120} height={100} />
-                <span className='text-xl sm:text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-10 sm:ml-15'>
-                  Groups Dashboard
-                </span>
+          <main className='h-screen bg-white'>
+            <div className='max-w-7xl min-h-screen h-full mx-auto px-5'>
+              <div className='flex items-end justify-between h-[10%]'>
+                <div className='flex gapx-2'>
+                  <Image src='/logo.svg' alt='logo' width={120} height={100} />
+                  <span className='text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-8 sm:ml-15'>
+                    Groups Dashboard
+                  </span>
+                </div>
+                <Link className="hidden md:flex items-center font-semibold text-primary" href={'https://docs.aboutcircles.com/'} target='_blank'>Documentation<ArrowTopRightOnSquareIcon className='h-4 w-4 ml-2' /></Link>
               </div>
-              {children}
+              <div className='flex w-full justify-center items-center h-[90%]'>
+                {children}
+              </div>
               <EventToastNotifier />
             </div>
           </main>
