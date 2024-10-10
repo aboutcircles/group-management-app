@@ -153,7 +153,7 @@ export default function ManageMembers() {
             </div>
           </>
         )}
-        <div className='w-full sm:w-auto flex flex-row gap-2'>
+        <div className='w-full sm:w-auto flex flex-row gap-2 justify-center'>
           <BulkTrust members={members} />
           <Button
             type='button'
