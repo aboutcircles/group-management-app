@@ -1,9 +1,8 @@
 import {
   ArrowRightIcon,
   ArrowUturnLeftIcon,
-  CheckIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { HiCheck, HiOutlineX } from 'react-icons/hi';
 import CreateGroupForm from '@/components/group/CreateGroupForm';
 import Link from 'next/link';
 import { Step } from '@/types';
@@ -39,8 +38,7 @@ export default function RegisterGroup({}: // step,
       ) : step === 'executed' ? (
         <div className='w-full flex flex-col items-center'>
           <div className='flex items-center'>
-            <CheckIcon className='h-5 w-5' /> Your group was sucessfully created
-            !
+            <HiCheck className='h-5 w-5' /> Your group was sucessfully created !
           </div>
           <Link
             className='text-accent flex items-center px-4 py-1 rounded-full mt-4 text-base font-semibold'
@@ -52,7 +50,7 @@ export default function RegisterGroup({}: // step,
       ) : step === 'error' ? (
         <div className='w-full flex flex-col items-center'>
           <div className='flex items-center'>
-            <XMarkIcon className='h-5 w-5' /> Something went wrong with your
+            <HiOutlineX className='h-5 w-5' /> Something went wrong with your
             transaction, try again or contact the support
             <Link
               href='https://www.aboutcircles.com/community'

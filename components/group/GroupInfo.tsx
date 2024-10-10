@@ -2,7 +2,8 @@ import { useState } from 'react';
 import ImgUpload from './FileUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useGroupStore } from '@/stores/groupStore';
-import { CheckIcon } from '@heroicons/react/24/outline';
+// import { CheckIcon } from '@heroicons/react/24/outline';
+import { HiCheck } from 'react-icons/hi';
 import { Group } from '@/types';
 import { ethers } from 'ethers';
 import { Label, TextInput, Textarea } from 'flowbite-react';
@@ -179,29 +180,10 @@ export default function GroupInfo() {
         type='submit'
         disabled={!isChanged}
         loading={isLoading}
-        icon={<CheckIcon className='h-5 w-5' />}
+        icon={<HiCheck className='h-5 w-5' />}
       >
         Save Changes
       </Button>
-      {/* <button
-        type='submit'
-        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4 shadow-md'
-        disabled={!isChanged}
-      >
-        {isLoading ? (
-          <>
-            <div className='mr-2'>
-              <Loader />
-            </div>
-            Processing
-          </>
-        ) : (
-          <>
-            Save Changes
-            <CheckIcon className='h-5 w-5 ml-1' />
-          </>
-        )}
-      </button> */}
     </form>
   );
 }

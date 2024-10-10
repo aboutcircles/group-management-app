@@ -1,12 +1,11 @@
 'use client';
 
 import {
-  CheckIcon,
   PlusIcon,
   UserPlusIcon,
   UserMinusIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { HiCheck, HiOutlineX } from 'react-icons/hi';
 import { Dialog, DialogPanel, Tab, TabGroup, TabList } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import FileUpload from '../group/FileUpload';
@@ -121,7 +120,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
               </TabGroup>
 
               <button className='rounded-full p-1.5 hover:bg-black/10 transition duration-300 ease-in-out'>
-                <XMarkIcon
+                <HiOutlineX
                   width={20}
                   height={20}
                   onClick={() => closeModal()}
@@ -162,7 +161,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 </>
               ) : isConfirmed ? (
                 <>
-                  <CheckIcon className='h-5 w-5' />
+                  <HiCheck className='h-5 w-5' />
                   Confirmed
                 </>
               ) : (

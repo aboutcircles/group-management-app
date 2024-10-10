@@ -6,9 +6,8 @@ import {
   ArrowUpRightIcon,
   ArrowDownLeftIcon,
   ArrowsRightLeftIcon,
-  PlusIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { HiOutlinePlusSm, HiOutlineX } from 'react-icons/hi';
 import { Tooltip } from '@/components/common/Tooltip';
 import { IconButton } from '@/components/common/IconButton';
 import { Button } from '@/components/common/Button';
@@ -104,9 +103,9 @@ export default function ProfilePreview({
           icon={
             profile.relation === RelationType.MutuallyTrusts ||
             profile.relation === RelationType.Trusts ? (
-              <XMarkIcon className='h-5 w-5' />
+              <HiOutlineX className='h-5 w-5' />
             ) : (
-              <PlusIcon className='h-5 w-5' />
+              <HiOutlinePlusSm className='h-5 w-5' />
             )
           }
           handleClick={() =>
@@ -129,9 +128,9 @@ export default function ProfilePreview({
           icon={
             profile.relation === RelationType.MutuallyTrusts ||
             profile.relation === RelationType.Trusts ? (
-              <XMarkIcon className='h-5 w-5' />
+              <HiOutlineX className='h-5 w-5' />
             ) : (
-              <PlusIcon className='h-5 w-5' />
+              <HiOutlinePlusSm className='h-5 w-5' />
             )
           }
           handleClick={() =>
