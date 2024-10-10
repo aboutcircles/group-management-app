@@ -78,8 +78,8 @@ const MemberList = ({ members }: MemberListProps) => {
                 <Button
                   type='button'
                   handleClick={() => handleTrustMultiple(false)}
-                  loading={isLoading}
-                  disabled={isLoading}
+                  loading={isLoading || isTrusting === true}
+                  disabled={isLoading || isTrusting === true}
                   icon={<XMarkIcon className='h-5 w-5 stroke-white' />}
                 >
                   Untrust {flaggedMembers.length}{' '}

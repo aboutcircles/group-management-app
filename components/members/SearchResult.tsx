@@ -15,7 +15,6 @@ export const SearchResult: React.FC<SearchResultProps> = ({
   style = 'light',
   onClose,
 }) => {
-  // const [isVisible, setIsVisible] = useState(true);
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,7 +23,6 @@ export const SearchResult: React.FC<SearchResultProps> = ({
         resultRef.current &&
         !resultRef.current.contains(event.target as Node)
       ) {
-        // setIsVisible(false);
         onClose();
       }
     };
@@ -53,12 +51,12 @@ export const SearchResult: React.FC<SearchResultProps> = ({
         visible opacity-100'
       `}
       >
-        <div className='relative z-20 flex flex-col gap-2 items-center pt-5'>
-          <ProfilePreview profile={profile} full />
+        <div className='relative z-20 flex flex-col gap-2 items-center py-5'>
+          <ProfilePreview profile={profile} full cleanup={onClose} />
           <Button
             color='gray'
             onClick={onClose}
-            className='mt-5 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-primary-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:focus:ring-gray-600 sm:w-auto [&>span]:text-sm hover:[&>span]:text-gray-900'
+            className='mt-0 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-primary-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:focus:ring-gray-600 sm:w-auto [&>span]:text-sm hover:[&>span]:text-gray-900'
           >
             <HiX className='-ml-1 mr-1 h-5 w-5' />
             Discard
