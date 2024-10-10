@@ -1,18 +1,15 @@
 'use client';
 
-import MemberList from '@/components/members/MemberList';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMembersStore } from '@/stores/membersStore';
-import Loading from '@/components/layout/Loading';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import Papa from 'papaparse';
 import BulkTrust from '@/components/members/BulkTrust';
 import { Label, TextInput } from 'flowbite-react';
-import Button from '@/components/common/Button';
+import { Button } from '@/components/common/Button';
 import { ProfileWithAddress } from '@/types';
 import useProfiles from '@/hooks/useProfiles';
 import { SearchResult } from '@/components/members/SearchResult';
-import { useDebouncedCallback } from 'use-debounce';
 import { isAddress } from 'viem';
 
 export default function ManageMembers() {
@@ -33,57 +30,42 @@ export default function ManageMembers() {
     }
   }, [fetchMembers, isFetched]);
 
-  const handleChangeSearch = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setAddress(event.target.value);
-      if (profileNotFound) {
-        setProfileNotFound(false);
-      }
-    },
-    [profileNotFound]
-  );
-
-  const validateAddress = (addr: string) => {
-    if (!isAddress(addr)) {
-      setValidAddress(false);
-      return false;
-    }
-    setValidAddress(true);
-    return true;
-  };
-
-  const debouncedFetchAddress = useDebouncedCallback(async (addr: string) => {
-    if (!validateAddress(addr)) return;
-
-    const existingMember = members?.find(
-      (member) => member.address.toLowerCase() === addr.toLowerCase()
-    );
-
-    if (existingMember) {
-      setProfile(existingMember);
-      return;
-    }
-
-    const profileInfo = await getAvatarProfileByAddress(addr);
-
-    if (!profileInfo) {
-      setProfileNotFound(true);
-      setProfile(null);
-    } else {
-      setProfile(profileInfo);
-    }
-  }, 300);
-
-  useEffect(() => {
-    setProfile(null);
-    if (address !== '') {
-      debouncedFetchAddress(address);
-    }
-    if (address === '') {
+  const handleChangeSearch = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setAddress(event.target.value);
+    if (event.target.value === '') {
       setValidAddress(true);
       setProfileNotFound(false);
+      setProfile(null);
+      return;
     }
-  }, [address, debouncedFetchAddress, getAvatarProfileByAddress, members]);
+    if (isAddress(event.target.value)) {
+      setValidAddress(true);
+      const addr = event.target.value;
+      const existingMember = members?.find(
+        (member) => member.address.toLowerCase() === addr.toLowerCase()
+      );
+
+      if (existingMember) {
+        setProfile(existingMember);
+        return;
+      }
+
+      const profileInfo = await getAvatarProfileByAddress(addr);
+
+      if (!profileInfo) {
+        setProfileNotFound(true);
+        setProfile(null);
+      } else {
+        setProfile(profileInfo);
+        setProfileNotFound(false);
+      }
+    } else {
+      setValidAddress(false);
+      setProfileNotFound(false);
+    }
+  };
 
   const handleExportCSV = () => {
     if (!members || members.length === 0) {
@@ -105,8 +87,15 @@ export default function ManageMembers() {
     document.body.removeChild(link);
   };
 
+  const handleClose = () => {
+    setAddress('');
+    setValidAddress(true);
+    setProfileNotFound(false);
+    setProfile(null);
+  };
+
   return (
-    <div className='w-full h-full flex flex-col items-center justify-between'>
+    <div className='w-full flex flex-col items-center'>
       <Label
         htmlFor='address'
         className='text-sm my-4 px-4 text-center sm:text-left w-full'
@@ -144,16 +133,11 @@ export default function ManageMembers() {
                 left: 0,
               }}
             >
-              <SearchResult
-                profile={profile}
-                onClose={() => {
-                  setAddress('');
-                }}
-              />
+              <SearchResult profile={profile} onClose={handleClose} />
             </div>
           </>
         )}
-        <div className='w-full sm:w-auto flex flex-row gap-2'>
+        <div className='w-full sm:w-auto flex flex-row gap-2 justify-center'>
           <BulkTrust members={members} />
           <Button
             type='button'
@@ -163,9 +147,6 @@ export default function ManageMembers() {
             Export CSV
           </Button>
         </div>
-      </div>
-      <div className='w-full flex justify-center items-center'>
-        {isFetched ? <MemberList members={members} /> : <Loading />}
       </div>
     </div>
   );

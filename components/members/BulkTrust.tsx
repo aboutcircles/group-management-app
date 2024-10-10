@@ -10,12 +10,12 @@ import {
 import { Dialog, DialogPanel, Tab, TabGroup, TabList } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import FileUpload from '../group/FileUpload';
-import Loader from '../group/Loader';
+import Loader from '../common/Loader';
 import { Address } from 'viem';
 import Papa from 'papaparse';
 import { ProfileWithAddress } from '@/types';
 import { useMulticallStore } from '@/stores/multicallStore';
-import Button from '../common/Button';
+import { Button } from '@/components/common/Button';
 
 interface BulkTrustProp {
   members: ProfileWithAddress[] | undefined;

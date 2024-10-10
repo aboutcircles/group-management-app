@@ -6,7 +6,7 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { Group } from '@/types';
 import { ethers } from 'ethers';
 import { Label, TextInput, Textarea } from 'flowbite-react';
-import Button from '@/components/common/Button';
+import { Button } from '@/components/common/Button';
 import { Tooltip } from '@/components/common/Tooltip';
 
 export default function GroupInfo() {
