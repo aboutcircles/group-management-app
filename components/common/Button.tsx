@@ -1,7 +1,7 @@
 import { Button as FlowbiteButton } from 'flowbite-react';
-import Loader from '../group/Loader';
+import Loader from '@/components/common/Loader';
 
-export default function Button({
+export function Button({
   type,
   children,
   icon,
@@ -21,7 +21,6 @@ export default function Button({
       type={type}
       className='bg-primary flex items-center justify-center font-medium'
       disabled={disabled}
-      // isProcessing={loading}
       onClick={handleClick}
     >
       <span className='mr-2'>{loading ? <Loader /> : icon}</span>

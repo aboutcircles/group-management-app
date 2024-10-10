@@ -4,7 +4,7 @@ import { ProfileWithAddress } from '@/types';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Address } from 'viem';
-import Loader from '../group/Loader';
+import Loader from '../common/Loader';
 import { Pagination } from '@nextui-org/react';
 import { useMembersStore } from '@/stores/membersStore';
 

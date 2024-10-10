@@ -8,7 +8,7 @@ import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import Papa from 'papaparse';
 import BulkTrust from '@/components/members/BulkTrust';
 import { Label, TextInput } from 'flowbite-react';
-import Button from '@/components/common/Button';
+import { Button } from '@/components/common/Button';
 import { ProfileWithAddress } from '@/types';
 import useProfiles from '@/hooks/useProfiles';
 import { SearchResult } from '@/components/members/SearchResult';

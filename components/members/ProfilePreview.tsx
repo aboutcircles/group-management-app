@@ -13,7 +13,7 @@ import { Tooltip } from '@/components/common/Tooltip';
 import { Button } from '@headlessui/react';
 import { useMembersStore } from '@/stores/membersStore';
 import { useState } from 'react';
-import Loader from '../group/Loader';
+import Loader from '../common/Loader';
 
 export default function ProfilePreview({
   profile,
@@ -75,7 +75,7 @@ export default function ProfilePreview({
             className='rounded-full'
           />
         ) : (
-          <div className='w-[30px] h-[30px] min-w-[30px] min-h-[30px] bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold'>
+          <div className='w-[30px] h-[30px] min-w-[30px] min-h-[30px] text-gray-900 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold'>
             {profile.name ? profile.name.charAt(0).toUpperCase() : ''}
           </div>
         )}

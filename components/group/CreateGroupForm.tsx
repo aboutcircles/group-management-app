@@ -6,17 +6,15 @@ import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy from '@/components/group/MintPolicy';
 import FileUpload from '@/components/group/FileUpload';
 import { GroupProfile } from '@circles-sdk/profiles';
-import Loader from '@/components/group/Loader';
 import { mintPolicies } from '@/const';
 import { useGroupStore } from '@/stores/groupStore';
 import { Address } from 'viem';
 import { Step } from '@/types';
-import Button from '@/components/common/Button';
+import { Button } from '@/components/common/Button';
 import { HiCheck } from 'react-icons/hi';
-import { Tooltip } from '../common/Tooltip';
+import { Tooltip } from '@/components/common/Tooltip';
 import Link from 'next/link';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
-// import { Button } from 'flowbite-react';
 
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -145,12 +143,18 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
           </Field>
         </div>
         <Field className='w-full md:w-1/3 flex flex-col items-center'>
-          <Label className='font-bold mb-1 flex items-center gap-1'>Group Image<Tooltip content='Upload a logo or image for your group. Max size=2MB, 150x150 pixels.' /></Label>
+          <Label className='font-bold mb-1 flex items-center gap-1'>
+            Group Image
+            <Tooltip content='Upload a logo or image for your group. Max size=2MB, 150x150 pixels.' />
+          </Label>
           <FileUpload onFileSelected={handleFileSelected} fileType='image' />
         </Field>
       </div>
       <Field className='w-full mb-8'>
-        <Label className='font-bold flex items-center gap-1'>Description<Tooltip content='Provide a brief description of your group.' /></Label>
+        <Label className='font-bold flex items-center gap-1'>
+          Description
+          <Tooltip content='Provide a brief description of your group.' />
+        </Label>
         <Textarea
           name='description'
           value={formData.description}
@@ -160,8 +164,18 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         />
       </Field>
       <Field className='w-full flex flex-col mb-12 pt-8 border-t-1.5'>
-        <Label className='font-bold flex items-center gap-1'>Base Mint Policy<Tooltip content='Select the minting policy for group currency.' /></Label>
-        <Link className='flex mb-2 items-center font-bold text-xs text-primary' href={''} target='_blank' >Learn more<ArrowTopRightOnSquareIcon className='h-4 w-4 ml-1' /></Link>
+        <Label className='font-bold flex items-center gap-1'>
+          Base Mint Policy
+          <Tooltip content='Select the minting policy for group currency.' />
+        </Label>
+        <Link
+          className='flex mb-2 items-center font-bold text-xs text-primary'
+          href={''}
+          target='_blank'
+        >
+          Learn more
+          <ArrowTopRightOnSquareIcon className='h-4 w-4 ml-1' />
+        </Link>
         <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
       </Field>
       <Button

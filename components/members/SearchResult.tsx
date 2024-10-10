@@ -1,8 +1,7 @@
-import { Button } from 'flowbite-react';
-
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import ProfilePreview from '@/components/members/ProfilePreview';
 import { ProfileWithAddress } from '@/types';
+import { Button } from 'flowbite-react';
 import { HiX } from 'react-icons/hi';
 
 interface SearchResultProps {
