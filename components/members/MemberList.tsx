@@ -111,7 +111,7 @@ const MemberList = ({ members }: MemberListProps) => {
             <Pagination
               isCompact
               showControls
-              showShadow
+              showShadow={false}
               size='sm'
               color='primary'
               page={currentPage}
