@@ -17,7 +17,7 @@ const MemberList = ({ members }: MemberListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isTrusting, setIsTrusting] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const membersPerPage = 30;
+  const membersPerPage = 10;
   const totalPages = Math.ceil((members?.length || 0) / membersPerPage);
   const startIndex = (currentPage - 1) * membersPerPage;
   const endIndex = startIndex + membersPerPage;
@@ -58,12 +58,12 @@ const MemberList = ({ members }: MemberListProps) => {
   };
 
   return (
-    <div className='w-full h-full flex flex-col justify-between my-10'>
+    <div className='w-full h-full flex flex-col flex-1 justify-between'>
       {members && members.length === 0 ? (
         <p className='text-gray text-center px-2'>No members yet</p>
       ) : (
         <>
-          <div className='flex flex-col'>
+          <div className='flex flex-col flex-1 w-full'>
             <div className='flex items-center justify-center flex-wrap gap-2 p-1'>
               <input
                 type='checkbox'
@@ -87,7 +87,7 @@ const MemberList = ({ members }: MemberListProps) => {
                 </Button>
               )}
             </div>
-            <ul className='w-full overflow-y-auto h-full px-1'>
+            <ul className='w-full px-1'>
               {currentMembers?.map((member) => (
                 <li
                   key={member.address}
@@ -107,7 +107,7 @@ const MemberList = ({ members }: MemberListProps) => {
             </ul>
           </div>
 
-          <div className='flex justify-end items-center h-1/6 px-2'>
+          <div className='flex justify-center items-center pt-5'>
             <Pagination
               isCompact
               showControls

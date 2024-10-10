@@ -75,6 +75,14 @@ export default function GroupInfo() {
     }
   };
 
+  const formatEther = (value: bigint | undefined) => {
+    const num = parseFloat(ethers.formatEther(value || BigInt(0)));
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -134,7 +142,7 @@ export default function GroupInfo() {
           className='dark:text-white text-sm flex items-center gap-1'
         >
           Description
-          <Tooltip content='A brief description of your group' />
+          <Tooltip content='A brief description of your group.' />
         </Label>
         <Textarea
           id='description'
@@ -156,10 +164,10 @@ export default function GroupInfo() {
           <Tooltip content='The total number of group tokens currently in circulation.' />
         </Label>
         <p className='flex text-black' id='totalSupply'>
-          <span className='text-2xl font-bold'>{groupInfo?.symbol}</span>
-          <span className='ml-2 text-2xl overflow-hidden text-ellipsis'>
-            {ethers.formatEther(totalSupply || BigInt(0))}
+          <span className='text-2xl overflow-hidden text-ellipsis'>
+            {formatEther(totalSupply || BigInt(0))}
           </span>
+          <span className='ml-2 text-2xl font-bold'>{groupInfo?.symbol}</span>
         </p>
       </div>
       {groupInfo?.mint && (

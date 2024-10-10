@@ -28,18 +28,25 @@ export default function RootLayout({
             draggable={false}
             position='bottom-right'
           />
-          <main className='h-screen bg-white'>
-            <div className='max-w-7xl min-h-screen h-full mx-auto px-5'>
-              <div className='flex items-end justify-between h-[10%]'>
-                <div className='flex gapx-2'>
+          <main className='min-h-screen bg-white'>
+            <div className='max-w-7xl min-h-screen mx-auto px-5'>
+              <div className='flex items-end justify-between'>
+                <div className='flex gap-x-2 mt-5 sm:mt-10'>
                   <Image src='/logo.svg' alt='logo' width={120} height={100} />
                   <span className='text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-8 sm:ml-15'>
                     Groups Dashboard
                   </span>
                 </div>
-                <Link className="hidden md:flex items-center font-semibold text-primary" href={'https://docs.aboutcircles.com/'} target='_blank'>Documentation<ArrowTopRightOnSquareIcon className='h-4 w-4 ml-2' /></Link>
+                <Link
+                  className='hidden md:flex items-center font-semibold text-primary'
+                  href={'https://docs.aboutcircles.com/'}
+                  target='_blank'
+                >
+                  Documentation
+                  <ArrowTopRightOnSquareIcon className='h-4 w-4 ml-2' />
+                </Link>
               </div>
-              <div className='flex w-full justify-center items-center h-[90%]'>
+              <div className='flex w-full justify-center items-center my-4 sm:my-8'>
                 {children}
               </div>
               <EventToastNotifier />
