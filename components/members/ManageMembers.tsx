@@ -1,9 +1,7 @@
 'use client';
 
-import MemberList from '@/components/members/MemberList';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMembersStore } from '@/stores/membersStore';
-import Loading from '@/components/layout/Loading';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import Papa from 'papaparse';
 import BulkTrust from '@/components/members/BulkTrust';
@@ -106,7 +104,7 @@ export default function ManageMembers() {
   };
 
   return (
-    <div className='w-full h-full flex flex-col items-center justify-between'>
+    <div className='w-full flex flex-col items-center'>
       <Label
         htmlFor='address'
         className='text-sm my-4 px-4 text-center sm:text-left w-full'
@@ -163,9 +161,6 @@ export default function ManageMembers() {
             Export CSV
           </Button>
         </div>
-      </div>
-      <div className='w-full flex justify-center items-center'>
-        {isFetched ? <MemberList members={members} /> : <Loading />}
       </div>
     </div>
   );

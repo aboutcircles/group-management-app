@@ -10,10 +10,10 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { Tooltip } from '@/components/common/Tooltip';
-import { Button } from '@headlessui/react';
+import { IconButton } from '@/components/common/IconButton';
+import { Button } from '@/components/common/Button';
 import { useMembersStore } from '@/stores/membersStore';
 import { useState } from 'react';
-import Loader from '../common/Loader';
 
 export default function ProfilePreview({
   profile,
@@ -47,7 +47,7 @@ export default function ProfilePreview({
   };
 
   return (
-    <div className='flex items-center w-full'>
+    <div className='flex items-center w-full py-4'>
       <div className='flex flex-col-reverse sm:flex-row gap-2 items-center'>
         <div className='h-5 w-5 text-zinc-400'>
           {profile.relation === RelationType.Trusts && (
@@ -97,41 +97,52 @@ export default function ProfilePreview({
           {profile.name ? profile.address : 'v1 profile'}
         </div>
       </div>
-      <Button
-        className={`flex items-center rounded-full bg-accent px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 text-white transition duration-300 ease-in-out shadow-md ${
-          profile.relation === RelationType.MutuallyTrusts ||
-          profile.relation === RelationType.Trusts
-            ? 'bg-black'
-            : ''
-        }`}
-        onClick={() =>
-          profile.relation === RelationType.MutuallyTrusts ||
-          profile.relation === RelationType.Trusts
-            ? handleUntrustInSearch(profile)
-            : handleTrustInSearch(profile)
-        }
-      >
-        {isLoading ? (
-          <>
-            <div className='mr-2'>
-              <Loader />
-            </div>
-            Processing
-          </>
-        ) : profile.relation === RelationType.MutuallyTrusts ||
+      {full ? (
+        <Button
+          type='button'
+          loading={isLoading}
+          icon={
+            profile.relation === RelationType.MutuallyTrusts ||
+            profile.relation === RelationType.Trusts ? (
+              <XMarkIcon className='h-5 w-5' />
+            ) : (
+              <PlusIcon className='h-5 w-5' />
+            )
+          }
+          handleClick={() =>
+            profile.relation === RelationType.MutuallyTrusts ||
+            profile.relation === RelationType.Trusts
+              ? handleUntrustInSearch(profile)
+              : handleTrustInSearch(profile)
+          }
+        >
+          {profile.relation === RelationType.MutuallyTrusts ||
           profile.relation === RelationType.Trusts ? (
-          <>
-            {full && <span className='mr-1'>Untrust</span>}
-            <XMarkIcon className='h-5 w-5' />
-          </>
-        ) : (
-          <>
-            {/* When we can have Trust button not full? */}
-            {full && <span className='mr-1'>Trust</span>}
-            <PlusIcon className='h-5 w-5' />
-          </>
-        )}
-      </Button>
+            <>{full && <span className='mr-1'>Untrust</span>}</>
+          ) : (
+            <>{full && <span className='mr-1'>Trust</span>}</>
+          )}
+        </Button>
+      ) : (
+        <IconButton
+          type='button'
+          icon={
+            profile.relation === RelationType.MutuallyTrusts ||
+            profile.relation === RelationType.Trusts ? (
+              <XMarkIcon className='h-5 w-5' />
+            ) : (
+              <PlusIcon className='h-5 w-5' />
+            )
+          }
+          handleClick={() =>
+            profile.relation === RelationType.MutuallyTrusts ||
+            profile.relation === RelationType.Trusts
+              ? handleUntrustInSearch(profile)
+              : handleTrustInSearch(profile)
+          }
+          loading={isLoading}
+        />
+      )}
     </div>
   );
 }

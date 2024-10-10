@@ -1,30 +1,28 @@
-import { Button as FlowbiteButton } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import Loader from '@/components/common/Loader';
 
-export function Button({
+export function IconButton({
   type,
-  children,
   icon,
   loading,
   disabled,
   handleClick,
 }: {
   type: 'submit' | 'button' | 'reset';
-  children: React.ReactNode;
   icon: React.ReactNode;
   loading?: boolean;
   disabled?: boolean;
   handleClick?: () => void;
 }) {
   return (
-    <FlowbiteButton
+    <Button
       type={type}
-      className='bg-primary flex items-center justify-center font-medium'
+      className='bg-primary flex items-center justify-center rounded-full [&>span]:p-1'
       disabled={disabled || loading}
       onClick={handleClick}
+      size='xl'
     >
-      <span className='mr-2'>{loading ? <Loader /> : icon}</span>
-      {children}
-    </FlowbiteButton>
+      <span>{loading ? <Loader /> : icon}</span>
+    </Button>
   );
 }
