@@ -153,7 +153,7 @@ export default function GroupInfo() {
           className='dark:text-white text-sm flex items-center gap-1'
         >
           Total supply
-          <Tooltip content='Total supply of tokens in your group' />
+          <Tooltip content='The total number of group tokens currently in circulation.' />
         </Label>
         <p className='flex text-black' id='totalSupply'>
           <span className='text-2xl font-bold'>{groupInfo?.symbol}</span>
