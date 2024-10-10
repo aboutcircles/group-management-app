@@ -89,18 +89,20 @@ export default function TxHistory() {
         ))}
       </div>
 
-      <div className='w-fullflex items-center justify-center pt-5'>
-        <Pagination
-          isCompact
-          showControls
-          showShadow={false}
-          size='sm'
-          color='primary'
-          page={currentPage}
-          total={totalPages}
-          onChange={(page_) => setCurrentPage(page_)}
-        />
-      </div>
+      {formattedEvents.length > 0 && (
+        <div className='w-fullflex items-center justify-center pt-5'>
+          <Pagination
+            isCompact
+            showControls
+            showShadow={false}
+            size='sm'
+            color='primary'
+            page={currentPage}
+            total={totalPages}
+            onChange={(page_) => setCurrentPage(page_)}
+          />
+        </div>
+      )}
     </div>
   );
 }
