@@ -98,7 +98,7 @@ export default function ManageMembers() {
     <div className='w-full flex flex-col items-center'>
       <Label
         htmlFor='address'
-        className='text-sm my-4 px-4 text-center sm:text-left w-full'
+        className='text-sm my-3 sm:my-5 px-4 text-center sm:text-left w-full'
       >
         Add/remove member by address
       </Label>

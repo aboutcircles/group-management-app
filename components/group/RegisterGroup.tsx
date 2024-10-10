@@ -7,6 +7,7 @@ import CreateGroupForm from '@/components/group/CreateGroupForm';
 import Link from 'next/link';
 import { Step } from '@/types';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { Button } from 'flowbite-react';
 
 export default function RegisterGroup({}: // step,
 // setStep,
@@ -18,20 +19,25 @@ export default function RegisterGroup({}: // step,
   // const [isPageReady, setIsPageReady] = useState(false);
 
   return (
-    <div className='w-full h-[90%] md:h-4/5 flex flex-col items-center justify-center gap-y-8 md:gap-y-4 rounded-xl px-12 border shadow-lg'>
+    <div className='w-full flex-1 flex flex-col items-center justify-center gap-y-8 md:gap-y-4 rounded-xl px-12 border py-20'>
       {step === 'start' ? (
         <>
-          <p className='text-2xl md:text-3xl text-center font-bold text-primary'>
+          <p className='text-2xl md:text-3xl text-center font-bold text-primary pt-10'>
             Welcome to Circles Group Management
           </p>
-          <p className='text-sm'>Create a group for you and your community</p>
-          <button
-            className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4'
+          <p className='text-gray-900 text-center'>
+            Create a group for you and your community
+          </p>
+          <Button
+            type='button'
+            className='flex items-center justify-center font-medium bg-accent'
             onClick={() => setStep('form')}
           >
+            <span className='mr-2'>
+              <ArrowRightIcon className='h-5 w-5' />
+            </span>
             Get Started
-            <ArrowRightIcon className='h-4 w-4 ml-1' />
-          </button>
+          </Button>
         </>
       ) : step === 'form' ? (
         <CreateGroupForm setStep={setStep} />

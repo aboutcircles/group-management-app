@@ -29,7 +29,7 @@ export default function RootLayout({
             position='bottom-right'
           />
           <main className='min-h-screen bg-white'>
-            <div className='max-w-7xl min-h-screen mx-auto px-5'>
+            <div className='max-w-7xl min-h-screen mx-auto px-5 flex flex-col'>
               <div className='flex items-end justify-between'>
                 <div className='flex gap-x-2 mt-5 sm:mt-10'>
                   <Image src='/logo.svg' alt='logo' width={120} height={100} />
@@ -46,7 +46,7 @@ export default function RootLayout({
                   <ArrowTopRightOnSquareIcon className='h-4 w-4 ml-2' />
                 </Link>
               </div>
-              <div className='flex w-full justify-center items-center my-4 sm:my-8'>
+              <div className='flex flex-col flex-1 w-full items-center my-4 sm:my-8'>
                 {children}
               </div>
               <EventToastNotifier />
