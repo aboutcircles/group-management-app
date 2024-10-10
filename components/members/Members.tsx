@@ -16,9 +16,9 @@ export const Members = () => {
   }, [fetchMembers, isFetched]);
 
   return (
-    <div className='w-full h-full flex flex-col items-center'>
+    <div className='w-full h-full flex flex-col items-center gap-5'>
       <ManageMembers />
-      <div className='w-full flex justify-center items-center mt-5'>
+      <div className='w-full justify-center items-center member-list flex-1'>
         {isFetched ? <MemberList members={members} /> : <Loading />}
       </div>
     </div>
