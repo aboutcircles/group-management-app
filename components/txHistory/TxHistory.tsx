@@ -73,13 +73,13 @@ export default function TxHistory() {
                   rel='noopener noreferrer'
                   className='flex items-center w-full hover:bg-black/5 px-3 py-5'
                 >
-                  <div className='text-gray-500 font-medium text-sm w-1/6'>
+                  <div className='text-gray-500 font-medium text-sm w-2/12'>
                     {event.time}
                   </div>
-                  <div className='font-semibold w-4/6'>
+                  <div className='font-semibold w-7/12'>
                     {truncateAddress(event.eventInfo.data)}
                   </div>
-                  <div className='w-1/6'>
+                  <div className='w-3/12'>
                     <EventType type={event.eventInfo.type} />
                   </div>
                 </Link>
