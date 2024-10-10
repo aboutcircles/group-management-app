@@ -7,10 +7,10 @@ import { Address } from 'viem';
 import EventType from '@/components/txHistory/EventType';
 import Loading from '@/components/layout/Loading';
 import { Pagination } from '@nextui-org/react';
-import Button from '../common/Button';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { truncateAddress } from '@/utils/truncateAddress';
+import { Button } from '../common/Button';
 
 export default function TxHistory() {
   const events = useEventsStore((state) => state.events);
