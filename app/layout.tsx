@@ -35,7 +35,7 @@ export default function RootLayout({
               <div className='flex items-end justify-between h-[10%]'>
                 <div className='flex gapx-2'>
                   <Image src='/logo.svg' alt='logo' width={120} height={100} />
-                  <span className='text-xl sm:text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-8 sm:ml-15'>
+                  <span className='text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-8 sm:ml-15'>
                     Groups Dashboard
                   </span>
                 </div>
