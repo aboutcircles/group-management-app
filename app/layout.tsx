@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import Footer from '@/components/layout/Footer';
-import Navbar from '@/components/layout/NavBar';
 import { ToastContainer } from 'react-toastify';
 import EventToastNotifier from '@/components/layout/EventToastNotifier';
 const font = DM_Sans({ subsets: ['latin'] });
