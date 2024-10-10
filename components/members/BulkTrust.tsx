@@ -82,7 +82,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   };
 
   return (
-    <div>
+    <>
       <Button
         type='button'
         // className='flex gap-x-1 items-center bg-accent rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
@@ -184,7 +184,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
           </DialogPanel>
         </div>
       </Dialog>
-    </div>
+    </>
   );
 };
 
