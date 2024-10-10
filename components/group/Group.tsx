@@ -26,10 +26,10 @@ export default function Group() {
   const [activeTab, setActiveTab] = useState(tabsData[0].id);
   return (
     <div className='w-full h-full flex flex-col md:flex-row gap-4 items-start'>
-      <section className='basis-[calc(33.333%-2.5px)] border-1 border-gray-200 dark:border-gray-700 rounded-lg py-5 sm:py-10 px-2 sm:px-5'>
+      <section className='w-full md:w-auto md:basis-[calc(33%-5px)] border-1 border-gray-200 dark:border-gray-700 rounded-lg py-5 sm:py-10 px-2 sm:px-5'>
         <GroupInfo />
       </section>
-      <section className='basis-[calc(66.667%-2.5px)] flex flex-col border-1 border-gray-200 dark:border-gray-700 rounded-lg py-5 sm:py-10 px-2 sm:px-5'>
+      <section className='w-full md:w-auto md:basis-[calc(66%-5px)] flex flex-col border-1 border-gray-200 dark:border-gray-700 rounded-lg py-5 sm:py-10 px-2 sm:px-5'>
         <div className='flex justify-center text-gray-500 border-gray-200 dark:border-gray-700 mb-5'>
           <ul
             className='flex -mb-px text-sm font-medium text-center'

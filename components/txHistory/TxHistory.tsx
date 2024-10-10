@@ -48,8 +48,8 @@ export default function TxHistory() {
   const totalPages = Math.ceil((filteredEvents?.length || 0) / eventsPerPage);
 
   return (
-    <div className='flex flex-col h-full'>
-      <div className='flex w-full justify-end my-3 sm:my-5'>
+    <div className='w-full h-full flex flex-col items-center'>
+      {/* <div className='flex w-full justify-end my-3 sm:my-5'>
         <Button
           type='button'
           handleClick={handleExportCSV}
@@ -57,7 +57,7 @@ export default function TxHistory() {
         >
           Export transaction history
         </Button>
-      </div>
+      </div> */}
       <div className='flex flex-col gap-y-4 w-full flex-1'>
         {formattedEvents.map((groupedEvents) => (
           <React.Fragment key={groupedEvents[0].date}>
@@ -89,7 +89,7 @@ export default function TxHistory() {
         ))}
       </div>
 
-      <div className='flex items-center justify-center pt-5'>
+      <div className='w-fullflex items-center justify-center pt-5'>
         <Pagination
           isCompact
           showControls
