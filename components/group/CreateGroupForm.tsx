@@ -99,7 +99,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className='w-full h-full flex flex-col items-center justify-center text-xs md:text-sm/6 md:p-6'
+      className='w-full h-full flex flex-col items-center justify-center text-xs md:text-sm/6 md:p-6 text-black'
     >
       <h1 className='text-2xl text-center font-bold text-primary mb-2'>
         REGISTER GROUP
