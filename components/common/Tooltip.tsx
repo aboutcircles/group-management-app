@@ -14,7 +14,7 @@ export const Tooltip: React.FC<{
       style='light'
       placement={placement}
     >
-      {children || <HiQuestionMarkCircle className='w-5 h-5' />}
+      {children || <HiQuestionMarkCircle className='w-5 h-5 text-gray-500' />}
     </FlowbiteTooltip>
   );
 };
