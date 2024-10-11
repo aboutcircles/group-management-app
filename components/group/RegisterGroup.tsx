@@ -1,44 +1,50 @@
 import {
   ArrowRightIcon,
   ArrowUturnLeftIcon,
-  CheckIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { HiCheck, HiOutlineX } from 'react-icons/hi';
 import CreateGroupForm from '@/components/group/CreateGroupForm';
 import Link from 'next/link';
 import { Step } from '@/types';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Button } from 'flowbite-react';
 
-export default function RegisterGroup({
-  step,
-  setStep,
-}: {
-  step: Step;
-  setStep: Dispatch<SetStateAction<Step>>;
+export default function RegisterGroup({}: // step,
+// setStep,
+{
+  // step: Step;
+  // setStep: Dispatch<SetStateAction<Step>>;
 }) {
+  const [step, setStep] = useState<Step>('start');
+  // const [isPageReady, setIsPageReady] = useState(false);
+
   return (
-    <div className='w-full h-full flex flex-col items-center justify-center gap-y-8 md:gap-y-4 p-4 md:p-8'>
+    <div className='w-full flex-1 flex flex-col items-center justify-center gap-y-8 md:gap-y-4 rounded-xl px-12 border py-20'>
       {step === 'start' ? (
         <>
-          <p className='text-2xl text-center font-bold'>
+          <p className='text-2xl md:text-3xl text-center font-bold text-primary pt-10'>
             Welcome to Circles Group Management
           </p>
-          <p className='text-sm'>Create a group for you and your community</p>
-          <button
-            className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4'
+          <p className='text-gray-900 text-center'>
+            Create a group for you and your community
+          </p>
+          <Button
+            type='button'
+            className='flex items-center justify-center font-medium bg-accent mb-20'
             onClick={() => setStep('form')}
           >
+            <span className='mr-2'>
+              <ArrowRightIcon className='h-5 w-5' />
+            </span>
             Get Started
-            <ArrowRightIcon className='h-4 w-4 ml-1' />
-          </button>
+          </Button>
         </>
       ) : step === 'form' ? (
         <CreateGroupForm setStep={setStep} />
       ) : step === 'executed' ? (
         <div className='w-full flex flex-col items-center'>
           <div className='flex items-center'>
-            <CheckIcon className='h-5 w-5' /> Your group was sucessfully created
-            !
+            <HiCheck className='h-5 w-5' /> Your group was sucessfully created !
           </div>
           <Link
             className='text-accent flex items-center px-4 py-1 rounded-full mt-4 text-base font-semibold'
@@ -50,7 +56,7 @@ export default function RegisterGroup({
       ) : step === 'error' ? (
         <div className='w-full flex flex-col items-center'>
           <div className='flex items-center'>
-            <XMarkIcon className='h-5 w-5' /> Something went wrong with your
+            <HiOutlineX className='h-5 w-5' /> Something went wrong with your
             transaction, try again or contact the support
             <Link
               href='https://www.aboutcircles.com/community'

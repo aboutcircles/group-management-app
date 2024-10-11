@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { Field, Textarea } from '@headlessui/react';
 import ImgUpload from './FileUpload';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { useGroupStore } from '@/stores/groupStore';
-import { CheckIcon } from '@heroicons/react/24/outline';
+// import { CheckIcon } from '@heroicons/react/24/outline';
+import { HiCheck } from 'react-icons/hi';
 import { Group } from '@/types';
-import Loader from './Loader';
 import { ethers } from 'ethers';
+import { Label, TextInput, Textarea } from 'flowbite-react';
+import { Button } from '@/components/common/Button';
+import { Tooltip } from '@/components/common/Tooltip';
 
 export default function GroupInfo() {
   const groupInfo = useGroupStore((state) => state.groupInfo);
@@ -74,6 +76,14 @@ export default function GroupInfo() {
     }
   };
 
+  const formatEther = (value: bigint | undefined) => {
+    const num = parseFloat(ethers.formatEther(value || BigInt(0)));
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -95,77 +105,85 @@ export default function GroupInfo() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='w-full h-full p-4 flex flex-col items-center justify-between gap-y-4'
-    >
-      <div className='flex w-full gap-x-2'>
-        <Field className='flex flex-col justify-center'>
+    <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-5'>
+      <div className='flex flex-row sm:flex-col w-full gap-2 items-center'>
+        <div className='flex flex-col justify-center'>
           <ImgUpload
             onFileSelected={handleFileSelected}
             fileType='image'
             imgUrl={groupInfo?.previewImageUrl}
           />
-        </Field>
-        <div className='flex flex-1 flex-col gap-y-2 pl-4'>
-          <Field className='w-full'>
-            <p className='text-xs text-gray mx-3 break-all'>
-              {groupInfo?.group}
-            </p>
-            <Textarea
-              name='name'
-              value={formData.name}
-              placeholder='Group Name'
-              className='block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-2xl font-bold text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
-              onChange={handleChange}
-              rows={1}
-            />
-          </Field>
-
-          <Field className='w-full flex-1'>
-            <Textarea
-              name='description'
-              value={formData.description}
-              placeholder='Group Description...'
-              className='mt-1 block w-full rounded-lg border-none bg-transparent py-1.5 px-3 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25 resize-none'
-              onChange={handleChange}
-            />
-          </Field>
-          <div className=''>
-            <p className='text-xs text-gray mx-3'>Total supply</p>
-            <p className='mx-3'>
-              <span className='font-bold'>{groupInfo?.symbol}</span>
-              <span className='ml-2'>
-                {ethers.formatEther(totalSupply || BigInt(0))}
-              </span>
-            </p>
-          </div>
-          {groupInfo?.mint && (
-            <p className='text-xs text-gray mx-3'>
-              Mint policy: {truncateAddress(groupInfo.mint)}
-            </p>
-          )}
+        </div>
+        <div className='flex flex-col w-auto sm:w-full'>
+          <p className='w-full text-xs text-gray-500 text-left break-all mb-2 sm:mb-5'>
+            {groupInfo?.group
+              ? truncateAddress(groupInfo.group)
+              : 'No group address'}
+          </p>
+          <TextInput
+            name='name'
+            value={formData.name}
+            placeholder='Group Name'
+            className='text-2xl font-bold'
+            onChange={handleChange}
+            theme={{
+              field: {
+                input: {
+                  base: '!bg-white !px-0 !text-2xl !font-bold border-none focus:ring-0 focus:border w-full !py-0',
+                },
+              },
+            }}
+          />
         </div>
       </div>
-      <button
+
+      <div className='w-full flex flex-col gap-2'>
+        <Label
+          htmlFor='message'
+          className='dark:text-white text-sm flex items-center gap-1'
+        >
+          Description
+          <Tooltip content='A brief description of your group.' />
+        </Label>
+        <Textarea
+          id='description'
+          name='description'
+          value={formData.description}
+          placeholder='Description goes here...'
+          rows={6}
+          className='[&_input]:p-3'
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className='w-full flex flex-col gap-2'>
+        <Label
+          htmlFor='totalSupply'
+          className='dark:text-white text-sm flex items-center gap-1'
+        >
+          Total supply
+          <Tooltip content='The total number of group tokens currently in circulation.' />
+        </Label>
+        <p className='flex text-black' id='totalSupply'>
+          <span className='text-2xl overflow-hidden text-ellipsis'>
+            {formatEther(totalSupply || BigInt(0))}
+          </span>
+          <span className='ml-2 text-2xl font-bold'>{groupInfo?.symbol}</span>
+        </p>
+      </div>
+      {groupInfo?.mint && (
+        <p className='font-medium text-base text-gray-400 w-full'>
+          Mint policy: {truncateAddress(groupInfo.mint)}
+        </p>
+      )}
+      <Button
         type='submit'
-        className='flex items-center bg-accent rounded-full px-3 py-1 hover:bg-accent/90 disabled:bg-secondary text-white transition duration-300 ease-in-out mt-4 shadow-md'
         disabled={!isChanged}
+        loading={isLoading}
+        icon={<HiCheck className='h-5 w-5' />}
       >
-        {isLoading ? (
-          <>
-            <div className='mr-2'>
-              <Loader />
-            </div>
-            Processing
-          </>
-        ) : (
-          <>
-            Save Changes
-            <CheckIcon className='h-5 w-5 ml-1' />
-          </>
-        )}
-      </button>
+        Save Changes
+      </Button>
     </form>
   );
 }

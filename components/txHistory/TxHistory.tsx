@@ -7,6 +7,11 @@ import { Address } from 'viem';
 import EventType from '@/components/txHistory/EventType';
 import Loading from '@/components/layout/Loading';
 import { Pagination } from '@nextui-org/react';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import { truncateAddress } from '@/utils/truncateAddress';
+import { Button } from '../common/Button';
+import Papa from 'papaparse';
 
 export default function TxHistory() {
   const events = useEventsStore((state) => state.events);
@@ -27,6 +32,22 @@ export default function TxHistory() {
     (event) => event !== undefined && event !== null
   );
 
+  const handleExportCSV = () => {
+    if (!filteredEvents || filteredEvents.length === 0) {
+      return;
+    }
+
+    const csv = Papa.unparse(filteredEvents);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'txHistory.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const startIndex = (currentPage - 1) * eventsPerPage;
   const endIndex = startIndex + eventsPerPage;
   const paginatedEvents = filteredEvents.slice(startIndex, endIndex);
@@ -37,50 +58,58 @@ export default function TxHistory() {
     groupInfo?.symbol as string
   );
 
-  // console.log('events', formattedEvents);
-
   if (!isFetched) return <Loading />;
 
   const totalPages = Math.ceil((filteredEvents?.length || 0) / eventsPerPage);
 
   return (
-    <div className='flex flex-col justify-between h-full'>
-      <div className='flex w-full h-1/4 p-2 font-bold'>Transaction history:</div>
-      <div className='flex flex-col w-full h-3/4'>
-        <div className='grid grid-cols-8 gap-0 items-center overflow-y-scroll h-5/6'>
-          {formattedEvents.map((groupedEvents) => (
-            <React.Fragment key={groupedEvents[0].date}>
-              <div className='col-span-8 mt-5 mb-2 mx-4 text-accent font-bold'>
-                {groupedEvents[0].date}
-              </div>
+    <div className='w-full h-full flex flex-col items-center'>
+      <div className='flex w-full justify-end my-3 sm:my-5'>
+        <Button
+          type='button'
+          handleClick={handleExportCSV}
+          icon={<ArrowUpTrayIcon className='w-5 h-5' />}
+        >
+          Export transaction history
+        </Button>
+      </div>
+      <div className='flex flex-col gap-y-4 w-full flex-1'>
+        {formattedEvents.map((groupedEvents) => (
+          <React.Fragment key={groupedEvents[0].date}>
+            <div className='w-full text-gray-400 font-bold'>
+              {groupedEvents[0].date}
+            </div>
+            <div className='flex flex-col w-full divide-y divide-gray/20'>
               {groupedEvents.map((event, index) => (
-                <a
+                <Link
                   href={`https://gnosis.blockscout.com/tx/${event.transactionHash}`}
                   key={index}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='grid grid-cols-subgrid grid-rows-3 sm:grid-rows-1 gap-0 col-span-8 hover:bg-accent/20 border-b border-gray/20 py-3'
+                  className='flex items-center w-full hover:bg-black/5 px-3 py-5'
                 >
-                  <div className='text-gray mx-2 col-span-2 sm:col-span-1 row-span-3 sm:row-span-1 text-sm py-0.5 sm:py-0'>
+                  <div className='text-gray-500 font-medium text-sm w-2/12'>
                     {event.time}
                   </div>
-                  <div className='col-span-6 px-1 sm:col-span-5 order-last sm:order-none break-all row-span-2 sm:row-span-1'>
-                    {event.eventInfo.data}
+                  <div className='font-semibold w-7/12'>
+                    {truncateAddress(event.eventInfo.data)}
                   </div>
-                  <div className='col-span-6 px-1 sm:col-span-2'>
+                  <div className='w-3/12'>
                     <EventType type={event.eventInfo.type} />
                   </div>
-                </a>
+                </Link>
               ))}
-            </React.Fragment>
-          ))}
-        </div>
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
 
-        <div className='flex justify-end items-center px-2 h-1/6'>
+      {formattedEvents.length > 0 && (
+        <div className='w-full flex items-center justify-center pt-5'>
           <Pagination
             isCompact
             showControls
-            showShadow
+            showShadow={false}
             size='sm'
             color='primary'
             page={currentPage}
@@ -88,7 +117,7 @@ export default function TxHistory() {
             onChange={(page_) => setCurrentPage(page_)}
           />
         </div>
-      </div>
+      )}
     </div>
   );
 }

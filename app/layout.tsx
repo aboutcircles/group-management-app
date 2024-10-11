@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import Footer from '@/components/layout/Footer';
-import Navbar from '@/components/layout/NavBar';
 import { ToastContainer } from 'react-toastify';
 import EventToastNotifier from '@/components/layout/EventToastNotifier';
 const font = DM_Sans({ subsets: ['latin'] });
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
 export const metadata: Metadata = {
   title: 'Circles Management Group',
@@ -27,14 +28,28 @@ export default function RootLayout({
             draggable={false}
             position='bottom-right'
           />
-          <main className='flex min-h-screen flex-col items-center justify-center bg-background'>
-            <EventToastNotifier />
-            <div className='w-full md:w-[775px] sm:my-4 bg-primary shadow-sm p-4 min-h-screen sm:min-h-0 sm:h-auto sm:rounded-3xl flex gap-y-4 flex-col justify-around items-center'>
-              <Navbar />
-              <div className='w-full min-h-48 flex items-center justify-center relative bg-background text-black rounded-2xl overflow-hidden'>
+          <main className='min-h-screen bg-white'>
+            <div className='max-w-7xl min-h-screen mx-auto px-5 flex flex-col'>
+              <div className='flex items-end justify-between'>
+                <div className='flex gap-x-2 mt-5 sm:mt-10'>
+                  <Image src='/logo.svg' alt='logo' width={120} height={100} />
+                  <span className='text-2xl text-right sm:text-left font-bold text-primary mt-1 ml-8 sm:ml-15'>
+                    Groups Dashboard
+                  </span>
+                </div>
+                <Link
+                  className='hidden md:flex items-center font-semibold text-primary'
+                  href={'https://docs.aboutcircles.com/'}
+                  target='_blank'
+                >
+                  Documentation
+                  <ArrowTopRightOnSquareIcon className='h-4 w-4 ml-2' />
+                </Link>
+              </div>
+              <div className='flex flex-col flex-1 w-full items-center my-4 sm:my-8'>
                 {children}
               </div>
-              <Footer />
+              <EventToastNotifier />
             </div>
           </main>
         </Providers>

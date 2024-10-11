@@ -1,7 +1,8 @@
 'use client';
 
 import { truncateAddress } from '@/utils/truncateAddress';
-import { CheckIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import { HiCheck } from 'react-icons/hi';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -31,7 +32,7 @@ export default function ConnectButton() {
       {address ? (
         <>
           {isCopied ? (
-            <CheckIcon className='ml-2 h-5 w-5' />
+            <HiCheck className='ml-2 h-5 w-5' />
           ) : (
             truncateAddress(address)
           )}

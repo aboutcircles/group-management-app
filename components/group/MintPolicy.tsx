@@ -4,7 +4,8 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/react';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { HiCheck } from 'react-icons/hi';
 import { Dispatch, SetStateAction } from 'react';
 import { type MintPolicy } from '@/types';
 import { mintPolicies } from '@/const';
@@ -38,7 +39,7 @@ export default function MintPolicy({
             value={policy}
             className='group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-black/10 overflow-x-clip'
           >
-            <CheckIcon className='invisible size-4 fill-black group-data-[selected]:visible' />
+            <HiCheck className='invisible size-4 fill-black group-data-[selected]:visible' />
             <div className='w-full text-[11px] text-sm/6 text-black overflow-x-clip'>
               {policy.name}
             </div>

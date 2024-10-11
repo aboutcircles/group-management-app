@@ -1,40 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Tooltip as FlowbiteTooltip, TooltipProps } from 'flowbite-react';
+import { HiQuestionMarkCircle } from 'react-icons/hi';
 
-interface TooltipProps {
-  children: React.ReactNode;
+export const Tooltip: React.FC<{
   content: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
-}
-
-export const Tooltip: React.FC<TooltipProps> = ({
-  children,
-  content,
-  position = 'right',
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const positionClasses = {
-    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-    left: 'right-full top-full -translate-y-1/2 mr-2',
-    right: 'left-full top-full -translate-y-1/2 mt-2',
-  };
-
+  placement?: TooltipProps['placement'];
+  children?: React.ReactNode;
+}> = ({ content, placement = 'top', children }) => {
   return (
-    <div className='relative inline-block'>
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <div className={`absolute z-10 ${positionClasses[position]}`}>
-          <div className='bg-primary text-white text-sm rounded py-1 px-2 whitespace-nowrap shadow-md'>
-            {content}
-          </div>
-        </div>
-      )}
-    </div>
+    <FlowbiteTooltip
+      content={content}
+      trigger='hover'
+      style='light'
+      placement={placement}
+    >
+      {children || <HiQuestionMarkCircle className='w-5 h-5' />}
+    </FlowbiteTooltip>
   );
 };

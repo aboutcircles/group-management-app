@@ -1,17 +1,20 @@
 'use client';
 
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Field, Input, Label, Textarea } from '@headlessui/react';
 import { isValidName, isValidSymbol } from '@/utils/isValid';
 import MintPolicy from '@/components/group/MintPolicy';
 import FileUpload from '@/components/group/FileUpload';
 import { GroupProfile } from '@circles-sdk/profiles';
-import Loader from '@/components/group/Loader';
 import { mintPolicies } from '@/const';
 import { useGroupStore } from '@/stores/groupStore';
 import { Address } from 'viem';
 import { Step } from '@/types';
+import { Button } from '@/components/common/Button';
+import { HiCheck } from 'react-icons/hi';
+import { Tooltip } from '@/components/common/Tooltip';
+import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -96,22 +99,25 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className='w-full h-full flex flex-col items-center justify-center text-xs md:text-sm/6 text-black'
+      className='w-full h-full flex flex-col items-center justify-center text-xs md:text-sm/6 md:p-6'
     >
-      <h1 className='text-xl text-center font-extrabold text-accent mb-8'>
-        CREATE GROUP
+      <h1 className='text-2xl text-center font-bold text-primary mb-2'>
+        REGISTER GROUP
       </h1>
-      <div className='flex flex-col md:flex-row w-full gap-x-2'>
-        <div className='flex flex-col w-full md:w-2/3'>
+      <div className='flex flex-col-reverse md:flex-row w-full gap-x-2'>
+        <div className='flex flex-col w-full h-full justify-center md:w-2/3'>
           <Field className='w-full'>
-            <Label className='font-medium'>Name</Label>
+            <Label className='font-bold flex items-center gap-1'>
+              Name
+              <Tooltip content='Enter a name for your group.' />
+            </Label>
             <Input
               required
               type='text'
               name='name'
               value={formData.name}
               placeholder='Group Name...'
-              className='mt-1 shadow-sm block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+              className='mt-1 shadow-sm w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
               onChange={handleChange}
             />
             <p className='text-xs text-accent h-4 pl-1'>
@@ -119,13 +125,16 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
             </p>
           </Field>
           <Field className='w-full'>
-            <Label className='font-medium'>Symbol</Label>
+            <Label className='font-bold flex items-center gap-1'>
+              Symbol
+              <Tooltip content='Add a short currency symbol (e.g., CRC).' />
+            </Label>
             <Input
               required
               name='symbol'
               value={formData.symbol}
               placeholder='CRC...'
-              className='mt-1 shadow-sm block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+              className='mt-1 shadow-sm w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
               onChange={handleChange}
             />
             <p className='text-xs text-accent h-4 pl-1'>
@@ -134,45 +143,49 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
           </Field>
         </div>
         <Field className='w-full md:w-1/3 flex flex-col items-center'>
-          <Label className='font-medium'>Group Image</Label>
+          <Label className='font-bold mb-1 flex items-center gap-1'>
+            Group Image
+            <Tooltip content='Upload a logo or image for your group. Max size=2MB, 150x150 pixels.' />
+          </Label>
           <FileUpload onFileSelected={handleFileSelected} fileType='image' />
         </Field>
       </div>
-      <div className='flex flex-col md:flex-row items-center w-full'>
-        <Field className='w-full'>
-          <Label className='font-medium'>Description</Label>
-          <Textarea
-            name='description'
-            value={formData.description}
-            placeholder='Group Description...'
-            className='mt-1 shadow-sm h-20 block w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
-            onChange={handleChange}
-          />
-        </Field>
-      </div>
-      <Field className='w-full flex flex-col mt-4'>
-        <Label className='font-medium'>Base Mint Policy</Label>
+      <Field className='w-full mb-8'>
+        <Label className='font-bold flex items-center gap-1'>
+          Description
+          <Tooltip content='Provide a brief description of your group.' />
+        </Label>
+        <Textarea
+          name='description'
+          value={formData.description}
+          placeholder='Group Description...'
+          className='mt-1 shadow-sm h-20 w-full rounded-lg border-none bg-black/5 py-1.5 px-3 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+          onChange={handleChange}
+        />
+      </Field>
+      <Field className='w-full flex flex-col mb-12 pt-8 border-t-1.5'>
+        <Label className='font-bold flex items-center gap-1'>
+          Base Mint Policy
+          <Tooltip content='Select the minting policy for group currency.' />
+        </Label>
+        <Link
+          className='flex mb-2 items-center font-bold text-xs text-primary'
+          href={''}
+          target='_blank'
+        >
+          Learn more
+          <ArrowTopRightOnSquareIcon className='h-4 w-4 ml-1' />
+        </Link>
         <MintPolicy mintPolicy={mintPolicy} setMintPolicy={setMintPolicy} />
       </Field>
-      <button
+      <Button
         type='submit'
         disabled={!validName || !validSymbol}
-        className='flex items-center bg-gradient-to-r from-accent/90 to-accent/80 rounded-full text-lg px-3 py-1 hover:bg-accent/90 disabled:bg-accent/50 disabled:hover:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4'
+        icon={<HiCheck className='w-5 h-5 mr-1' />}
+        loading={isLoading}
       >
-        {isLoading ? (
-          <>
-            <div className='mr-2'>
-              <Loader />
-            </div>
-            Processing
-          </>
-        ) : (
-          <>
-            Create
-            <ArrowRightIcon className='h-4 w-4 ml-1' />
-          </>
-        )}
-      </button>
+        Register
+      </Button>
     </form>
   );
 }

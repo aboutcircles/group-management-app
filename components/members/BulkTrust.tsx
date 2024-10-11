@@ -1,20 +1,20 @@
 'use client';
 
 import {
-  CheckIcon,
   PlusIcon,
   UserPlusIcon,
   UserMinusIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { HiCheck, HiOutlineX } from 'react-icons/hi';
 import { Dialog, DialogPanel, Tab, TabGroup, TabList } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import FileUpload from '../group/FileUpload';
-import Loader from '../group/Loader';
+import Loader from '../common/Loader';
 import { Address } from 'viem';
 import Papa from 'papaparse';
 import { ProfileWithAddress } from '@/types';
 import { useMulticallStore } from '@/stores/multicallStore';
+import { Button } from '@/components/common/Button';
 
 interface BulkTrustProp {
   members: ProfileWithAddress[] | undefined;
@@ -81,14 +81,16 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
   };
 
   return (
-    <div>
-      <button
-        className='flex gap-x-1 items-center bg-accent rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
-        onClick={() => setIsOpen(true)}
+    <>
+      <Button
+        type='button'
+        // className='flex gap-x-1 items-center bg-accent rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
+        handleClick={() => setIsOpen(true)}
+        icon={<PlusIcon className='w-5 h-5' />}
       >
-        <PlusIcon width={14} height={14} className='stroke-white' />
+        {/* <PlusIcon width={14} height={14} className='stroke-white' /> */}
         Import
-      </button>
+      </Button>
       <Dialog
         open={isOpen}
         onClose={() => closeModal()}
@@ -118,7 +120,11 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
               </TabGroup>
 
               <button className='rounded-full p-1.5 hover:bg-black/10 transition duration-300 ease-in-out'>
-                <XMarkIcon width={20} height={20} onClick={() => closeModal()} />
+                <HiOutlineX
+                  width={20}
+                  height={20}
+                  onClick={() => closeModal()}
+                />
               </button>
             </div>
             <p className='text-lg font-bold'>
@@ -131,15 +137,20 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
               here to trust multiple addresses in one transaction.
             </div>
 
-            <button
+            <Button
+              // <button
               type='submit'
-              className={`flex items-center rounded-full text-lg px-3 py-1 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2 ${
-                isConfirmed
-                  ? 'bg-secondary/80 hover:bg-secondary/90'
-                  : 'bg-gradient-to-r from-accent/90 to-accent/80 hover:bg-accent/90'
-              }`}
+              // className={`flex items-center rounded-full text-lg px-3 py-1 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2 ${
+              //   isConfirmed
+              //     ? 'bg-secondary/80 hover:bg-secondary/90'
+              //     : 'bg-gradient-to-r from-accent/90 to-accent/80 hover:bg-accent/90'
+              // }`}
               disabled={addresses.length === 0 && !isConfirmed}
-              onClick={isConfirmed ? () => closeModal() : handleTrustAddresses}
+              handleClick={
+                isConfirmed ? () => closeModal() : handleTrustAddresses
+              }
+              loading={isLoading}
+              icon={<UserPlusIcon className='h-5 w-5' />}
             >
               {isLoading ? (
                 <>
@@ -150,29 +161,29 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 </>
               ) : isConfirmed ? (
                 <>
-                  <CheckIcon className='h-4 w-4 mr-1' />
+                  <HiCheck className='h-5 w-5' />
                   Confirmed
                 </>
               ) : (
                 <>
                   {selectedIndex === 0 ? (
                     <>
-                      <UserPlusIcon className='h-4 w-4 mr-1' />
+                      <UserPlusIcon className='h-5 w-5' />
                       Trust and Invite
                     </>
                   ) : (
                     <>
-                      <UserMinusIcon className='h-4 w-4 mr-1' />
+                      <UserMinusIcon className='h-5 w-5' />
                       Untrust
                     </>
                   )}
                 </>
               )}
-            </button>
+            </Button>
           </DialogPanel>
         </div>
       </Dialog>
-    </div>
+    </>
   );
 };
 
