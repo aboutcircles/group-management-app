@@ -98,21 +98,21 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
       >
         <div className='fixed inset-0 flex bg-black/50 backdrop-blur-sm w-screen items-center justify-center p-4'>
           <DialogPanel className='flex flex-col items-center max-w-lg rounded-lg bg-background text-black p-4'>
-            <div className='flex justify-between w-full'>
+            <div className='flex justify-between w-full items-center'>
               <TabGroup
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
               >
-                <TabList className='rounded-full bg-black/50 p-1 shadow-inner'>
+                <TabList className='rounded-md bg-black/50 p-1 shadow-inner'>
                   <Tab
                     key={'trust'}
-                    className='rounded-full px-2 text-sm/6 font-semibold focus:outline-none text-white data-[selected]:bg-accent data-[hover]:bg-black/5 data-[selected]:data-[hover]:bg-accent/90'
+                    className='rounded-md px-3 py-2 text-sm/6 font-semibold focus:outline-none text-white data-[selected]:bg-accent data-[hover]:bg-black/5 data-[selected]:data-[hover]:bg-accent/90'
                   >
                     Trust
                   </Tab>
                   <Tab
                     key={'untrust'}
-                    className='rounded-full  px-3 text-sm/6 font-semibold focus:outline-none text-white data-[selected]:bg-accent data-[hover]:bg-black/5 data-[selected]:data-[hover]:bg-accent/90'
+                    className='rounded-md  px-3 py-2 text-sm/6 font-semibold focus:outline-none text-white data-[selected]:bg-accent data-[hover]:bg-black/5 data-[selected]:data-[hover]:bg-accent/90'
                   >
                     Untrust
                   </Tab>
@@ -150,7 +150,6 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 isConfirmed ? () => closeModal() : handleTrustAddresses
               }
               loading={isLoading}
-              icon={<UserPlusIcon className='h-5 w-5' />}
             >
               {isLoading ? (
                 <>
@@ -168,12 +167,12 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
                 <>
                   {selectedIndex === 0 ? (
                     <>
-                      <UserPlusIcon className='h-5 w-5' />
+                      <UserPlusIcon className='h-5 w-5 mr-2' />
                       Trust and Invite
                     </>
                   ) : (
                     <>
-                      <UserMinusIcon className='h-5 w-5' />
+                      <UserMinusIcon className='h-5 w-5 mr-2' />
                       Untrust
                     </>
                   )}

@@ -71,7 +71,11 @@ const FileUpload: React.FC<AvatarUploadProps> = ({
     <div className='flex flex-col items-center'>
       <div
         {...getRootProps()}
-        className={`w-20 h-20 sm:w-44 sm:h-44 bg-black/5 text-black/30 rounded-full cursor-pointer text-center flex items-center justify-center text-xs shadow-inner hover:animate-pulse ${
+        className={` bg-black/5 text-black/30 ${
+          fileType === 'csv'
+            ? 'rounded-md w-40 h-20 sm:w-64 sm:h-20 m-4'
+            : 'rounded-full w-20 h-20 sm:w-44 sm:h-44'
+        } cursor-pointer text-center flex items-center justify-center text-xs shadow-inner hover:animate-pulse ${
           isDragging ? 'border-accent' : 'border-zinc'
         } ${
           preview

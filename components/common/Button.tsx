@@ -11,7 +11,7 @@ export function Button({
 }: {
   type: 'submit' | 'button' | 'reset';
   children: React.ReactNode;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   loading?: boolean;
   disabled?: boolean;
   handleClick?: () => void;
