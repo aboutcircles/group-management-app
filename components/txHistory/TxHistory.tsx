@@ -11,6 +11,7 @@ import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { Button } from '../common/Button';
+import Papa from 'papaparse';
 
 export default function TxHistory() {
   const events = useEventsStore((state) => state.events);
@@ -21,8 +22,6 @@ export default function TxHistory() {
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 10;
 
-  const handleExportCSV = () => {};
-
   useEffect(() => {
     if (!isFetched) {
       fetchEvents();
@@ -32,6 +31,22 @@ export default function TxHistory() {
   const filteredEvents = (events || []).filter(
     (event) => event !== undefined && event !== null
   );
+
+  const handleExportCSV = () => {
+    if (!filteredEvents || filteredEvents.length === 0) {
+      return;
+    }
+
+    const csv = Papa.unparse(filteredEvents);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'txHistory.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const startIndex = (currentPage - 1) * eventsPerPage;
   const endIndex = startIndex + eventsPerPage;
@@ -90,7 +105,7 @@ export default function TxHistory() {
       </div>
 
       {formattedEvents.length > 0 && (
-        <div className='w-fullflex items-center justify-center pt-5'>
+        <div className='w-full flex items-center justify-center pt-5'>
           <Pagination
             isCompact
             showControls
