@@ -19,7 +19,7 @@ export default function RegisterGroup({}: // step,
   // const [isPageReady, setIsPageReady] = useState(false);
 
   return (
-    <div className='w-full flex-1 flex flex-col items-center justify-center gap-y-8 md:gap-y-4 rounded-xl px-12 border py-20'>
+    <div className='w-full flex-1 flex flex-col items-center justify-center gap-y-8 md:gap-y-4 rounded-xl px-2 sm:px-10 border py-10 sm:py-20'>
       {step === 'start' ? (
         <>
           <p className='text-2xl md:text-3xl text-center font-bold text-primary pt-10'>
