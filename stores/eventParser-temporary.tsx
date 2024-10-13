@@ -213,6 +213,7 @@ export const parseEventValues = (
     case 'CrcV2_GroupMintBatch':
       return {
         ...baseEvent,
+        // @ts-ignore
         $event: 'CrcV2_GroupMintBatch',
         batchIndex: parseInt(values.batchIndex),
         group: values.group,
@@ -225,6 +226,7 @@ export const parseEventValues = (
     case 'CrcV2_GroupMintSingle':
       return {
         ...baseEvent,
+        // @ts-ignore
         $event: 'CrcV2_GroupMintSingle',
         group: values.group,
         id: values.id ? hexToBigInt(values.id) : undefined,
