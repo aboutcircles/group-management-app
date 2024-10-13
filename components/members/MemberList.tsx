@@ -4,8 +4,9 @@ import { ProfileWithAddress } from '@/types';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Address } from 'viem';
-import { Pagination } from '@nextui-org/react';
+// import { Pagination as PaginationNextUI } from '@nextui-org/react';
 import { Button } from '../common/Button';
+import { Pagination } from '@/components/common/Pagination';
 
 interface MemberListProps {
   members: ProfileWithAddress[] | undefined;
@@ -108,7 +109,7 @@ const MemberList = ({ members }: MemberListProps) => {
           </div>
 
           <div className='flex justify-center items-center pt-5'>
-            <Pagination
+            {/* <PaginationNextUI
               isCompact
               showControls
               showShadow={false}
@@ -117,6 +118,11 @@ const MemberList = ({ members }: MemberListProps) => {
               page={currentPage}
               total={totalPages}
               onChange={(page_) => setCurrentPage(page_)}
+            /> */}
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+              totalPages={totalPages}
             />
           </div>
         </>

@@ -6,12 +6,13 @@ import { useEffect } from 'react';
 import { Address } from 'viem';
 import EventType from '@/components/txHistory/EventType';
 import Loading from '@/components/layout/Loading';
-import { Pagination } from '@nextui-org/react';
+import { Pagination as PaginationNextUI } from '@nextui-org/react';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { truncateAddress } from '@/utils/truncateAddress';
 import { Button } from '../common/Button';
 import Papa from 'papaparse';
+import { Pagination } from '@/components/common/Pagination';
 
 export default function TxHistory() {
   const events = useEventsStore((state) => state.events);
@@ -106,7 +107,7 @@ export default function TxHistory() {
 
       {formattedEvents.length > 0 && (
         <div className='w-full flex items-center justify-center pt-5'>
-          <Pagination
+          {/* <PaginationNextUI
             isCompact
             showControls
             showShadow={false}
@@ -115,6 +116,11 @@ export default function TxHistory() {
             page={currentPage}
             total={totalPages}
             onChange={(page_) => setCurrentPage(page_)}
+          /> */}
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+            totalPages={totalPages}
           />
         </div>
       )}
