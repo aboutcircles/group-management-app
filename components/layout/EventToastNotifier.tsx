@@ -24,14 +24,12 @@ const EventToastNotifier = () => {
 
   useEffect(() => {
     console.log('last event changed', lastEvent);
-    if(lastEvent?.$event == "CrcV2_RegisterGroup") {
-      toast.success("Group registered !")
-    }
-    else if(lastEvent?.$event == "CrcV2_Trust") {
-      toast.success("Group members updated !")
-    }
-    else if(lastEvent?.$event == "CrcV2_UpdateMetadataDigest") {
-      toast.success("Group profile updated !")
+    if (lastEvent?.$event == 'CrcV2_RegisterGroup') {
+      toast.success('Group registered!');
+      // } else if (lastEvent?.$event == 'CrcV2_Trust') {
+      //   toast.success('Group members updated!');
+    } else if (lastEvent?.$event == 'CrcV2_UpdateMetadataDigest') {
+      toast.success('Group profile updated!');
     }
   }, [lastEvent]);
 

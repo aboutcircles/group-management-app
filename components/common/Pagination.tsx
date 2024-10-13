@@ -12,6 +12,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
+  // console.log('currentPage', currentPage);
+  // console.log('totalPages', totalPages);
   return (
     <FlowbitePagination
       currentPage={currentPage}

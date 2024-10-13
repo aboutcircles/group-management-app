@@ -7,6 +7,7 @@ import { Address } from 'viem';
 // import { Pagination as PaginationNextUI } from '@nextui-org/react';
 import { Button } from '../common/Button';
 import { Pagination } from '@/components/common/Pagination';
+import { useMembersStore } from '@/stores/membersStore';
 
 interface MemberListProps {
   members: ProfileWithAddress[] | undefined;
@@ -16,13 +17,15 @@ const MemberList = ({ members }: MemberListProps) => {
   const [flaggedMembers, setFlaggedMembers] = useState<Address[]>([]);
   const [flagAll, setFlagAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isTrusting, setIsTrusting] = useState<boolean | null>(null);
+  // const [isTrusting, setIsTrusting] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const membersPerPage = 10;
   const totalPages = Math.ceil((members?.length || 0) / membersPerPage);
   const startIndex = (currentPage - 1) * membersPerPage;
   const endIndex = startIndex + membersPerPage;
   const currentMembers = members?.slice(startIndex, endIndex);
+
+  const fetchMembers = useMembersStore((state) => state.fetchMembers);
 
   const trustMultipleMembers = useMulticallStore(
     (state) => state.trustMultipleMembers
@@ -38,14 +41,15 @@ const MemberList = ({ members }: MemberListProps) => {
 
   const handleTrustMultiple = async (trust: boolean) => {
     setIsLoading(true);
-    setIsTrusting(trust);
     try {
-      await trustMultipleMembers(flaggedMembers, trust);
+      const res = await trustMultipleMembers(flaggedMembers, trust);
+      if (res === true) {
+        handleFlagAll(false);
+      }
     } catch (error) {
       console.error('Error trusting members:', error);
     } finally {
       setIsLoading(false);
-      setIsTrusting(null);
     }
   };
 
@@ -79,8 +83,8 @@ const MemberList = ({ members }: MemberListProps) => {
                 <Button
                   type='button'
                   handleClick={() => handleTrustMultiple(false)}
-                  loading={isLoading || isTrusting === true}
-                  disabled={isLoading || isTrusting === true}
+                  loading={isLoading}
+                  disabled={isLoading}
                   icon={<XMarkIcon className='h-5 w-5 stroke-white' />}
                 >
                   Untrust {flaggedMembers.length}{' '}

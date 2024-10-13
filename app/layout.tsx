@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={font.className}>
         <Providers>
           <ToastContainer
-            autoClose={false}
+            autoClose={3000}
             draggable={false}
             position='bottom-right'
           />

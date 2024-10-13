@@ -4,6 +4,7 @@ import { useCirclesSdkStore } from '@/stores/circlesSdkStore';
 import { Address } from 'viem';
 import { CirclesEvent } from '@circles-sdk/data';
 import { parseRpcSubscriptionMessage } from './eventParser-temporary';
+import { useMembersStore } from '@/stores/membersStore';
 
 type EventsStore = {
   events?: any[];
@@ -55,6 +56,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
 
       const responseJson = await response.json();
       const events = parseRpcSubscriptionMessage(responseJson.result);
+
       // const events = await circlesData?.getEvents(
       //   groupInfo?.group.toLowerCase() as Address,
       //   groupInfo?.blockNumber as number
@@ -69,6 +71,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
     const circlesData = useCirclesSdkStore.getState().circlesData;
     const groupInfo = useGroupStore.getState().groupInfo;
     const fetchTotalSupply = useGroupStore.getState().fetchTotalSupply;
+    const fetchMembers = useMembersStore.getState().fetchMembers;
     // console.log('subscribeToEvents', groupInfo, circlesData);
 
     try {
@@ -83,9 +86,12 @@ export const useEventsStore = create<EventsStore>((set) => ({
           events: [event, ...(state.events || [])],
           lastEvent: event,
         }));
-
+        // @ts-ignore
         if (event.$event === 'CrcV2_GroupMintSingle') {
           fetchTotalSupply();
+        }
+        if (event.$event === 'CrcV2_Trust') {
+          fetchMembers();
         }
       });
     } catch (error) {

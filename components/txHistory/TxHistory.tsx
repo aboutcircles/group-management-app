@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { Address } from 'viem';
 import EventType from '@/components/txHistory/EventType';
 import Loading from '@/components/layout/Loading';
-import { Pagination as PaginationNextUI } from '@nextui-org/react';
+// import { Pagination as PaginationNextUI } from '@nextui-org/react';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { truncateAddress } from '@/utils/truncateAddress';

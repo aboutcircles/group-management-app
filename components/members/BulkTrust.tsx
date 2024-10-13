@@ -84,11 +84,9 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
     <>
       <Button
         type='button'
-        // className='flex gap-x-1 items-center bg-accent rounded-full text-white text-sm py-1 px-2 shadow-md hover:bg-accent/90 transition duration-300 ease-in-out'
         handleClick={() => setIsOpen(true)}
         icon={<PlusIcon className='w-5 h-5' />}
       >
-        {/* <PlusIcon width={14} height={14} className='stroke-white' /> */}
         Import
       </Button>
       <Dialog
@@ -138,13 +136,7 @@ const BulkTrust = ({ members }: BulkTrustProp) => {
             </div>
 
             <Button
-              // <button
               type='submit'
-              // className={`flex items-center rounded-full text-lg px-3 py-1 disabled:bg-accent/50 text-white shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-2 ${
-              //   isConfirmed
-              //     ? 'bg-secondary/80 hover:bg-secondary/90'
-              //     : 'bg-gradient-to-r from-accent/90 to-accent/80 hover:bg-accent/90'
-              // }`}
               disabled={addresses.length === 0 && !isConfirmed}
               handleClick={
                 isConfirmed ? () => closeModal() : handleTrustAddresses

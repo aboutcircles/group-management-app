@@ -66,6 +66,8 @@ export const useMembersStore = create<MembersStore>((set) => ({
 
       // console.log('avatarProfilesWithRelations', avatarProfilesWithRelations);
 
+      console.log('fetched members');
+
       set({
         members: avatarProfilesWithRelations as ProfileWithAddress[],
         isFetched: true,
