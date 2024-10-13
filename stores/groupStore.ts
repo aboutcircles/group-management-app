@@ -52,6 +52,7 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
       if (!circles || !address) return;
 
       const _address = address.toLowerCase();
+
       try {
         const avatar = await circles.getAvatar(_address);
         if (!avatar) {
