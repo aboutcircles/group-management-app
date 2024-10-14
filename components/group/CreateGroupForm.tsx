@@ -15,6 +15,8 @@ import { HiCheck } from 'react-icons/hi';
 import { Tooltip } from '@/components/common/Tooltip';
 import Link from 'next/link';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
+import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+
 
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
