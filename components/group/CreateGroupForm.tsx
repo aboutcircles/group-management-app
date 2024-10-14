@@ -16,7 +16,6 @@ import { Tooltip } from '@/components/common/Tooltip';
 import Link from 'next/link';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
-
 type CreateGroupFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
 };
@@ -171,7 +170,7 @@ export default function CreateGroupForm({ setStep }: CreateGroupFormProps) {
         </Label>
         <Link
           className='flex mb-2 items-center font-bold text-xs text-primary'
-          href={''}
+          href={'https://docs.aboutcircles.com/overview/circles-architecture'}
           target='_blank'
         >
           Learn more
