@@ -6,17 +6,11 @@ import { HiCheck, HiOutlineX } from 'react-icons/hi';
 import CreateGroupForm from '@/components/group/CreateGroupForm';
 import Link from 'next/link';
 import { Step } from '@/types';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'flowbite-react';
 
-export default function RegisterGroup({}: // step,
-// setStep,
-{
-  // step: Step;
-  // setStep: Dispatch<SetStateAction<Step>>;
-}) {
+export default function RegisterGroup({}: {}) {
   const [step, setStep] = useState<Step>('start');
-  // const [isPageReady, setIsPageReady] = useState(false);
 
   return (
     <div className='w-full flex-1 flex flex-col items-center justify-center gap-y-8 md:gap-y-4 rounded-xl px-2 sm:px-10 border py-10 sm:py-20'>
@@ -54,7 +48,7 @@ export default function RegisterGroup({}: // step,
           </Link>
         </div>
       ) : step === 'error' ? (
-        <div className='w-full flex flex-col items-center'>
+        <div className='text-gray-900 w-full flex flex-col items-center'>
           <div className='flex items-center'>
             <HiOutlineX className='h-5 w-5' /> Something went wrong with your
             transaction, try again or contact the support
