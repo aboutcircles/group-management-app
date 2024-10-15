@@ -28,6 +28,7 @@
     "flowbite-react": "^0.10.2",
     "flowbite-react-icons": "^1.0.8",
     "framer-motion": "^11.7.0",
+    "hardhat": "^2.22.13",
     "next": "14.2.5",
     "npm": "^10.8.3",
     "nullthrows": "^1.1.1",
