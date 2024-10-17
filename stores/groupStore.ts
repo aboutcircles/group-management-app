@@ -66,6 +66,7 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
         if (await getGroups?.queryNextPage()) {
           const groupsResult = getGroups?.currentPage?.results ?? [];
           const group = groupsResult[0] as GroupRow; //Group;
+          console.log('group', group);
           if (!group) {
             throw new Error('Group not found');
           }
@@ -75,7 +76,9 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
             throw new Error('Group profile not found');
           }
 
+          console.log('cid', cid);
           const groupProfile = await circles.profiles?.get(cid);
+          console.log('groupProfile', groupProfile);
 
           const totalSupply = await avatar.getTotalSupply();
           // console.log('totalSupply', ethers.formatEther(totalSupply));

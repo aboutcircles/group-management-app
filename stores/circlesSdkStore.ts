@@ -3,7 +3,7 @@ import { Sdk } from '@circles-sdk/sdk';
 import { BrowserProviderContractRunner } from '@circles-sdk/adapter-ethers';
 import { ethers } from 'ethers';
 import { CirclesData, CirclesRpc } from '@circles-sdk/data';
-import { CIRCLES_RPC, chainConfigGnosis } from '@/const';
+import { chainConfigGnosis } from '@/const';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk';
 import { SafeAppProvider } from '@safe-global/safe-apps-provider';
 
@@ -53,16 +53,16 @@ export const useCirclesSdkStore = create<
 
     const SafeEthersProvider = new ethers.BrowserProvider(safeProvider);
     const adapter = new BrowserProviderContractRunner();
-    adapter.provider = SafeEthersProvider; 
+    adapter.provider = SafeEthersProvider;
 
     await adapter.init();
 
     try {
-      await adapter.init();  // Initialize the adapter after setting the provider
+      await adapter.init(); // Initialize the adapter after setting the provider
 
       // Initialize Circles SDK with the adapter
       const circlesSdk = new Sdk(chainConfigGnosis, adapter);
-      const circlesRpc = new CirclesRpc(CIRCLES_RPC);
+      const circlesRpc = new CirclesRpc(chainConfigGnosis.circlesRpcUrl);
       const data = new CirclesData(circlesRpc);
 
       set({
@@ -90,4 +90,3 @@ export const useCirclesSdkStore = create<
     set(initialState);
   },
 }));
-

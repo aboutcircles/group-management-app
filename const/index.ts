@@ -2,9 +2,6 @@ import { MintPolicy } from '@/types';
 import { CirclesConfig } from '@circles-sdk/sdk';
 import { Address } from 'viem';
 
-export const CIRCLES_RPC = 'https://rpc.helsinki.aboutcircles.com';
-// export const CIRCLES_RPC = 'https://rpc.falkenstein.aboutcircles.com';
-
 // Gnosis:
 export const chainConfigGnosis: CirclesConfig = {
   circlesRpcUrl: 'https://static.174.163.76.144.clients.your-server.de/rpc/',

@@ -25,42 +25,47 @@ export const useEventsStore = create<EventsStore>((set) => ({
 
     try {
       // TODO: temporary solution
-      const postData = {
-        jsonrpc: '2.0',
-        id: 2,
-        method: 'circles_events',
-        params: [
-          groupInfo?.group.toLowerCase(),
-          groupInfo?.blockNumber,
-          null,
-          null,
-          null,
-          null,
-        ],
-      };
+      // const postData = {
+      //   jsonrpc: '2.0',
+      //   id: 2,
+      //   method: 'circles_events',
+      //   params: [
+      //     groupInfo?.group.toLowerCase(),
+      //     groupInfo?.blockNumber,
+      //     null,
+      //     null,
+      //     null,
+      //     null,
+      //   ],
+      // };
 
-      const response = await fetch(
-        'https://rpc.falkenstein.aboutcircles.com/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(postData),
-        }
+      // const response = await fetch(
+      //   'https://rpc.falkenstein.aboutcircles.com/',
+      //   {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(postData),
+      //   }
+      // );
+
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! status: ${response.status}`);
+      // }
+
+      // const responseJson = await response.json();
+      // const events = parseRpcSubscriptionMessage(responseJson.result);
+      // console.log('events', events);
+
+      console.log('groupInfo', groupInfo);
+
+      const events = await circlesData?.getEvents(
+        groupInfo?.group.toLowerCase() as Address,
+        groupInfo?.blockNumber as number
       );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const responseJson = await response.json();
-      const events = parseRpcSubscriptionMessage(responseJson.result);
-
-      // const events = await circlesData?.getEvents(
-      //   groupInfo?.group.toLowerCase() as Address,
-      //   groupInfo?.blockNumber as number
-      // );
+      console.log('events', events);
       set({ events: events || [], isFetched: true });
     } catch (error) {
       console.error('Failed to get events:', error);
