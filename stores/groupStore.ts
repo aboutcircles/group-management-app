@@ -22,7 +22,7 @@ interface GroupStoreActions {
   setGroupInfo: (group: Group) => Promise<void>;
 
   createGroup: (
-    // mintPolicy: Address,
+    mintPolicy: Address,
     groupData: GroupProfile
   ) => Promise<AvatarInterface | null>;
 
