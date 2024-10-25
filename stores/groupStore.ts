@@ -14,6 +14,7 @@ interface GroupStoreState {
   avatarEvents: Observable<CirclesEvent> | null;
   isLoading: boolean;
   totalSupply: bigint;
+  isHumanAvatar: boolean;
 }
 
 interface GroupStoreActions {
@@ -40,6 +41,7 @@ const initialState: GroupStoreState = {
   groupInfo: null,
   isLoading: true,
   totalSupply: BigInt(0),
+  isHumanAvatar: false,
 };
 
 export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
@@ -59,6 +61,19 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
           set({ ...initialState, isLoading: false });
           return;
         }
+
+        const profile = await avatar.getProfile();
+        const isHuman = profile !== undefined;
+
+        if (isHuman) {
+          set({
+            ...initialState,
+            isLoading: false,
+            isHumanAvatar: true,
+          });
+          return;
+        }
+
         const getGroups = circles.data.findGroups(1, {
           groupAddressIn: [_address],
         });
@@ -89,6 +104,7 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
             totalSupply: totalSupply || BigInt(0),
             // totalSupply: BigInt(0),
             isLoading: false,
+            isHumanAvatar: false,
           });
         }
       } catch (error) {
