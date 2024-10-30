@@ -62,8 +62,7 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
           return;
         }
 
-        const profile = await avatar.getProfile();
-        const isHuman = profile !== undefined;
+        const isHuman = avatar.avatarInfo?.type === "CrcV2_RegisterHuman";
 
         if (isHuman) {
           set({
