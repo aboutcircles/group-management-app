@@ -54,10 +54,12 @@ export const useEventsStore = create<EventsStore>((set) => ({
           events: [event, ...(state.events || [])],
           lastEvent: event,
         }));
-        // @ts-ignore
         if (
           event.$event === 'CrcV2_CollateralLockedSingle' ||
-          event.$event === 'CrcV2_CollateralLockedBatch'
+          event.$event === 'CrcV2_CollateralLockedBatch' ||
+          event.$event === 'CrcV2_GroupRedeem' ||
+          event.$event === 'CrcV2_GroupRedeemCollateralBurn' ||
+          event.$event === 'CrcV2_GroupRedeemCollateralReturn'
         ) {
           fetchTotalSupply();
         }

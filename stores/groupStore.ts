@@ -62,7 +62,7 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
           return;
         }
 
-        const isHuman = avatar.avatarInfo?.type === "CrcV2_RegisterHuman";
+        const isHuman = avatar.avatarInfo?.type === 'CrcV2_RegisterHuman';
 
         if (isHuman) {
           set({
@@ -90,18 +90,16 @@ export const useGroupStore = create<GroupStoreState & GroupStoreActions>(
             throw new Error('Group profile not found');
           }
 
-          console.log('cid', cid);
+          // console.log('cid', cid);
           const groupProfile = await circles.profiles?.get(cid);
-          console.log('groupProfile', groupProfile);
+          // console.log('groupProfile', groupProfile);
 
           const totalSupply = await avatar.getTotalSupply();
-          // console.log('totalSupply', ethers.formatEther(totalSupply));
 
           set({
             groupAvatar: avatar,
             groupInfo: { ...group, ...groupProfile },
             totalSupply: totalSupply || BigInt(0),
-            // totalSupply: BigInt(0),
             isLoading: false,
             isHumanAvatar: false,
           });

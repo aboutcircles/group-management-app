@@ -12,8 +12,11 @@ export const formatEvents = (
     if (
       event.$event !== 'CrcV2_CollateralLockedSingle' &&
       event.$event !== 'CrcV2_CollateralLockedBatch' &&
-      event.$event !== 'CrcV2_Trust' // &&
+      event.$event !== 'CrcV2_Trust' &&
       // event.$event !== 'CrcV2_UpdateMetadataDigest'
+      event.$event !== 'CrcV2_GroupRedeem' &&
+      event.$event !== 'CrcV2_GroupRedeemCollateralBurn' &&
+      event.$event !== 'CrcV2_GroupRedeemCollateralReturn'
     ) {
       return acc;
     }
@@ -25,6 +28,14 @@ export const formatEvents = (
     ) {
       eventInfo.data = `+${formatEther(event.value)} ${symbol}`;
       eventInfo.type = 'mint';
+    }
+    if (
+      event.$event === 'CrcV2_GroupRedeem' ||
+      event.$event === 'CrcV2_GroupRedeemCollateralBurn' ||
+      event.$event === 'CrcV2_GroupRedeemCollateralReturn'
+    ) {
+      eventInfo.data = `-${formatEther(event.value)} ${symbol}`;
+      eventInfo.type = 'redeem';
     }
     if (event.$event === 'CrcV2_Trust') {
       eventInfo.data =
