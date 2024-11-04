@@ -17,7 +17,7 @@ const baseGroupMintPolicy = '0xcCa27c26CF7BAC2a9928f42201d48220F0e3a549';
 
 export const mintPolicies: MintPolicy[] = [
   {
-    id: 1,
+    id: 0,
     address: baseGroupMintPolicy as Address,
     name: `Standard Mint Policy - ${baseGroupMintPolicy}`,
   },

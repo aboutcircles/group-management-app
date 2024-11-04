@@ -10,14 +10,19 @@ export const formatEvents = (
 ) => {
   const formattedEvents = events.reduce((acc, event) => {
     if (
-      event.$event !== 'CrcV2_GroupMintSingle' &&
-      event.$event !== 'CrcV2_Trust'
+      event.$event !== 'CrcV2_CollateralLockedSingle' &&
+      event.$event !== 'CrcV2_CollateralLockedBatch' &&
+      event.$event !== 'CrcV2_Trust' // &&
+      // event.$event !== 'CrcV2_UpdateMetadataDigest'
     ) {
       return acc;
     }
 
     const eventInfo = {} as any;
-    if (event.$event === 'CrcV2_GroupMintSingle') {
+    if (
+      event.$event === 'CrcV2_CollateralLockedSingle' ||
+      event.$event === 'CrcV2_CollateralLockedBatch'
+    ) {
       eventInfo.data = `+${formatEther(event.value)} ${symbol}`;
       eventInfo.type = 'mint';
     }
@@ -28,6 +33,10 @@ export const formatEvents = (
           : event.trustee;
       eventInfo.type = getTrustType(event, groupAddress);
     }
+    // if (event.$event === 'CrcV2_UpdateMetadataDigest') {
+    //   eventInfo.data = 'Group info updated';
+    //   eventInfo.type = '';
+    // }
 
     const dateObj = new Date((event.timestamp as number) * 1000);
     const formattedEvent = {

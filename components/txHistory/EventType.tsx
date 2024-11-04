@@ -19,3 +19,5 @@ export default function EventType({ type }: { type: string }) {
 // trusted by
 // untrusted by
 // mint
+
+// group info updated
