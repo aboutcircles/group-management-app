@@ -61,7 +61,7 @@ export const useCirclesSdkStore = create<
       await adapter.init(); // Initialize the adapter after setting the provider
 
       // Initialize Circles SDK with the adapter
-      const circlesSdk = new Sdk(chainConfigGnosis, adapter);
+      const circlesSdk = new Sdk(adapter, chainConfigGnosis);
       const circlesRpc = new CirclesRpc(chainConfigGnosis.circlesRpcUrl);
       const data = new CirclesData(circlesRpc);
 
