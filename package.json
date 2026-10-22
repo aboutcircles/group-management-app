@@ -9,6 +9,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@circles-sdk/adapter-ethers": "^0.14.0",
     "@circles-sdk/data": "^0.14.0",
@@ -28,12 +31,12 @@
     "flowbite-react": "^0.10.2",
     "flowbite-react-icons": "^1.1.0",
     "framer-motion": "^11.11.11",
-    "next": "14.2.5",
+    "next": "15.5.28",
     "npm": "^10.9.0",
     "nullthrows": "^1.1.1",
     "papaparse": "^5.4.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "react-dropzone": "^14.3.4",
     "react-icons": "^5.3.0",
     "react-toastify": "^10.0.6",
@@ -45,11 +48,11 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.59.19",
     "@types/node": "^20.17.6",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "15.5.28",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
